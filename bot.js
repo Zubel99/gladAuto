@@ -7,7 +7,6 @@
 // @match        https://s303-en.gladiatus.gameforge.com/game*
 // @match        https://lobby.gladiatus.gameforge.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
-// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 (function() {
@@ -41,6 +40,7 @@
     let autodungeonok=localStorage.getItem('_autodungeonok') === 'true';
     let autoarenaok=localStorage.getItem('_autoarenaok') === 'true';
     let autocircusprovinciariumok=localStorage.getItem('_autocircusprovinciariumok') === 'true';
+    let autoarenaprovinciariumok=localStorage.getItem('_autoarenaprovinciariumok') === 'true';
     let autoturmaok=localStorage.getItem('_autoturmaok') === 'true';
     let autoworkok=localStorage.getItem('_autoworkok') === 'true';
     //additional functionalities handle the same way
@@ -155,9 +155,6 @@
     //BOTON DUNGEON
     let dungeonboton=document.createElement('a');
     let selectdungeonmap=document.createElement('select');
-    let dundatalist=document.createElement('datalist');
-    dundatalist.id="dundatalist";
-    dundatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
     let advanced=document.createElement('select');
     advanced.id="advanced";
     advanced.innerHTML='<option value="false">Normal</option><option value="true">Advanced</option>';
@@ -279,6 +276,42 @@
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
     selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 0;
 
+    // BOTON ARENA PROVINCIARIUM
+    let arenaprovinciariumboton=document.createElement('a');//turmaboton
+    let selectarenaprovinciariummode=document.createElement('select');//selectturmatarget
+    arenaprovinciariumboton.classList.add('menuitem');
+    arenaprovinciariumboton.style.cursor = "pointer";
+    //arenaprovinciariumboton.href="#";
+    let arenahp=document.createElement('input');
+    arenahp.setAttribute("type","range");
+    arenahp.value=localStorage.getItem('_arenahp') || 50;
+    arenahp.setAttribute("list","arenadatalist");
+    arenahp.id="arenahp";
+    let arenadatalist=document.createElement('datalist');
+    arenadatalist.id="arenadatalist";
+    arenadatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let arenadatalabel=document.createElement('span');
+    arenadatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_arenahp') || 50) +"%";
+    arenadatalabel.id="arenadatalabel";
+    if (autoarenaprovinciariumok==true){
+        arenaprovinciariumboton.innerHTML="AUTO ARENA PROV ON";
+        arenaprovinciariumboton.style.textShadow = botOptionOn
+        //selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
+        selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
+        arenahp.setAttribute("style","display:block;margin-left:10px;");
+        arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
+    }else{
+        arenaprovinciariumboton.innerHTML="AUTO ARENA PROV OFF";
+        arenaprovinciariumboton.style.textShadow = botOptionOff
+        selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
+        arenahp.setAttribute("style","display:block;margin-left:10px;");
+        arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
+    }
+    selectarenaprovinciariummode.innerHTML='<option value="0" selected>All lvls</option><option value="1">Lowest lvl</option><option value="2">Highest lvl</option>';
+    selectarenaprovinciariummode.id="selectarenaprovinciariummode";
+    selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 0;
+
+
     //BOTON EVENTON
     let eventboton=document.createElement('a');
     let selecteventtarget=document.createElement('select');
@@ -317,8 +350,10 @@
     //menubotboton.classList.add('eyecatcher');
     if (boton){
         menubotboton.innerHTML="BOT ON";
+        menubotboton.style.textShadow = botOptionOn;
     }else{
         menubotboton.innerHTML="BOT OFF";
+        menubotboton.style.textShadow = botOptionOff;
     }
     menubotboton.id="botboton";
     //menubotboton.href="#";
@@ -331,7 +366,6 @@
     menubot.appendChild(expdatalist);
     menubot.appendChild(dungeonboton);
     menubot.appendChild(selectdungeonmap);
-    menubot.appendChild(dundatalist);
     menubot.appendChild(advanced);
     menubot.appendChild(skipboss);
     menubot.appendChild(fulldungclear);
@@ -344,7 +378,11 @@
     //menubot.appendChild(selectturmatarget);
     menubot.appendChild(circusprovinciariumboton)
     menubot.appendChild(selectcircusprovinciariummode)
-
+    menubot.appendChild(arenaprovinciariumboton)
+    menubot.appendChild(selectarenaprovinciariummode)
+    menubot.appendChild(arenadatalabel);
+    menubot.appendChild(arenahp);
+    menubot.appendChild(arenadatalist);
     menubot.appendChild(autoworkboton);
     menubot.appendChild(autoworktype);
     //menubot.appendChild(autoworktime);
@@ -495,7 +533,7 @@
     });
     */
 
-    // CIRCUS PROV
+    // CIRCUS PROV LOGIC
     circusprovinciariumboton.addEventListener('click', function(){
         let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
         if (autocircusprovinciariumok==true){
@@ -515,6 +553,33 @@
     selectcircusprovinciariummode.addEventListener('change', function(){
         localStorage.setItem('_selectcircusprovinciariummode', selectcircusprovinciariummode.value);
     })
+
+    // ARENA PROV LOGIC
+        arenaprovinciariumboton.addEventListener('click', function(){
+        let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
+        if (autoarenaprovinciariumok==true){
+            autoarenaprovinciariumok=false;
+            arenaprovinciariumboton.innerHTML="AUTO ARENA PROV OFF";
+            arenaprovinciariumboton.style.textShadow = botOptionOff
+            selectarenaprovinciariummode.style.display="block";
+        }else{
+            autoarenaprovinciariumok=true;
+            arenaprovinciariumboton.innerHTML="AUTO ARENA PROV ON";
+            arenaprovinciariumboton.style.textShadow = botOptionOn
+            //selectarenaprovinciariummode.style.display="none";
+            selectarenaprovinciariummode.style.display="block";
+        }
+        localStorage.setItem('_autoarenaprovinciariumok', autoarenaprovinciariumok);
+    })
+    selectarenaprovinciariummode.addEventListener('change', function(){
+        localStorage.setItem('_selectarenaprovinciariummode', selectarenaprovinciariummode.value);
+    })
+    arenahp.addEventListener("change",function(){
+        var arenadatalabel=document.querySelector('#arenadatalabel');
+        arenadatalabel.innerHTML="NOT ATTACK HP < "+arenahp.value+"%";
+        localStorage.setItem('_arenahp', arenahp.value);
+    });
+
     // WORKON
     autoworkboton.addEventListener('click', function(){
         let autoworktype=document.querySelector('#autoworktype');
@@ -601,13 +666,6 @@
 
     var refreshPageCounter = 0
 
-    //function getPage(url, callback){
-    //    GM_xmlhttpRequest({
-    //        method: 'GET',
-    //        url: url,
-    //        onload: callback
-    //    })
-    //}
     function changePage(url){
         if (location.href == url) return
         else location.href = url
@@ -634,20 +692,18 @@
         var skipboss = _skipboss === 'true'
         var fulldungclear = _fulldungclear === 'true'
         console.log('dungeon');
-        console.log('data', selectdungeonmap, advanced, skipboss, fulldungclear)
         var content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
         if(content == 'Go to dungeon'){
             location.href = dungeonLocations[selectdungeonmap];
 
-            var pickDungeon = ''
-            if (advanced){
-                pickDungeon=document.querySelector('input.button1[value="Normal"]');
-            }
-            else{
-                pickDungeon=document.querySelector('input.button1[value="Advanced"]');
-            }
-            if (pickDungeon && pickDungeon.value == 'Normal'){
-                pickDungeon.click();
+
+            if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
+                if (advanced){
+                    document.querySelector('input.button1[value="Advanced"]').click();
+                }
+                else{
+                    document.querySelector('input.button1[value="Normal"]').click();
+                }
             }
 
             var enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
@@ -772,6 +828,31 @@
         }
     }
 
+    function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
+        //var arenahp = parseInt(_arenahp);
+        console.log('arena');
+        var currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        //console.log('current and cap hp: ', currentHpPercentage , ' < ', arenahp, ' = ', currentHpPercentage < arenahp)
+        if (currentHpPercentage < arenahp) return;
+        var selectarenaprovinciariummode = parseInt(_selectarenaprovinciariummode)
+        var content = document.getElementById('cooldown_bar_text_arena').innerHTML;
+        var arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
+
+        if(content == 'Go to the arena'){
+            location.href = arenaLink;
+            var enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
+            if (selectarenaprovinciariummode == 0){
+                var randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
+                enemies[randomEnemy].click();
+            }
+            else if (selectarenaprovinciariummode == 1){//attack lowest lvl available
+                enemies[0].click();
+            }
+            else if (selectarenaprovinciariummode == 2){ //attack highest lvl available
+                enemies[enemies.length-1].click();
+            }
+        }
+    }
 
 
     function checkWork(_autoworktype){
@@ -788,7 +869,6 @@
             document.getElementById('doWork').click();
         }
     }
-
 
 
 function checkHealth(){ //not using atm
@@ -810,6 +890,7 @@ function checkHealth(){ //not using atm
 
 
 
+    
     function eventChecker(){
         refreshPageCounter += 1
         console.log(refreshPageCounter)
@@ -821,6 +902,7 @@ function checkHealth(){ //not using atm
             if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
             if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
             if (autocircusprovinciariumok) checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
+            if (autoarenaprovinciariumok) checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
             if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
             //checkArena()
             //checkCircus()
@@ -828,12 +910,9 @@ function checkHealth(){ //not using atm
     }
 
 
-
     if (!location.href.includes('/game/index.php?mod=auction')){
         setInterval(eventChecker, 2000);
     }
-
-
 
 
 })();
