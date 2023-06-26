@@ -7,6 +7,7 @@
 // @match        https://s303-en.gladiatus.gameforge.com/game*
 // @match        https://lobby.gladiatus.gameforge.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 (function() {
@@ -16,6 +17,7 @@
     var sessionHash = urlWithHash.substring(hashIndex+4)
     console.log('current hash: ', sessionHash)
 
+    /*
     var expeditionLocations = [
         'index.php?mod=location&loc=0&sh=' + sessionHash, // 0 Grimwoord
         'index.php?mod=location&loc=1&sh=' + sessionHash, // 1 Pirate Harbour
@@ -34,6 +36,18 @@
         'index.php?mod=dungeon&loc=5&sh=' + sessionHash, // 5 Barbarian Village
         'index.php?mod=dungeon&loc=6&sh=' + sessionHash, // 6 Bandit Camp
     ]
+    */
+     var expeditionLocations = [];
+     var dungeonLocations = [];
+     var expeditionLocationsUnfiltered=document.querySelectorAll('div#submenu2.submenu a');
+     for (let i=1; i < expeditionLocationsUnfiltered.length; i++) {
+         let leftAnchor = expeditionLocationsUnfiltered[i].href.indexOf('index.php?');
+         let rightAnchor = expeditionLocationsUnfiltered[i].href.indexOf('&sh=');
+         let locationLink = expeditionLocationsUnfiltered[i].href.substring(leftAnchor, rightAnchor+4)+sessionHash;
+         expeditionLocations.push(locationLink);
+         let dungeonLink = locationLink.replace('=location&', '=dungeon&');
+         dungeonLocations.push(dungeonLink);
+     }
 
     let boton=localStorage.getItem('_boton') === 'true';
     let autoexpeditionok=localStorage.getItem('_autoexpeditionok') === 'true';
@@ -666,6 +680,13 @@
 
     var refreshPageCounter = 0
 
+    //function getPage(url, callback){
+    //    GM_xmlhttpRequest({
+    //        method: 'GET',
+    //        url: url,
+    //        onload: callback
+    //    })
+    //}
     function changePage(url){
         if (location.href == url) return
         else location.href = url
@@ -855,6 +876,7 @@
     }
 
 
+
     function checkWork(_autoworktype){
         var autoworktype = parseInt(_autoworktype);
         console.log('work')
@@ -869,6 +891,7 @@
             document.getElementById('doWork').click();
         }
     }
+
 
 
 function checkHealth(){ //not using atm
@@ -890,7 +913,6 @@ function checkHealth(){ //not using atm
 
 
 
-    
     function eventChecker(){
         refreshPageCounter += 1
         console.log(refreshPageCounter)
@@ -913,6 +935,8 @@ function checkHealth(){ //not using atm
     if (!location.href.includes('/game/index.php?mod=auction')){
         setInterval(eventChecker, 2000);
     }
+
+
 
 
 })();
