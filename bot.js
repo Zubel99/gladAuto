@@ -6,6 +6,7 @@
 // @author       You
 // @match        https://s303-en.gladiatus.gameforge.com/game*
 // @match        https://lobby.gladiatus.gameforge.com/*
+// @exclude      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
@@ -912,14 +913,39 @@ function checkHealth(){ //not using atm
     }
 
 
+    function questChecker(){
+        console.log("QUESTS")
+        var link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = 'https://icons.iconarchive.com/icons/tatice/cristal-intense/256/Help-icon.png';
+
+        var resetQuestsButton = document.querySelectorAll('input[type="button"][value="New quests"]');
+        var questContainer = document.querySelector('div#main_inner div#content div.contentboard_start');
+        var questIds = ['qcategory_arena', 'qcategory_grouparena', 'qcategory_combat', 'qcategory_expedition', 'qcategory_dungeon']
+
+        //var arenaQuests =
+
+
+        for(let i=0; i<questContainer.children.length; i++){
+            for (let j=0; j<questIds.length; j++){
+                if (questContainer.children[i].getAttribute('id') == questIds[j]){
+                    console.log(questContainer.children[i].children[2])
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 
     function eventChecker(){
-        refreshPageCounter += 1
-        console.log(refreshPageCounter)
-        if (refreshPageCounter > 180){
-            var overviewLink = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href
-            location.href = overviewLink
-        }
         if (boton){
             if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
             if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
@@ -932,11 +958,36 @@ function checkHealth(){ //not using atm
     }
 
 
-    if (!location.href.includes('/game/index.php?mod=auction')){
-        setInterval(eventChecker, 2000);
+    function main(){ // here include further functionalities
+        if (!location.href.includes('/game/index.php?mod=quests')){ //set main bots
+            eventChecker()
+        }
+
+        if (location.href.includes('/game/index.php?mod=quests')){ // quest bot
+            questChecker()
+        }
     }
 
 
+    //dont touch these 2 :)
+    function loop() {
+        var rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
+        setTimeout(function() {
+            main();
+            loop();
+        }, rand);
+    }
+    setInterval(function(){
+        refreshPageCounter += 1
+        console.log(refreshPageCounter)
+        if (refreshPageCounter > 180){
+            var overviewLink = 'https://s303-en.gladiatus.gameforge.com/game/index.php?mod=overview&sh=' + sessionHash;
+            location.href = overviewLink
+        }
+    }, 1000)
 
 
+
+
+    loop()
 })();
