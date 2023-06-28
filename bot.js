@@ -13,42 +13,23 @@
 
 (function() {
     'use strict';
-    var urlWithHash = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href;
-    var hashIndex = urlWithHash.indexOf('&sh=');
-    var sessionHash = urlWithHash.substring(hashIndex+4)
+    let urlWithHash = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href;
+    let hashIndex = urlWithHash.indexOf('&sh=');
+    let sessionHash = urlWithHash.substring(hashIndex+4)
     console.log('current hash: ', sessionHash)
 
-    /*
-    var expeditionLocations = [
-        'index.php?mod=location&loc=0&sh=' + sessionHash, // 0 Grimwoord
-        'index.php?mod=location&loc=1&sh=' + sessionHash, // 1 Pirate Harbour
-        'index.php?mod=location&loc=2&sh=' + sessionHash, // 2 Misty Mountains
-        'index.php?mod=location&loc=3&sh=' + sessionHash, // 3 Wolf Cave
-        'index.php?mod=location&loc=4&sh=' + sessionHash, // 4 Ancient Temple
-        'index.php?mod=location&loc=5&sh=' + sessionHash, // 5 Barbarian Village
-        'index.php?mod=location&loc=6&sh=' + sessionHash, // 6 Bandit Camp
-    ]
-    var dungeonLocations = [
-        'index.php?mod=dungeon&loc=0&sh=' + sessionHash, // 0 Grimwoord
-        'index.php?mod=dungeon&loc=1&sh=' + sessionHash, // 1 Pirate Harbour
-        'index.php?mod=dungeon&loc=2&sh=' + sessionHash, // 2 Misty Mountains
-        'index.php?mod=dungeon&loc=3&sh=' + sessionHash, // 3 Wolf Cave
-        'index.php?mod=dungeon&loc=4&sh=' + sessionHash, // 4 Ancient Temple
-        'index.php?mod=dungeon&loc=5&sh=' + sessionHash, // 5 Barbarian Village
-        'index.php?mod=dungeon&loc=6&sh=' + sessionHash, // 6 Bandit Camp
-    ]
-    */
-     var expeditionLocations = [];
-     var dungeonLocations = [];
-     var expeditionLocationsUnfiltered=document.querySelectorAll('div#submenu2.submenu a');
-     for (let i=1; i < expeditionLocationsUnfiltered.length; i++) {
-         let leftAnchor = expeditionLocationsUnfiltered[i].href.indexOf('index.php?');
-         let rightAnchor = expeditionLocationsUnfiltered[i].href.indexOf('&sh=');
-         let locationLink = expeditionLocationsUnfiltered[i].href.substring(leftAnchor, rightAnchor+4)+sessionHash;
-         expeditionLocations.push(locationLink);
-         let dungeonLink = locationLink.replace('=location&', '=dungeon&');
-         dungeonLocations.push(dungeonLink);
-     }
+
+    let expeditionLocations = [];
+    let dungeonLocations = [];
+    let expeditionLocationsUnfiltered=document.querySelectorAll('div#submenu2.submenu a');
+    for (let i=1; i < expeditionLocationsUnfiltered.length; i++) {
+        let leftAnchor = expeditionLocationsUnfiltered[i].href.indexOf('index.php?');
+        let rightAnchor = expeditionLocationsUnfiltered[i].href.indexOf('&sh=');
+        let locationLink = expeditionLocationsUnfiltered[i].href.substring(leftAnchor, rightAnchor+4)+sessionHash;
+        expeditionLocations.push(locationLink);
+        let dungeonLink = locationLink.replace('=location&', '=dungeon&');
+        dungeonLocations.push(dungeonLink);
+    }
 
     let boton=localStorage.getItem('_boton') === 'true';
     let autoexpeditionok=localStorage.getItem('_autoexpeditionok') === 'true';
@@ -76,10 +57,10 @@
     function existevent(){
         let captureeventbutton=document.evaluate(".//div[contains(@id,'submenu2')]/a[contains(@class,'eyecatcher')]", document.body, null, 9, null).singleNodeValue;
         if (captureeventbutton){
-        return true;
-    }else{
-        return false;
-    }}
+            return true;
+        }else{
+            return false;
+        }}
 
     if (boton==true) {
         menubot.setAttribute("style","display:none");
@@ -215,62 +196,7 @@
     }
     selectdungeonmap.value=localStorage.getItem('_selecteddungeonmap') || 0;
     //dungeonboton.href="#";
-    // BOTON ARENA
-    /*
-    let arenaboton=document.createElement('a');
-    let selectarenatarget=document.createElement('select');
-    arenaboton.classList.add('menuitem');
-    arenaboton.href="#";
-    let arenahp=document.createElement('input');
-    arenahp.setAttribute("type","range");
-    arenahp.setAttribute("list","arenadatalist");
-    arenahp.id="arenahp";
-    let arenadatalist=document.createElement('datalist');
-    arenadatalist.id="arenadatalist";
-    arenadatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
-    let arenadatalabel=document.createElement('span');
-    arenadatalabel.innerHTML="NOT ATTACK HP < 50%";
-    arenadatalabel.id="arenadatalabel";
-    if (autoarenaok){
-        arenaboton.innerHTML="AUTO ARENA ON";
-        selectarenatarget.setAttribute("style","display:none;margin-left:10px;");
-        arenahp.setAttribute("style","display:none;margin-left:10px;");
-        arenadatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
-    }else{
-        arenaboton.innerHTML="AUTO ARENA OFF";
-        selectarenatarget.setAttribute("style","display:block;margin-left:10px;");
-        arenahp.setAttribute("style","display:block;margin-left:10px;");
-        arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
-    }
-    let lvl=parseInt(document.querySelector('div#header_values_level').innerHTML);
-    selectarenatarget.innerHTML='<option value="999" selected>No Limit</option><option value="'+(lvl-3)+'">Target level <'+(lvl-3)+'</option><option value="'+(lvl-2)+'">Target level <'+(lvl-2)+'</option><option value="'+(lvl-1)+'">Target level <'+(lvl-1)+'</option><option value="'+lvl+'">Target level <'+lvl+'</option><option value="'+(lvl+1)+'">Target level <'+(lvl+1)+'</option><option value="'+(lvl+2)+'">Target level <'+(lvl+2)+'</option><option value="'+(lvl+3)+'">Target level <'+(lvl+3)+'</option><option value="'+(lvl+4)+'">Target level <'+(lvl+4)+'</option><option value="'+(lvl+5)+'">Target level <'+(lvl+5)+'</option>';
-    selectarenatarget.id="arenatarget";
-    //ARENA CUSTOMTARGET ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    let arenacustomtarget=document.createElement('a');
-    arenacustomtarget.classList.add('menuitem');
-    arenacustomtarget.href="#";
-    let arenatargetname=document.createElement('input');
-    let arenatargetserver=document.createElement('input');
-    let arenaaddtarget=document.createElement('button');
-    let arenatable=document.createElement('table');
-    */
 
-    //BOTON CIRCUS TURMA
-    /*
-    let turmaboton=document.createElement('a');
-    let selectturmatarget=document.createElement('select');
-    turmaboton.classList.add('menuitem');
-    turmaboton.href="#";
-    if (autoturmaok==true){
-        turmaboton.innerHTML="AUTO TURMA ON";
-        selectturmatarget.setAttribute("style","display:none;margin-left:10px;");
-    }else{
-        turmaboton.innerHTML="AUTO TURMA OFF";
-        selectturmatarget.setAttribute("style","display:block;margin-left:10px;");
-    }
-    selectturmatarget.innerHTML='<option value="999" selected>No Limit</option><option value="'+(lvl-3)+'">Target level <'+(lvl-3)+'</option><option value="'+(lvl-2)+'">Target level <'+(lvl-2)+'</option><option value="'+(lvl-1)+'">Target level <'+(lvl-1)+'</option><option value="'+lvl+'">Target level <'+lvl+'</option><option value="'+(lvl+1)+'">Target level <'+(lvl+1)+'</option><option value="'+(lvl+2)+'">Target level <'+(lvl+2)+'</option><option value="'+(lvl+3)+'">Target level <'+(lvl+3)+'</option><option value="'+(lvl+4)+'">Target level <'+(lvl+4)+'</option><option value="'+(lvl+5)+'">Target level <'+(lvl+5)+'</option>';
-    selectturmatarget.id="turmatarget";
-    */
     //BOTON CIRCUS PROVINCIARIUM
     let circusprovinciariumboton=document.createElement('a');//turmaboton
     let selectcircusprovinciariummode=document.createElement('select');//selectturmatarget
@@ -384,13 +310,6 @@
     menubot.appendChild(advanced);
     menubot.appendChild(skipboss);
     menubot.appendChild(fulldungclear);
-    //menubot.appendChild(arenaboton);
-    //menubot.appendChild(selectarenatarget);
-    //menubot.appendChild(arenadatalabel);
-    //menubot.appendChild(arenahp);
-    //menubot.appendChild(arenadatalist);
-    //menubot.appendChild(turmaboton);
-    //menubot.appendChild(selectturmatarget);
     menubot.appendChild(circusprovinciariumboton)
     menubot.appendChild(selectcircusprovinciariummode)
     menubot.appendChild(arenaprovinciariumboton)
@@ -419,10 +338,10 @@
     //   EXPEDITION LOGIC
 
     expeditionboton.addEventListener("click",function(){
-        var selectedexpeditionmap=document.querySelector('#expeditionmap');
-        var selectedexpeditiontarget=document.querySelector('#expeditiontarget');
-        var expdatalabel=document.querySelector('#expdatalabel');
-        var expeditionhp=document.querySelector('#expeditionhp');
+        let selectedexpeditionmap=document.querySelector('#expeditionmap');
+        let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
+        let expdatalabel=document.querySelector('#expdatalabel');
+        let expeditionhp=document.querySelector('#expeditionhp');
         if (autoexpeditionok==true){
             autoexpeditionok=false;
             expeditionboton.innerHTML="AUTO EXPEDITION OFF";
@@ -447,7 +366,7 @@
         localStorage.setItem('_autoexpeditionok', autoexpeditionok)
     });
     expeditionhp.addEventListener("change",function(){
-        var expdatalabel=document.querySelector('#expdatalabel');
+        let expdatalabel=document.querySelector('#expdatalabel');
         expdatalabel.innerHTML="NOT ATTACK HP < "+expeditionhp.value+"%";
         localStorage.setItem('_expeditionhp', expeditionhp.value);
     });
@@ -461,7 +380,7 @@
     //   DUNGEON LOGIC
 
     dungeonboton.addEventListener("click",function(){
-        var selecteddungeonmap=document.querySelector('#dungeonmap');
+        let selecteddungeonmap=document.querySelector('#dungeonmap');
         let advanced=document.querySelector('#advanced');
         let skipboss=document.querySelector('#skipboss');
         let fulldungclear=document.querySelector('#fulldungclear');
@@ -503,50 +422,6 @@
         localStorage.setItem('_fulldungclear', fulldungclear.value);
     })
 
-    /*
-    arenahp.addEventListener("change",function(){
-        var arenadatalabel=document.querySelector('#arenadatalabel');
-        arenadatalabel.innerHTML="NOT ATTACK HP < "+arenahp.value+"%";
-    });
-    arenaboton.addEventListener("click",function(){
-        let arenatarget=document.querySelector('#arenatarget');
-        if (autoarenaok){
-            autoarenaok=false;
-            arenaboton.innerHTML="AUTO ARENA OFF";
-            //setCookie("arenatarget", arenatarget.value, 0);
-            //setCookie("arenahp", arenahp.value, 0);
-            arenatarget.style.display="block";
-            arenadatalabel.style.display="block";
-            arenahp.style.display="block";
-        }else{
-            autoarenaok=true;
-            arenaboton.innerHTML="AUTO ARENA ON";
-            //setCookie("arenatarget", arenatarget.value, 10080);
-            //setCookie("arenahp", arenahp.value, 10080);
-            arenatarget.style.display="none";
-            arenadatalabel.style.display="none";
-            arenahp.style.display="none";
-        }
-        //setCookie("autoarena", autoarenaok, 10080);
-    });
-    */
-    /*
-    turmaboton.addEventListener("click",function(){
-        let turmatarget=document.querySelector('#turmatarget');
-        if (autoturmaok){
-            autoturmaok=false;
-            turmaboton.innerHTML="AUTO TURMA OFF";
-            //setCookie("turmatarget", turmatarget.value, 0);
-            turmatarget.style.display="block";
-        }else{
-            autoturmaok=true;
-            turmaboton.innerHTML="AUTO TURMA ON";
-            //setCookie("turmatarget", turmatarget.value, 10080);
-            turmatarget.style.display="none";
-        }
-        //setCookie("autoturma", autoturmaok, 10080);
-    });
-    */
 
     // CIRCUS PROV LOGIC
     circusprovinciariumboton.addEventListener('click', function(){
@@ -590,7 +465,7 @@
         localStorage.setItem('_selectarenaprovinciariummode', selectarenaprovinciariummode.value);
     })
     arenahp.addEventListener("change",function(){
-        var arenadatalabel=document.querySelector('#arenadatalabel');
+        let arenadatalabel=document.querySelector('#arenadatalabel');
         arenadatalabel.innerHTML="NOT ATTACK HP < "+arenahp.value+"%";
         localStorage.setItem('_arenahp', arenahp.value);
     });
@@ -619,11 +494,11 @@
     // EVENT IDK LEAVE FOR NOW
     if (existevent()){
         eventhp.addEventListener("change",function(){
-            var eventdatalabel=document.querySelector('#eventdatalabel');
+            let eventdatalabel=document.querySelector('#eventdatalabel');
             eventdatalabel.innerHTML="NOT ATTACK HP < "+eventhp.value+"%";
         });
         eventboton.addEventListener("click",function(){
-            var selectedeventtarget=document.querySelector('#eventtarget');
+            let selectedeventtarget=document.querySelector('#eventtarget');
             if (autoeventok){
                 autoeventok=false;
                 eventboton.innerHTML="AUTO EVENT OFF";
@@ -665,39 +540,31 @@
 
 
 
+   // FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS
 
+    function changePageIcon(){
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        let url = location.href
+        if (url.includes('index.php?mod=quests')){
+            link.href = 'https://icons.iconarchive.com/icons/tatice/cristal-intense/256/Help-icon.png';
+        }
+        else {
+            link.href = 'https://i.kym-cdn.com/photos/images/original/001/882/131/c6e.png'
+        }
 
-
-
-
-
-    var expeditionLocationIndex = 2 // 0-6
-    var expeditionEnemyIndex = 1 // 0-3
-
-    var dungeonLocationIndex = 1 // 0-6
-
-    var arenaEnemiesNicknames = ['Asmonius', 'PijariVodkowich', 'YebacPolicje', 'Nigun']
-    var jobIndex = 2 //0-8,  -- 0,1,8 are paid --
-
-    var refreshPageCounter = 0
-
-    //function getPage(url, callback){
-    //    GM_xmlhttpRequest({
-    //        method: 'GET',
-    //        url: url,
-    //        onload: callback
-    //    })
-    //}
-    function changePage(url){
-        if (location.href == url) return
-        else location.href = url
     }
 
+
     function checkExpedition(selectexpeditionmap, selectexpeditiontarget, expeditionhp){
-        var currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
         if (currentHpPercentage < expeditionhp) return;
         console.log('expedition')
-        var content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+        let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
         //alert(content);
 
         if(content == 'Go to expedition'){
@@ -709,12 +576,12 @@
 
 
     function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
-        var selectdungeonmap = parseInt(_selectdungeonmap)
-        var advanced = _advanced === 'true'
-        var skipboss = _skipboss === 'true'
-        var fulldungclear = _fulldungclear === 'true'
+        let selectdungeonmap = parseInt(_selectdungeonmap)
+        let advanced = _advanced === 'true'
+        let skipboss = _skipboss === 'true'
+        let fulldungclear = _fulldungclear === 'true'
         console.log('dungeon');
-        var content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
+        let content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
         if(content == 'Go to dungeon'){
             location.href = dungeonLocations[selectdungeonmap];
 
@@ -728,14 +595,14 @@
                 }
             }
 
-            var enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
-            var furthestEnemyIndex = 0;
-            var furthestEnemy = '';
-            var closestEnemyIndex = 0;
-            var closestEnemy = '';
-            var firstLoop = true;
+            let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
+            let furthestEnemyIndex = 0;
+            let furthestEnemy = '';
+            let closestEnemyIndex = 0;
+            let closestEnemy = '';
+            let firstLoop = true;
             for (var i = 0; i < enemiesImgs.length; i++) {
-                var enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
                 if (firstLoop){
                     firstLoop = false;
                     closestEnemyIndex = enemyMapIndex;
@@ -752,16 +619,16 @@
                     closestEnemy = enemiesImgs[i]
                 }
             }
-            var compareObject = {}
-            var enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
+            let compareObject = {}
+            let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
             enemiesDivs.forEach(enemy => {
-                var enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
                 compareObject={
                     ...compareObject,
                     [enemyMapIndex]: enemy.innerHTML,
                 }
             })
-            var cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
+            let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
             if (fulldungclear){
                 if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
                     cancelBtn.click()
@@ -782,63 +649,18 @@
     }
 
 
-    function checkArena(){ // not using atm
-        var currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
-        if (currentHpPercentage < 40) return;
-        console.log('arena')
-        var content = document.getElementById('cooldown_bar_text_arena').innerHTML
-        var arenaLink = 'index.php?mod=arena&sh=' + sessionHash;
-
-        if(content == 'Go to the arena'){
-            //location.href = arenaLink
-            //var enemyTextField = document.querySelector('input.player-name.input.ui-autocomplete-input');
-            //var fightButton = document.querySelector('input.button3');
-            //arenaEnemiesNicknames.forEach(enemy => {
-            //    console.log(enemy)
-            //    enemyTextField.value = enemy;
-            //    console.log('click')
-            //    fightButton.click()
-            //})
-            location.href = arenaLink;
-            var fetchedPlayersFightIcon = document.querySelectorAll('aside.right section table tbody tr td div.attack');
-            fetchedPlayersFightIcon[fetchedPlayersFightIcon.length -1].click(); // 0 = highest ranking
-        }
-    }
-
-    function checkCircus(){ //not using atm
-        console.log('circus')
-        var content = document.getElementById('cooldown_bar_text_ct').innerHTML
-        var circusLink = 'index.php?mod=arena&submod=grouparena&sh=' + sessionHash;
-
-        if(content == 'To Circus Turma'){
-            //location.href = arenaLink
-            //var enemyTextField = document.querySelector('input.player-name.input.ui-autocomplete-input');
-            //var fightButton = document.querySelector('input.button3');
-            //arenaEnemiesNicknames.forEach(enemy => {
-            //    console.log(enemy)
-            //    enemyTextField.value = enemy;
-            //    console.log('click')
-            //    fightButton.click()
-            //})
-            location.href = circusLink;
-            var fetchedPlayersFightIcon = document.querySelectorAll('aside.right section table tbody tr td div.attack')
-
-            fetchedPlayersFightIcon[fetchedPlayersFightIcon.length -1].click(); // 0 = highest ranking
-        }
-    }
-
     function checkCircusProvinciarium(_selectcircusprovinciariummode){
-        var selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode)
+        let selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode)
         console.log('circus');
-        var content = document.getElementById('cooldown_bar_text_ct').innerHTML;
-        var circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
+        let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
+        let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
 
         if(content == 'To Circus Turma'){
 
             location.href = circusLink;
-            var enemies = document.querySelectorAll('section#own3 table tbody tr td div.attack');
+            let enemies = document.querySelectorAll('section#own3 table tbody tr td div.attack');
             if (selectcircusprovinciariummode == 0){
-                var randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
+                let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
                 enemies[randomEnemy].click();
             }
             else if (selectcircusprovinciariummode == 1){//attack lowest lvl available
@@ -853,18 +675,18 @@
     function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
         //var arenahp = parseInt(_arenahp);
         console.log('arena');
-        var currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
         //console.log('current and cap hp: ', currentHpPercentage , ' < ', arenahp, ' = ', currentHpPercentage < arenahp)
         if (currentHpPercentage < arenahp) return;
-        var selectarenaprovinciariummode = parseInt(_selectarenaprovinciariummode)
-        var content = document.getElementById('cooldown_bar_text_arena').innerHTML;
-        var arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
+        let selectarenaprovinciariummode = parseInt(_selectarenaprovinciariummode)
+        let content = document.getElementById('cooldown_bar_text_arena').innerHTML;
+        let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
         if(content == 'Go to the arena'){
             location.href = arenaLink;
-            var enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
+            let enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
             if (selectarenaprovinciariummode == 0){
-                var randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
+                let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
                 enemies[randomEnemy].click();
             }
             else if (selectarenaprovinciariummode == 1){//attack lowest lvl available
@@ -879,13 +701,13 @@
 
 
     function checkWork(_autoworktype){
-        var autoworktype = parseInt(_autoworktype);
+        let autoworktype = parseInt(_autoworktype);
         console.log('work')
-        var expeditionsLeft = document.getElementById('expeditionpoints_value_point').innerHTML;
-        var dungeonsLeft = document.getElementById('dungeonpoints_value_point').innerHTML;
-        var isWorking = document.querySelector('div#content.show-item-quality.show-item-level h1');
+        let expeditionsLeft = document.getElementById('expeditionpoints_value_point').innerHTML;
+        let dungeonsLeft = document.getElementById('dungeonpoints_value_point').innerHTML;
+        let isWorking = document.querySelector('div#content.show-item-quality.show-item-level h1');
         if (expeditionsLeft == '0' && dungeonsLeft == '0' && !isWorking){
-            var workTabLink = document.getElementById('submenu1').children[0].href;
+            let workTabLink = document.getElementById('submenu1').children[0].href;
             location.href = workTabLink;
             console.log('work index: ', autoworktype)
             document.querySelectorAll('div#select table.section-like.select_work_table tbody tr[id]')[autoworktype].click();
@@ -895,14 +717,13 @@
 
 
 
-function checkHealth(){ //not using atm
-        var currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
-        var maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
-        var currentHealthInPercentage = currentHealth / maxHealth;
+    function checkHealth(){ //not using atm
+        let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
+        let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
+        let currentHealthInPercentage = currentHealth / maxHealth;
         console.log('health: ', currentHealthInPercentage);
         if (currentHealthInPercentage < 0.90){ //health percentage, for example 0.4 = 40%
-            var overviewLink = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href
-            changePage(overviewLink)
+            let overviewLink = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href
             // zamienic pozniej na
             // location.href = overviewLink
 
@@ -913,30 +734,174 @@ function checkHealth(){ //not using atm
     }
 
 
+
+    let questCounter=document.createElement('button');//selectturmatarget
+    questCounter.classList.add('awesome-tabs');
+    questCounter.setAttribute("style"," position:absolute; padding:2px; left: -25px; font-size: 14px; min-width: 25px; min-height: 25px;");
+    let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
+    questNavTab.appendChild(questCounter)
+    let qc = parseInt(localStorage.getItem('_questCounter')) || 0
+    questCounter.innerHTML = qc;
+
     function questChecker(){
         console.log("QUESTS")
-        var link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.head.appendChild(link);
+        let randomNumber = Math.random() * (100 - 0) + 0; //additional refresh cuz quests dont refresha s often as they should
+        if (randomNumber < 10){ //10% for refresh per loop (loop itself has couple seconds of delay)
+            location.reload();
         }
-        link.href = 'https://icons.iconarchive.com/icons/tatice/cristal-intense/256/Help-icon.png';
-
-        var resetQuestsButton = document.querySelectorAll('input[type="button"][value="New quests"]');
-        var questContainer = document.querySelector('div#main_inner div#content div.contentboard_start');
-        var questIds = ['qcategory_arena', 'qcategory_grouparena', 'qcategory_combat', 'qcategory_expedition', 'qcategory_dungeon']
-
-        //var arenaQuests =
 
 
-        for(let i=0; i<questContainer.children.length; i++){
-            for (let j=0; j<questIds.length; j++){
-                if (questContainer.children[i].getAttribute('id') == questIds[j]){
-                    console.log(questContainer.children[i].children[2])
-                }
+        let rerollQuestsButton = document.querySelector('input[type="button"][value="New quests"]');
+        let completedQuests = document.querySelectorAll('div#qcategory_finished div.contentboard_slot.contentboard_slot_active a.quest_slot_button_finish')
+        let failedQuests = document.querySelectorAll('div#qcategory_restart div.contentboard_slot.contentboard_slot_active a.quest_slot_button_restart') //restart all
+
+        let arenaQuests = document.querySelectorAll('div#qcategory_arena div.contentboard_slot.contentboard_slot_inactive');
+
+        let circusQuests = document.querySelectorAll('div#qcategory_grouparena div.contentboard_slot.contentboard_slot_inactive');
+        let combatQuests = document.querySelectorAll('div#qcategory_combat div.contentboard_slot.contentboard_slot_inactive');
+        let expeditionQuests = document.querySelectorAll('div#qcategory_expedition div.contentboard_slot.contentboard_slot_inactive');
+        //let itemQuests = document.querySelectorAll('div#qcategory_items div.contentboard_slot.contentboard_slot_inactive')
+        let succession = true //later set on input
+
+
+
+        completedQuests.forEach(quest => {
+            console.log('completedQuests: ', quest)
+            quest.click()
+            qc += 1;
+            localStorage.setItem('_questCounter', qc)
+            questCounter.innerHTML = qc;
+        })
+        failedQuests.forEach(quest => {
+            console.log('failedQuests: ', quest)
+            quest.click()
+        })
+
+        let isQuestCooldown = document.getElementById('quest_header_cooldown')
+        if (isQuestCooldown){
+            console.log('cooldown')
+            return
+        }
+
+
+
+        arenaQuests.forEach(quest => {
+            if (quest.querySelector('.quest_slot_time')){ //if quest is timed - dont count it
+                //console.log('TIMED YUCK')
+                return
             }
+            let questText = quest.children[1].innerHTML;
+            if (!questText.includes('succession')){
+                //console.log('AKCEPTUJ: ', quest)
+                quest.children[3].click()
+            }
+            else if (questText.includes('succession') && succession){
+                //console.log('[S]AKCEPTUJ: ', quest)
+                quest.children[3].click()
+            }
+            else {
+                //console.log('NIE AKCEPTUJ: ', questText)
+            }
+        })
+
+        circusQuests.forEach(quest => {
+            let questText = quest.children[1].innerHTML;
+            if (!questText.includes('succession')){
+                //console.log('AKCEPTUJ: ', questText)
+                quest.children[3].click()
+            }
+            else if (questText.includes('succession') && succession){
+                //console.log('[S]AKCEPTUJ: ', questText)
+                quest.children[3].click()
+            }
+            else {
+                //console.log('NIE AKCEPTUJ: ', questText)
+            }
+        })
+        combatQuests.forEach(quest => {
+            let questText = quest.children[1].innerHTML;
+            if (!questText.includes('succession')){
+                //console.log('AKCEPTUJ: ', questText)
+                quest.children[3].click()
+            }
+            else if (questText.includes('succession') && succession){
+                //console.log('[S]AKCEPTUJ: ', questText)
+                quest.children[3].click()
+            }
+            else {
+                //console.log('NIE AKCEPTUJ: ', questText)
+            }
+        })
+        expeditionQuests.forEach(quest => {
+            let questText = quest.children[1].innerHTML;
+            if (questText.includes('Awakened Mummy')){
+                quest.children[3].click()
+            }
+        })
+
+
+        //itemQuests.forEach(quest => {
+        //    console.log('itemQuests: ', quest)
+        //    //quest.click()
+        //})  //idk, low gold and takes quest slot
+
+
+
+        //count valid quests *********
+        let validQuests = 0;
+        arenaQuests.forEach(quest =>{
+            if (quest.querySelector('.quest_slot_time')){
+                console.log('czasowka')
+                return
+            }
+            let questText = quest.children[1].innerHTML;
+            if (!questText.includes('succession')){
+                console.log('valid: ',quest)
+                validQuests += 1
+            }
+            else if (questText.includes('succession') && succession){
+                console.log('valid: ',quest)
+                validQuests += 1
+            }
+            else {
+                return
+            }
+        })
+        circusQuests.forEach(quest => {
+            console.log('valid: ',quest)
+            validQuests += 1 // all circus are valid
+        })
+        combatQuests.forEach(quest => {
+            let questText = quest.children[1].innerHTML;
+            if (!questText.includes('succession')){
+                console.log('valid: ',quest)
+                validQuests += 1
+            }
+            else if (questText.includes('succession') && succession){
+                console.log('valid: ',quest)
+                validQuests += 1
+            }
+            else {
+                return
+            }
+        })
+        expeditionQuests.forEach(quest => {
+            let questText = quest.children[1].innerHTML;
+            if (questText.includes('Awakened Mummy')){
+                console.log('valid: ',quest)
+                validQuests += 1
+            }
+        })
+        //count valid quests
+        console.log('number of valid quests to take: ', validQuests)
+
+
+        let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
+        console.log('number of active quests: ', activeQuests.length)
+        if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
+            rerollQuestsButton.click()
         }
+
     }
 
 
@@ -952,42 +917,50 @@ function checkHealth(){ //not using atm
             if (autocircusprovinciariumok) checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
             if (autoarenaprovinciariumok) checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
             if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
-            //checkArena()
-            //checkCircus()
         }
     }
 
 
     function main(){ // here include further functionalities
-        if (!location.href.includes('/game/index.php?mod=quests')){ //set main bots
+        if (!location.href.includes('index.php?mod=quests')){ //set main bots
             eventChecker()
         }
 
-        if (location.href.includes('/game/index.php?mod=quests')){ // quest bot
+        if (location.href.includes('index.php?mod=quests')){ // quest bot
             questChecker()
         }
     }
 
 
+    let refreshPageCounter = 0
     //dont touch these 2 :)
     function loop() {
-        var rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
+        let rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
         setTimeout(function() {
             main();
             loop();
         }, rand);
     }
+
     setInterval(function(){
         refreshPageCounter += 1
         console.log(refreshPageCounter)
         if (refreshPageCounter > 180){
-            var overviewLink = 'https://s303-en.gladiatus.gameforge.com/game/index.php?mod=overview&sh=' + sessionHash;
-            location.href = overviewLink
+            let resetLink = ''
+            if (location.href.includes('index.php?mod=quests')){
+                resetLink = 'index.php?mod=quests&sh=' + sessionHash;
+            }
+            else {
+                resetLink = 'index.php?mod=overview&sh=' + sessionHash;
+            }
+            location.href = resetLink;
         }
     }, 1000)
 
 
 
 
+
+    changePageIcon()
     loop()
 })();
