@@ -777,9 +777,12 @@
             quest.click()
         })
 
+        let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
+        //console.log('number of active quests: ', activeQuests.length)
+
         let isQuestCooldown = document.getElementById('quest_header_cooldown')
-        if (isQuestCooldown){
-            console.log('cooldown')
+        if (isQuestCooldown && (activeQuests.length == 5)){
+            console.log('cooldown/max quests')
             return
         }
 
@@ -827,6 +830,7 @@
             else if (questText.includes('succession') && succession){
                 //console.log('[S]AKCEPTUJ: ', questText)
                 quest.children[3].click()
+                //console.log(quest)
             }
             else {
                 //console.log('NIE AKCEPTUJ: ', questText)
@@ -893,11 +897,11 @@
             }
         })
         //count valid quests
-        console.log('number of valid quests to take: ', validQuests)
+        //console.log('number of valid quests to take: ', validQuests)
 
 
-        let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
-        console.log('number of active quests: ', activeQuests.length)
+        //let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
+        //console.log('number of active quests: ', activeQuests.length)
         if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
             rerollQuestsButton.click()
         }
