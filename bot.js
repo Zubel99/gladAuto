@@ -781,7 +781,7 @@
         //console.log('number of active quests: ', activeQuests.length)
 
         let isQuestCooldown = document.getElementById('quest_header_cooldown')
-        if (isQuestCooldown && (activeQuests.length == 5)){
+        if (isQuestCooldown || (activeQuests.length == 5)){
             console.log('cooldown/max quests')
             return
         }
@@ -855,16 +855,16 @@
         let validQuests = 0;
         arenaQuests.forEach(quest =>{
             if (quest.querySelector('.quest_slot_time')){
-                console.log('czasowka')
+                //console.log('czasowka')
                 return
             }
             let questText = quest.children[1].innerHTML;
             if (!questText.includes('succession')){
-                console.log('valid: ',quest)
+                //console.log('valid: ',quest)
                 validQuests += 1
             }
             else if (questText.includes('succession') && succession){
-                console.log('valid: ',quest)
+                //console.log('valid: ',quest)
                 validQuests += 1
             }
             else {
@@ -872,17 +872,17 @@
             }
         })
         circusQuests.forEach(quest => {
-            console.log('valid: ',quest)
+            //console.log('valid: ',quest)
             validQuests += 1 // all circus are valid
         })
         combatQuests.forEach(quest => {
             let questText = quest.children[1].innerHTML;
             if (!questText.includes('succession')){
-                console.log('valid: ',quest)
+                //console.log('valid: ',quest)
                 validQuests += 1
             }
             else if (questText.includes('succession') && succession){
-                console.log('valid: ',quest)
+                //console.log('valid: ',quest)
                 validQuests += 1
             }
             else {
@@ -892,7 +892,7 @@
         expeditionQuests.forEach(quest => {
             let questText = quest.children[1].innerHTML;
             if (questText.includes('Awakened Mummy')){
-                console.log('valid: ',quest)
+                //console.log('valid: ',quest)
                 validQuests += 1
             }
         })
