@@ -37,8 +37,29 @@
     let autoarenaok=localStorage.getItem('_autoarenaok') === 'true';
     let autocircusprovinciariumok=localStorage.getItem('_autocircusprovinciariumok') === 'true';
     let autoarenaprovinciariumok=localStorage.getItem('_autoarenaprovinciariumok') === 'true';
-    let autoturmaok=localStorage.getItem('_autoturmaok') === 'true';
+    //let autoturmaok=localStorage.getItem('_autoturmaok') === 'true';
     let autoworkok=localStorage.getItem('_autoworkok') === 'true';
+
+    let autoquestok=localStorage.getItem('_autoquestok') === 'true';
+
+
+    let arenaquestok=localStorage.getItem('_arenaquestok') === 'true';
+    let arenaquesttimedok=localStorage.getItem('_arenaquesttimedok') === 'true';
+    let arenaquestsuccessionok=localStorage.getItem('_arenaquestsuccessionok') === 'true';
+
+    let circusquestok=localStorage.getItem('_circusquestok') === 'true';
+    let circusquesttimedok=localStorage.getItem('_circusquesttimedok') === 'true';
+    let circusquestsuccessionok=localStorage.getItem('_circusquestsuccessionok') === 'true';
+
+    let combatquestok=localStorage.getItem('_combatquestok') === 'true';
+    let combatquesttimedok=localStorage.getItem('_combatquesttimedok') === 'true';
+    let combatquestsuccessionok=localStorage.getItem('_combatquestsuccessionok') === 'true';
+
+    let expeditionquestok=localStorage.getItem('_expeditionquestok') === 'true';
+    let expeditionquesttimedok=localStorage.getItem('_expeditionquesttimedok') === 'true';
+    let expeditionquestsuccessionok=localStorage.getItem('_expeditionquestsuccessionok') === 'true';
+
+
     //additional functionalities handle the same way
     let autoeventok=true
 
@@ -49,6 +70,8 @@
     menubot.classList.add('submenu');
     let botOptionOn='0px 0px 15px green,0px 0px 15px green,0px 0px 15px green,0px 0px 15px green';
     let botOptionOff='0px 0px 15px red,0px 0px 15px red'
+    let smallButtonBotOptionOn= '0px 0px 15px green,0px 0px 15px green,0px 0px 15px green,0px 0px 15px green,0px 0px 15px green,0px 0px 15px green,0px 0px 15px green';
+    let smallButtonBotOptionOff= '0px 0px 15px red,0px 0px 15px red '
     let botTab=document.querySelector('a#botboton')
 
 
@@ -71,29 +94,6 @@
     }
     menubot.id="bot";
     menubot.setAttribute("style","display:block");
-
-    // WORKON
-    let autoworkboton=document.createElement('a');
-    autoworkboton.classList.add('menuitem');
-    autoworkboton.style.cursor = "pointer";
-    let autoworktype=document.createElement('select');
-    autoworktype.id="autoworktype";
-    autoworktype.innerHTML='<option value="0">Senator -3♦</div></option><option value="1">Jeweller -3♦</div></option><option value="2" selected>Stable boy</option><option value="3">Farmer</option><option value="4">Butcher</option><option value="5">Fisherman</option><option value="6">Baker</option><option value="7">Blacksmith</option><option value="8">Master blacksmith -3♦</option>';
-    autoworktype.value= localStorage.getItem('_worktype') || 2
-    //let autoworktime=document.createElement('select');
-    //autoworktime.id="autoworktime";
-    //autoworktime.innerHTML='<option value="1">1 HOUR</option><option value="2">2 HOURS</option><option value="3">3 HOURS</option><option value="4">4 HOURS</option><option value="5">5 HOURS</option><option value="6">6 HOURS</option><option value="7">7 HOURS</option><option value="8" selected>8 HOURS</option>';
-    //autoworkboton.href="#";
-    if (autoworkok==true){
-        autoworkboton.innerHTML="AUTO WORK ON";
-        //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
-        autoworkboton.style.textShadow = botOptionOn
-        autoworktype.setAttribute("style","display:block;margin-left:10px;");
-    }else{
-        autoworkboton.innerHTML="AUTO WORK OFF";
-        autoworkboton.style.textShadow = botOptionOff
-        autoworktype.setAttribute("style","display:block;margin-left:10px;");
-    }
 
     // BOTON EXPEDICION
     let expeditionboton=document.createElement('a');
@@ -252,6 +252,190 @@
     selectarenaprovinciariummode.id="selectarenaprovinciariummode";
     selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 0;
 
+    // WORKON
+    let autoworkboton=document.createElement('a');
+    autoworkboton.classList.add('menuitem');
+    autoworkboton.style.cursor = "pointer";
+    let autoworktype=document.createElement('select');
+    autoworktype.id="autoworktype";
+    autoworktype.innerHTML='<option value="0">Senator -3♦</div></option><option value="1">Jeweller -3♦</div></option><option value="2" selected>Stable boy</option><option value="3">Farmer</option><option value="4">Butcher</option><option value="5">Fisherman</option><option value="6">Baker</option><option value="7">Blacksmith</option><option value="8">Master blacksmith -3♦</option>';
+    autoworktype.value= localStorage.getItem('_worktype') || 2
+    //let autoworktime=document.createElement('select');
+    //autoworktime.id="autoworktime";
+    //autoworktime.innerHTML='<option value="1">1 HOUR</option><option value="2">2 HOURS</option><option value="3">3 HOURS</option><option value="4">4 HOURS</option><option value="5">5 HOURS</option><option value="6">6 HOURS</option><option value="7">7 HOURS</option><option value="8" selected>8 HOURS</option>';
+    //autoworkboton.href="#";
+    if (autoworkok==true){
+        autoworkboton.innerHTML="AUTO WORK ON";
+        //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
+        autoworkboton.style.textShadow = botOptionOn;
+        autoworktype.setAttribute("style","display:block;margin-left:10px;");
+    }else{
+        autoworkboton.innerHTML="AUTO WORK OFF";
+        autoworkboton.style.textShadow = botOptionOff;
+        autoworktype.setAttribute("style","display:block;margin-left:10px;");
+    }
+
+    // QUESTS ON
+    let autoquestboton=document.createElement('a');
+    autoquestboton.classList.add('menuitem');
+    autoquestboton.style.cursor = "pointer";
+
+    let arenaqueston=document.createElement('a'); //arena
+    arenaqueston.id="arenaqueston";
+    arenaqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+    arenaqueston.setAttribute('value', localStorage.getItem('_arenaquestok') || 0);
+    let arenaquesttimedon=document.createElement('select');
+    arenaquesttimedon.id="arenaquesttimedon";
+    arenaquesttimedon.innerHTML='<option value="0" selected>No timer</option><option value="1">Timer</option>';
+    arenaquesttimedon.value=localStorage.getItem('_arenaquesttimedon') || 0;
+    arenaquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+    let arenaquestsuccessionon=document.createElement('select');
+    arenaquestsuccessionon.id="arenaquestsuccessionon";
+    arenaquestsuccessionon.innerHTML='<option value="0" selected>No succession</option><option value="1">Succession</option>';
+    arenaquestsuccessionon.value=localStorage.getItem('_arenaquestsuccessionon') || 0;
+    arenaquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+    let circusqueston=document.createElement('a');//circus
+    circusqueston.id="circusqueston";
+    circusqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+    circusqueston.setAttribute('value', localStorage.getItem('_circusquestok') || 0);
+    let circusquesttimedon=document.createElement('select');
+    circusquesttimedon.id="circusquesttimedon";
+    circusquesttimedon.innerHTML='<option value="0" selected>No timer</option><option value="1">Timer</option>';
+    circusquesttimedon.value=localStorage.getItem('_circusquesttimedon') || 0;
+    circusquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+    let circusquestsuccessionon=document.createElement('select');
+    circusquestsuccessionon.id="circusquestsuccessionon";
+    circusquestsuccessionon.innerHTML='<option value="0" selected>No succession</option><option value="1">Succession</option>';
+    circusquestsuccessionon.value=localStorage.getItem('_circusquestsuccessionon') || 0;
+    circusquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+    let combatqueston=document.createElement('a');//combat
+    combatqueston.id="combatqueston";
+    combatqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+    combatqueston.setAttribute('value', localStorage.getItem('_combatquestok') || 0);
+    let combatquesttimedon=document.createElement('select');
+    combatquesttimedon.id="combatquesttimedon";
+    combatquesttimedon.innerHTML='<option value="0" selected>No timer</option><option value="1">Timer</option>';
+    combatquesttimedon.value=localStorage.getItem('_combatquesttimedon') || 0;
+    combatquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+    let combatquestsuccessionon=document.createElement('select');
+    combatquestsuccessionon.id="combatquestsuccessionon";
+    combatquestsuccessionon.innerHTML='<option value="0" selected>No succession</option><option value="1">Succession</option>';
+    combatquestsuccessionon.value=localStorage.getItem('_combatquestsuccessionon') || 0;
+    combatquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+    let expeditionqueston=document.createElement('a');//expedition
+    expeditionqueston.id="expeditionqueston";
+    expeditionqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+    expeditionqueston.setAttribute('value', localStorage.getItem('_expeditionquestok') || 0);
+    let expeditionquesttimedon=document.createElement('select');
+    expeditionquesttimedon.id="expeditionquesttimedon";
+    expeditionquesttimedon.innerHTML='<option value="0" selected>No timer</option><option value="1">Timer</option>';
+    expeditionquesttimedon.value=localStorage.getItem('_expeditionquesttimedon') || 0;
+    expeditionquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+    let expeditionquestsuccessionon=document.createElement('select');
+    expeditionquestsuccessionon.id="expeditionquestsuccessionon";
+    expeditionquestsuccessionon.innerHTML='<option value="0" selected>No succession</option><option value="1">Succession</option>';
+    expeditionquestsuccessionon.value=localStorage.getItem('_expeditionquestsuccessionon') || 0;
+    expeditionquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+
+    let expeditionquestmaplabel = document.createElement('span');
+    expeditionquestmaplabel.innerHTML='Expedition map name'
+    let expeditionquestmap=document.createElement('input');
+    expeditionquestmap.id="expeditionquestmap";
+    expeditionquestmap.value= localStorage.getItem('_expeditionquestmap') || '';
+
+    let expeditionquestenemylabel = document.createElement('span');
+    expeditionquestenemylabel.innerHTML='Expedition enemy name'
+    let expeditionquestenemy=document.createElement('input');
+    expeditionquestenemy.id="expeditionquestenemy";
+    expeditionquestenemy.value= localStorage.getItem('_expeditionquestenemy') || '';
+    if (autoquestok==true){//global for quests
+        autoquestboton.innerHTML="AUTO QUESTS ON";
+        autoquestboton.style.textShadow = botOptionOn;
+
+        //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
+        //now components
+        if(arenaquestok){
+            arenaqueston.innerHTML = 'ARENA ON'
+            arenaqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            arenaqueston.innerHTML = 'ARENA OFF'
+            arenaqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(circusquestok){
+            circusqueston.innerHTML = 'CIRCUS ON'
+            circusqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            circusqueston.innerHTML = 'CIRCUS OFF'
+            circusqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(combatquestok){
+            combatqueston.innerHTML = 'COMBAT ON'
+            combatqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            combatqueston.innerHTML = 'COMBAT OFF'
+            combatqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(expeditionquestok){
+            expeditionqueston.innerHTML = 'EXPEDITION ON'
+            expeditionqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            expeditionqueston.innerHTML = 'EXPEDITION OFF'
+            expeditionqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+
+    }else{
+        autoquestboton.innerHTML="AUTO QUESTS OFF";
+        autoquestboton.style.textShadow = botOptionOff;
+
+        if(arenaquestok){
+            arenaqueston.innerHTML = 'ARENA ON'
+            arenaqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            arenaqueston.innerHTML = 'ARENA OFF'
+            arenaqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(circusquestok){
+            circusqueston.innerHTML = 'CIRCUS ON'
+            circusqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            circusqueston.innerHTML = 'CIRCUS OFF'
+            circusqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(combatquestok){
+            combatqueston.innerHTML = 'COMBAT ON'
+            combatqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            combatqueston.innerHTML = 'COMBAT OFF'
+            combatqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        if(expeditionquestok){
+            expeditionqueston.innerHTML = 'EXPEDITION ON'
+            expeditionqueston.style.textShadow = smallButtonBotOptionOn;
+        }else{
+            expeditionqueston.innerHTML = 'EXPEDITION OFF'
+            expeditionqueston.style.textShadow = smallButtonBotOptionOff;
+        }
+
+        expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow;white-space: nowrap;");
+        expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+        expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+    }
 
     //BOTON EVENTON
     let eventboton=document.createElement('a');
@@ -317,6 +501,25 @@
     menubot.appendChild(arenadatalabel);
     menubot.appendChild(arenahp);
     menubot.appendChild(arenadatalist);
+    menubot.appendChild(autoquestboton);
+
+    menubot.appendChild(arenaqueston)
+    menubot.appendChild(arenaquesttimedon)
+    menubot.appendChild(arenaquestsuccessionon)
+    menubot.appendChild(circusqueston)
+    menubot.appendChild(circusquesttimedon)
+    menubot.appendChild(circusquestsuccessionon)
+    menubot.appendChild(combatqueston)
+    menubot.appendChild(combatquesttimedon)
+    menubot.appendChild(combatquestsuccessionon)
+    menubot.appendChild(expeditionqueston)
+    menubot.appendChild(expeditionquesttimedon)
+    menubot.appendChild(expeditionquestsuccessionon)
+
+    menubot.appendChild(expeditionquestmaplabel);
+    menubot.appendChild(expeditionquestmap);
+    menubot.appendChild(expeditionquestenemylabel);
+    menubot.appendChild(expeditionquestenemy);
     menubot.appendChild(autoworkboton);
     menubot.appendChild(autoworktype);
     //menubot.appendChild(autoworktime);
@@ -445,7 +648,7 @@
     })
 
     // ARENA PROV LOGIC
-        arenaprovinciariumboton.addEventListener('click', function(){
+    arenaprovinciariumboton.addEventListener('click', function(){
         let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
         if (autoarenaprovinciariumok==true){
             autoarenaprovinciariumok=false;
@@ -470,6 +673,7 @@
         localStorage.setItem('_arenahp', arenahp.value);
     });
 
+
     // WORKON
     autoworkboton.addEventListener('click', function(){
         let autoworktype=document.querySelector('#autoworktype');
@@ -489,6 +693,129 @@
     })
     autoworktype.addEventListener('change', function(){
         localStorage.setItem('_worktype', autoworktype.value);
+    })
+
+    //QUEST ON
+    autoquestboton.addEventListener('click', function(){ //main quests button
+        let expeditionquestmap=document.querySelector('#expeditionquestmap');
+        let expeditionquestenemy=document.querySelector('#expeditionquestenemy');
+        if (autoquestok==true){
+            autoquestok=false;
+            autoquestboton.innerHTML="AUTO QUESTS OFF";
+            autoquestboton.style.textShadow = botOptionOff;
+            expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+        }else{
+            autoquestok=true;
+            autoquestboton.innerHTML="AUTO QUESTS ON";
+            autoquestboton.style.textShadow = botOptionOn;
+            expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+        }
+        localStorage.setItem('_autoquestok', autoquestok);
+    })
+
+    arenaqueston.addEventListener('click', function(){ // arena quests button
+        if (arenaquestok==true){
+            arenaquestok=false;
+            arenaqueston.setAttribute('value', false);
+            arenaqueston.innerHTML="ARENA OFF";
+            arenaqueston.style.textShadow = smallButtonBotOptionOff;
+
+        }else{
+            arenaquestok=true;
+            arenaqueston.setAttribute('value', true);
+            arenaqueston.innerHTML="ARENA ON";
+            arenaqueston.style.textShadow = smallButtonBotOptionOn;
+        }
+        localStorage.setItem('_arenaquestok', arenaquestok);
+    })
+    arenaquesttimedon.addEventListener('change', function(){
+        console.log('arenaquesttimedon: ', arenaquesttimedon.value)
+        localStorage.setItem('_arenaquesttimedon', arenaquesttimedon.value);
+    })
+    arenaquestsuccessionon.addEventListener('change', function(){
+        console.log('arenaquestsuccessionon: ', arenaquestsuccessionon.value)
+        localStorage.setItem('_arenaquestsuccessionon', arenaquestsuccessionon.value);
+    })
+    circusqueston.addEventListener('click', function(){ // circus quests button
+        if (circusquestok==true){
+            circusquestok=false;
+            circusqueston.setAttribute('value', false);
+            circusqueston.innerHTML="CIRCUS OFF";
+            circusqueston.style.textShadow = smallButtonBotOptionOff;
+            circusqueston.value='true'
+
+        }else{
+            circusquestok=true;
+            circusqueston.setAttribute('value', false);
+            circusqueston.innerHTML="CIRCUS ON";
+            circusqueston.style.textShadow = smallButtonBotOptionOn;
+            circusqueston.value='false'
+        }
+        localStorage.setItem('_circusquestok', circusquestok);
+    })
+    circusquesttimedon.addEventListener('change', function(){
+        console.log('circusquesttimedon: ', circusquesttimedon.value)
+        localStorage.setItem('_circusquesttimedon', circusquesttimedon.value);
+    })
+    circusquestsuccessionon.addEventListener('change', function(){
+        console.log('circusquestsuccessionon: ', circusquestsuccessionon.value)
+        localStorage.setItem('_circusquestsuccessionon', circusquestsuccessionon.value);
+    })
+    combatqueston.addEventListener('click', function(){// combat quests button
+        if (combatquestok==true){
+            combatquestok=false;
+            combatqueston.setAttribute('value', false);
+            combatqueston.innerHTML="COMBAT OFF";
+            combatqueston.style.textShadow = smallButtonBotOptionOff;
+
+        }else{
+            combatquestok=true;
+            combatqueston.setAttribute('value', false);
+            combatqueston.innerHTML="COMBAT ON";
+            combatqueston.style.textShadow = smallButtonBotOptionOn;
+        }
+        localStorage.setItem('_combatquestok', combatquestok);
+    })
+    combatquesttimedon.addEventListener('change', function(){
+        console.log('combatquesttimedon: ', combatquesttimedon.value)
+        localStorage.setItem('_combatquesttimedon', combatquesttimedon.value);
+    })
+    combatquestsuccessionon.addEventListener('change', function(){
+        console.log('combatquestsuccessionon: ', combatquestsuccessionon.value)
+        localStorage.setItem('_combatquestsuccessionon', combatquestsuccessionon.value);
+    })
+    expeditionqueston.addEventListener('click', function(){// expedition quests button
+        if (expeditionquestok==true){
+            expeditionquestok=false;
+            expeditionqueston.setAttribute('value', false);
+            expeditionqueston.innerHTML="EXPEDITION OFF";
+            expeditionqueston.style.textShadow = smallButtonBotOptionOff;
+
+        }else{
+            expeditionquestok=true;
+            expeditionqueston.setAttribute('value', false);
+            expeditionqueston.innerHTML="EXPEDITION ON";
+            expeditionqueston.style.textShadow = smallButtonBotOptionOn;
+        }
+        localStorage.setItem('_expeditionquestok', expeditionquestok);
+    })
+    expeditionquesttimedon.addEventListener('change', function(){
+        console.log('expeditionquesttimedon: ', expeditionquesttimedon.value)
+        localStorage.setItem('_expeditionquesttimedon', expeditionquesttimedon.value);
+    })
+    expeditionquestsuccessionon.addEventListener('change', function(){
+        console.log('expeditionquestsuccessionon: ', expeditionquestsuccessionon.value)
+        localStorage.setItem('_expeditionquestsuccessionon', expeditionquestsuccessionon.value);
+    })
+    expeditionquestmap.addEventListener('input', function(){
+        localStorage.setItem('_expeditionquestmap', expeditionquestmap.value);
+        console.log(expeditionquestmap.value)
+    })
+    expeditionquestenemy.addEventListener('input', function(){
+        localStorage.setItem('_expeditionquestenemy', expeditionquestenemy.value);
+        console.log(expeditionquestenemy.value)
     })
 
     // EVENT IDK LEAVE FOR NOW
@@ -743,13 +1070,54 @@
     let qc = parseInt(localStorage.getItem('_questCounter')) || 0
     questCounter.innerHTML = qc;
 
-    function questChecker(){
+    function stringToBool(string){
+        if (string==='true' || string==='1') return true
+        else return false
+    }
+
+    function checkQuests(_arenaon, _arenatimedon, _arenasuccessionon, _circuson, _circustimedon, _circussuccessionon, _combaton, _combattimedon,
+                          _combatsuccessionon, _expeditionon, _expeditiontimedon, _expeditionsuccessionon, expeditionmap, expeditionenemy){
+
+        let arenaon = stringToBool(_arenaon)
+        let arenatimedon = stringToBool(_arenatimedon)
+        let arenasuccessionon = stringToBool(_arenasuccessionon)
+
+        let circuson = stringToBool(_circuson)
+        let circustimedon = stringToBool(_circustimedon)
+        let circussuccessionon = stringToBool(_circussuccessionon)
+
+        let combaton = stringToBool(_combaton)
+        let combattimedon = stringToBool(_combattimedon)
+        let combatsuccessionon = stringToBool(_combatsuccessionon)
+
+        let expeditionon = stringToBool(_expeditionon)
+        let expeditiontimedon = stringToBool(_expeditiontimedon)
+        let expeditionsuccessionon = stringToBool(_expeditionsuccessionon)
+
+        /*
+        console.log('arenaon :',arenaon)
+        console.log('arenatimedon :',arenatimedon)
+        console.log('arenasuccessionon :',arenasuccessionon)
+
+        console.log('circuson :',circuson)
+        console.log('circustimedon :',circustimedon)
+        console.log('circussuccessionon :',circussuccessionon)
+
+        console.log('combaton :',combaton)
+        console.log('combattimedon :',combattimedon)
+        console.log('combatsuccessionon :',combatsuccessionon)
+
+        console.log('expeditionon :',expeditionon)
+        console.log('expeditiontimedon :',expeditiontimedon)
+        console.log('expeditionsuccessionon :',expeditionsuccessionon)
+        */
+
         console.log("QUESTS")
+        //console.log('looking for: ', expeditionenemy, ' in ', expeditionmap)
         let randomNumber = Math.random() * (100 - 0) + 0; //additional refresh cuz quests dont refresha s often as they should
         if (randomNumber < 10){ //10% for refresh per loop (loop itself has couple seconds of delay)
-            location.reload();
+            //location.reload();
         }
-
 
         let rerollQuestsButton = document.querySelector('input[type="button"][value="New quests"]');
         let completedQuests = document.querySelectorAll('div#qcategory_finished div.contentboard_slot.contentboard_slot_active a.quest_slot_button_finish')
@@ -760,9 +1128,115 @@
         let circusQuests = document.querySelectorAll('div#qcategory_grouparena div.contentboard_slot.contentboard_slot_inactive');
         let combatQuests = document.querySelectorAll('div#qcategory_combat div.contentboard_slot.contentboard_slot_inactive');
         let expeditionQuests = document.querySelectorAll('div#qcategory_expedition div.contentboard_slot.contentboard_slot_inactive');
-        //let itemQuests = document.querySelectorAll('div#qcategory_items div.contentboard_slot.contentboard_slot_inactive')
-        let succession = true //later set on input
 
+        //let itemQuests = document.querySelectorAll('div#qcategory_items div.contentboard_slot.contentboard_slot_inactive')
+
+        /*
+        let successionArena = true;
+        let successionCircus = true;
+        let successionCombat = true;
+        let successionExpedition = true;
+        let timedArena = true;
+        let timedCircus = true;
+        let timedCombat = true;
+        let timedExpedition = true;
+*/
+        let validQuests = 0;
+        if (arenaon){
+            arenaQuests.forEach(quest =>{
+                if (quest.querySelector('.quest_slot_time') && !arenatimedon){
+                    //console.log('czasowka')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else if (questText.includes('succession') && arenasuccessionon){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else {
+                    return
+                }
+            })
+        }
+
+        if (circuson){
+            circusQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !circustimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    console.log('AKCEPTUJ: ', questText)
+                    validQuests += 1
+                }
+                else if (questText.includes('succession') && circussuccessionon){
+                    console.log('[S]AKCEPTUJ: ', questText)
+                    validQuests += 1
+                }
+                else {
+                    //console.log('NIE AKCEPTUJ: ', questText)
+                }
+            })
+        }
+
+        if (combaton){
+            combatQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !combattimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else if (questText.includes('succession') && combatsuccessionon){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else {
+                    return
+                }
+            })
+        }
+
+        if (expeditionon){
+            expeditionQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !expeditiontimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    if (questText.toLowerCase().includes(expeditionenemy.toLowerCase())){
+                        console.log('valid: ',questText)
+                        validQuests += 1
+                    }
+                    if (questText.includes('opponents of your choice') && questText.toLowerCase().includes(expeditionmap.toLowerCase())){
+                        console.log('valid: ',questText)
+                        validQuests += 1
+                    }
+                }
+                else if (questText.includes('succession') && expeditionsuccessionon){
+                    if (questText.toLowerCase().includes(expeditionenemy.toLowerCase())){
+                        console.log('valid: ',questText)
+                        validQuests += 1
+                    }
+                    if (questText.includes('opponents of your choice') && questText.toLowerCase().includes(expeditionmap)){
+                        console.log('valid: ',questText)
+                        validQuests += 1
+                    }
+                }
+                else {
+                    return
+                }
+            })
+        }
 
 
         completedQuests.forEach(quest => {
@@ -787,61 +1261,98 @@
         }
 
 
+        if (arenaon){
+            arenaQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !arenatimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    //console.log('AKCEPTUJ: ', quest)
+                    quest.children[3].click()
+                }
+                else if (questText.includes('succession') && arenasuccessionon){
+                    //console.log('[S]AKCEPTUJ: ', quest)
+                    quest.children[3].click()
+                }
+                else {
+                    //console.log('NIE AKCEPTUJ: ', questText)
+                }
+            })
+        }
+        if (circuson){
+            circusQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !circustimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    //console.log('AKCEPTUJ: ', questText)
+                    quest.children[3].click()
+                }
+                else if (questText.includes('succession') && circussuccessionon){
+                    //console.log('[S]AKCEPTUJ: ', questText)
+                    quest.children[3].click()
+                }
+                else {
+                    //console.log('NIE AKCEPTUJ: ', questText)
+                }
+            })
+        }
 
-        arenaQuests.forEach(quest => {
-            if (quest.querySelector('.quest_slot_time')){ //if quest is timed - dont count it
-                //console.log('TIMED YUCK')
-                return
-            }
-            let questText = quest.children[1].innerHTML;
-            if (!questText.includes('succession')){
-                //console.log('AKCEPTUJ: ', quest)
-                quest.children[3].click()
-            }
-            else if (questText.includes('succession') && succession){
-                //console.log('[S]AKCEPTUJ: ', quest)
-                quest.children[3].click()
-            }
-            else {
-                //console.log('NIE AKCEPTUJ: ', questText)
-            }
-        })
+        if (combaton){
+            combatQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !combattimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    //console.log('AKCEPTUJ: ', questText)
+                    quest.children[3].click()
+                }
+                else if (questText.includes('succession') && combatsuccessionon){
+                    //console.log('[S]AKCEPTUJ: ', questText)
+                    quest.children[3].click()
+                    //console.log(quest)
+                }
+                else {
+                    //console.log('NIE AKCEPTUJ: ', questText)
+                }
+            })
+        }
 
-        circusQuests.forEach(quest => {
-            let questText = quest.children[1].innerHTML;
-            if (!questText.includes('succession')){
-                //console.log('AKCEPTUJ: ', questText)
-                quest.children[3].click()
-            }
-            else if (questText.includes('succession') && succession){
-                //console.log('[S]AKCEPTUJ: ', questText)
-                quest.children[3].click()
-            }
-            else {
-                //console.log('NIE AKCEPTUJ: ', questText)
-            }
-        })
-        combatQuests.forEach(quest => {
-            let questText = quest.children[1].innerHTML;
-            if (!questText.includes('succession')){
-                //console.log('AKCEPTUJ: ', questText)
-                quest.children[3].click()
-            }
-            else if (questText.includes('succession') && succession){
-                //console.log('[S]AKCEPTUJ: ', questText)
-                quest.children[3].click()
-                //console.log(quest)
-            }
-            else {
-                //console.log('NIE AKCEPTUJ: ', questText)
-            }
-        })
-        expeditionQuests.forEach(quest => {
-            let questText = quest.children[1].innerHTML;
-            if (questText.includes('Awakened Mummy')){
-                quest.children[3].click()
-            }
-        })
+
+        if (expeditionon){
+            expeditionQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !expeditiontimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    if (questText.toLowerCase().includes(expeditionenemy.toLowerCase())){
+                        quest.children[3].click()
+                    }
+                    if (questText.includes('opponents of your choice') && questText.toLowerCase().includes(expeditionmap.toLowerCase())){
+                        quest.children[3].click()
+                    }
+                }
+                else if (questText.includes('succession') && expeditionsuccessionon){
+                    if (questText.toLowerCase().includes(expeditionenemy.toLowerCase())){
+                        quest.children[3].click()
+                    }
+                    if (questText.includes('opponents of your choice') && questText.toLowerCase().includes(expeditionmap.toLowerCase())){
+                        quest.children[3].click()
+                    }
+                }
+                else {
+                    return
+                }
+            })
+        }
 
 
         //itemQuests.forEach(quest => {
@@ -852,58 +1363,15 @@
 
 
         //count valid quests *********
-        let validQuests = 0;
-        arenaQuests.forEach(quest =>{
-            if (quest.querySelector('.quest_slot_time')){
-                //console.log('czasowka')
-                return
-            }
-            let questText = quest.children[1].innerHTML;
-            if (!questText.includes('succession')){
-                //console.log('valid: ',quest)
-                validQuests += 1
-            }
-            else if (questText.includes('succession') && succession){
-                //console.log('valid: ',quest)
-                validQuests += 1
-            }
-            else {
-                return
-            }
-        })
-        circusQuests.forEach(quest => {
-            //console.log('valid: ',quest)
-            validQuests += 1 // all circus are valid
-        })
-        combatQuests.forEach(quest => {
-            let questText = quest.children[1].innerHTML;
-            if (!questText.includes('succession')){
-                //console.log('valid: ',quest)
-                validQuests += 1
-            }
-            else if (questText.includes('succession') && succession){
-                //console.log('valid: ',quest)
-                validQuests += 1
-            }
-            else {
-                return
-            }
-        })
-        expeditionQuests.forEach(quest => {
-            let questText = quest.children[1].innerHTML;
-            if (questText.includes('Awakened Mummy')){
-                //console.log('valid: ',quest)
-                validQuests += 1
-            }
-        })
+
+        
         //count valid quests
         //console.log('number of valid quests to take: ', validQuests)
 
 
-        //let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
-        //console.log('number of active quests: ', activeQuests.length)
         if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
             rerollQuestsButton.click()
+            console.log("AUGH")
         }
 
     }
@@ -916,22 +1384,22 @@
 
     function eventChecker(){
         if (boton){
-            if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
-            if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
-            if (autocircusprovinciariumok) checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
-            if (autoarenaprovinciariumok) checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
-            if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
-        }
-    }
-
-
-    function main(){ // here include further functionalities
-        if (!location.href.includes('index.php?mod=quests')){ //set main bots
-            eventChecker()
-        }
-
-        if (location.href.includes('index.php?mod=quests')){ // quest bot
-            questChecker()
+            if (!location.href.includes('index.php?mod=quests')){ //set main bots
+                if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
+                if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
+                if (autocircusprovinciariumok) checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
+                if (autoarenaprovinciariumok) checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
+                if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
+            }
+            if (location.href.includes('index.php?mod=quests')){ // quest bot
+                if (autoquestok) {
+                    checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value, //arena
+                                circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value, //circus
+                                combatqueston.getAttribute('value'), combatquesttimedon.value, combatquestsuccessionon.value, //combat
+                                expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value, //expedition
+                                expeditionquestmap.value, expeditionquestenemy.value) //expedition
+                }
+            }
         }
     }
 
@@ -941,7 +1409,7 @@
     function loop() {
         let rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
         setTimeout(function() {
-            main();
+            eventChecker();
             loop();
         }, rand);
     }
