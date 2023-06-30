@@ -213,7 +213,7 @@
         circusprovinciariumboton.style.textShadow = botOptionOff
         selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
     }
-    selectcircusprovinciariummode.innerHTML='<option value="0" selected>All lvls</option><option value="1">Lowest lvl</option><option value="2">Highest lvl</option>';
+    selectcircusprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
     selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 0;
 
@@ -975,40 +975,11 @@
         }
     }
 
-
-    function checkCircusProvinciarium(_selectcircusprovinciariummode){
-        let selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode)
-        console.log('circus');
-        let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
-        let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
-
-        if(content == 'To Circus Turma'){
-
-            location.href = circusLink;
-            let enemies = document.querySelectorAll('section#own3 table tbody tr td div.attack');
-            if (selectcircusprovinciariummode == 0){
-                let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
-                enemies[randomEnemy].click();
-            }
-            else if (selectcircusprovinciariummode == 1){//attack lowest lvl available
-                enemies[0].click();
-            }
-            else if (selectcircusprovinciariummode == 2){ //attack highest lvl available
-                enemies[enemies.length-1].click();
-            }
-        }
-    }
-
-
-    function filterStringToNumbers(text){
-        return parseInt(text.replace(/\D+/g, ''))
-    }
-
-    function scrapStats(statsDiv, type){
+    function scrapStats(statsDiv, type, arenaOrCircus){
         let stats = {}
 
         let stringFix = type === 'enemy' ? 'Chance of avoiding critical hits:' : 'Chance for avoiding critical hits:' // XD !!!
-
+        //console.log('scraping stats for: ', statsDiv)
         let armorInfo = statsDiv.getElementById('char_panzer_tt').getAttribute('data-tooltip')
         let avoidCritChanceAnchor = armorInfo.indexOf(stringFix)
         let blockChanceAnchor = armorInfo.indexOf('Chance to block a hit:')
@@ -1053,8 +1024,8 @@
 
 
         let dmgReductionStringCombined = filterStringToNumbers(armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30)).toString()
-        console.log('dmgReductionStringCombined: ', dmgReductionStringCombined)
-        console.log('armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30): ', armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30))
+        //console.log('dmgReductionStringCombined: ', dmgReductionStringCombined)
+        //console.log('armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30): ', armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30))
         let dmgLength = dmgReductionStringCombined.length
         let dmgReductionMin = 0
         let dmgReductionMax = 0
@@ -1073,7 +1044,7 @@
             }
         }
 
-        return {
+        let returnStats = {
             //'name':
             'level': parseInt(level),
             'currentHealth': parseInt(currentHealth),
@@ -1092,6 +1063,18 @@
             'dmgMin': dmgMin,
             'dmgMax': dmgMax,
         }
+
+        if (arenaOrCircus == 'circus'){
+            let threat = statsDiv.querySelector('div#char_threat_tt span#char_threat').innerHTML
+            let healing = statsDiv.querySelector('div#char_healing_tt span#char_healing').innerHTML
+            returnStats = {
+                ...returnStats,
+                'threat': parseInt(threat),
+                'healing': parseInt(healing),
+            }
+        }
+        //console.log(returnStats)
+        return returnStats
 
     }
 
@@ -1116,7 +1099,7 @@
         let blockMultiplier = 0.5 //idk how much does block block, assuming 50%
 
         let avgDmg = (player.dmgMin + player.dmgMax) / 2
-        console.log('avgDmg: ', avgDmg)
+        //console.log('avgDmg: ', avgDmg)
         let avgEnemyDmgReduction = (enemy.dmgReductionMin + enemy.dmgReductionMax) / 2
         let hitChance = ((player.dexterity) / (player.dexterity + enemy.agility)) * 100
         let doubleHitChance = (((player.charisma * player.dexterity) / enemy.intelligence) / enemy.agility) * 10
@@ -1142,18 +1125,345 @@
 
         //console.log('doubleHitChance :', doubleHitChance)
 
-
-
-
-
-
-
         return totalPower
+    }
+    function filterStringToNumbers(text){
+        return parseInt(text.replace(/\D+/g, ''))
+    }
 
 
+    function isEqual(obj1, obj2) {
+        // Compare the properties of the objects
+        for (let key in obj1) {
+            if (obj1.hasOwnProperty(key)) {
+                if (obj1[key] !== obj2[key]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+
+    async function fetchCircusEnemyCharacters(){
+
+        let enemyElements = document.querySelectorAll('section#own3 table tbody tr');
+        let promises = [];
+        let validCharacterUrls = [];
+        let arrIndex = 0
+        enemyElements.forEach(enemy => {
+            let check = enemy.querySelector('td a[target="_blank"]'); // get profile refs
+            let enemyButtonFight = enemy.querySelector('td div.attack');
+            if (!check) return; // checks for the first element which is column name
+            let enemyPromise = performRequest(check.href).then(responseText => {
+                let dummyDiv = document.createElement('div');
+                dummyDiv.innerHTML = responseText;
+                let allCharacters = dummyDiv.querySelectorAll(' div.charmercsel[onclick]'); // all characters from single profile - cuz in loop
+
+                let urlArrBuffer = []
+                for (let i = 0; i < allCharacters.length; i++) {
+                    let onClickRef = allCharacters[i].getAttribute('onclick');
+                    if (onClickRef.includes('&doll=1')) continue; // ignore arena character
+                    let onClickRefLeftAnchor = onClickRef.indexOf('index.php?');
+                    let onClickRefRightAnchor = onClickRef.length - 2;
+
+                    let validUrlAnchor = check.href.indexOf('index.php?')
+                    let validUrl = check.href.substring(0, validUrlAnchor) + onClickRef.substring(onClickRefLeftAnchor, onClickRefRightAnchor)
+                    //console.log('valid URL ?? :', validUrl)
+                    urlArrBuffer.push(validUrl);
+                }
+                //console.log('buffer: ', urlArrBuffer)
+                if (!validCharacterUrls[arrIndex]) {
+                    validCharacterUrls[arrIndex] = [];
+                }
+                validCharacterUrls[arrIndex].push([urlArrBuffer, enemyButtonFight])
+                //console.log('validCharacterUrls state: ',validCharacterUrls)
+                //console.log('outsideValues :', validCharacterUrls)
+            })
+            .catch(error => {
+                console.error("Error occurred:", error);
+            });
+
+            promises.push(enemyPromise);
+        });
+        //return validCharacterUrls
+        //console.log('promises length: ', promises.length)
+        await Promise.all(promises).then(() => {
+            //console.log('validCharacterUrls state: ',validCharacterUrls)
+        }).catch((error) => {
+            console.error("Error occurred:", error);
+        });
+        return validCharacterUrls
+    }
+
+    async function fetchCircusPlayerCharacters(){
+
+        let enemyElements = document.querySelectorAll('section#own3 table tbody tr');
+        let promises = [];
+        let validCharacterUrls = [];
+        let arrIndex = 0
+        let playerCharacters = []
+
+        let overViewLink = 'index.php?mod=overview&sh=' + sessionHash;
+        let playerPromise = performRequest(overViewLink).then(responseText => {
+            let dummyDiv = document.createElement('div');
+            dummyDiv.innerHTML = responseText;
+            let allCharacters = dummyDiv.querySelectorAll(' div.charmercsel[onclick]'); // all characters from single profile - cuz in loop
+            for (let i = 0; i < allCharacters.length; i++) {
+                let onClickRef = allCharacters[i].getAttribute('onclick');
+                if (onClickRef.includes('&doll=1')) continue; // ignore arena character
+                let onClickRefLeftAnchor = onClickRef.indexOf('index.php?');
+                let onClickRefRightAnchor = onClickRef.length - 2;
+
+                let validUrlAnchor = overViewLink.indexOf('index.php?')
+                let validUrl = overViewLink.substring(0, validUrlAnchor) + onClickRef.substring(onClickRefLeftAnchor, onClickRefRightAnchor)
+                //console.log('valid URL ?? :', validUrl)
+                playerCharacters.push(validUrl);
+            }
+        }).catch(error => {
+            console.error("Error occurred:", error);
+        });
+        promises.push(playerPromise);
+
+        await Promise.all([Promise.resolve(playerPromise)]).then(() => {
+            //console.log('validCharacterUrls state: ',validCharacterUrls)
+        }).catch((error) => {
+            console.error("Error occurred:", error);
+        });
+        return playerCharacters
 
     }
+
+    async function delayFetch(millisec) {
+        return new Promise(resolve => {
+            setTimeout(() => { resolve('') }, millisec);
+        })
+    }
+
+
+    async function checkCircusProvinciarium(_selectcircusprovinciariummode) {
+
+        let selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode);
+        console.log('circus');
+        let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
+        let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
+        if (content == 'To Circus Turma') {
+            if (!location.href.includes(circusLink)) {
+                location.href = circusLink;
+            }
+            let loopBugCheck = document.getElementById('errorText').innerHTML;
+            if (loopBugCheck) {
+                if (loopBugCheck.includes('can only challenge an opponent in the arena every')) {
+                    console.log('bug detected');
+                    location.href = circusLink;
+                    return;
+                } else {
+                    console.log('lil bro just fought, reroll enemies');
+                    document.querySelector('input.button1[name="actionButton"]').click();
+                }
+            }
+
+
+
+            let validEnemyCharacterUrls = await fetchCircusEnemyCharacters();
+            //console.log("validEnemyCharacterUrls: ", validEnemyCharacterUrls)
+            let validPlayerCharacterUrls = await fetchCircusPlayerCharacters();
+            //console.log("validPlayerCharacterUrls: ", validPlayerCharacterUrls)
+
+
+            let playerCharactersStats = []
+            let enemyCharactersStats = []
+
+
+            //XD BEDIZE SIE DZIALO
+            let enemyStats = [];
+            let promises = [];
+
+            validEnemyCharacterUrls.forEach(urlAndButton => {
+                urlAndButton.forEach(hm => { // hm[0] = links array, hm[1] = buttons array
+                    let statsBuffer = []
+                    let index = 0;
+                    hm[0].forEach(link => {
+                        index++;
+                       // console.log('link: ', link)
+
+                        promises.push(
+                            new Promise((resolve, reject) => {
+                                setTimeout(() => { //timeout
+                                    performRequest(link)
+                                        .then(responseText => {
+                                        let dummyDiv = document.createElement('div');
+                                        dummyDiv.innerHTML = responseText;
+                                        //console.log("text: \n\n\n", responseText);
+                                        let scrappedEnemyCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'circus');
+                                        statsBuffer.push(scrappedEnemyCharacterStats);
+                                        resolve();
+                                    })
+                                        .catch(error => {
+                                        console.error("Error occurred:", error);
+                                        reject();
+                                    });
+                                }, index * 300);
+                            })
+                        );
+
+
+                    })
+                    enemyCharactersStats.push([statsBuffer, hm[1]])
+                })
+            });
+
+
+            validPlayerCharacterUrls.forEach(link => {
+                //console.log('player: ', link)
+                promises.push(
+                    performRequest(link)
+                    .then(responseText => {
+                        let dummyDiv = document.createElement('div');
+                        dummyDiv.innerHTML = responseText;
+                        let scrappedPlayerCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'circus');
+                        playerCharactersStats.push(scrappedPlayerCharacterStats);
+                    })
+                    .catch(error => {
+                        console.error("Error occurred:", error);
+                    })
+                );
+            })
+
+
+            Promise.all(promises)
+                .then(() => {
+                //console.log('enemyCharactersStats :', enemyCharactersStats)
+                //console.log('playerCharactersStats :', playerCharactersStats)
+                // Calculate enemy strengths and perform further actions
+
+                //player info
+                let playerMedic = playerCharactersStats[0]//assuming people usually play with 1 medic
+                let highestHealingValue = playerCharactersStats[0].healing
+
+                let playerTank = playerCharactersStats[0]//same here
+                let highestThreatValue = playerCharactersStats[0].threat
+
+                playerCharactersStats.forEach(character => {
+                    if (character.healing > highestHealingValue){
+                        highestHealingValue = character.healing
+                        playerMedic = character
+                    }
+                    if (character.threat > highestThreatValue){
+                        highestThreatValue = character.threat
+                        playerTank = character
+                    }
+                })
+
+                //console.log('playerMedic: ', playerMedic)
+                //console.log('playerTank: ', playerTank)
+
+                let playerAttackers = playerCharactersStats.filter(obj => !isEqual(obj, playerMedic)); //characters that are not medic nor tank
+                playerAttackers = playerAttackers.filter(obj => !isEqual(obj, playerTank));
+                //console.log(playerAttackers)
+
+
+                let strengthArray = []
+                let strengthArrayWithHealCorrection = []
+                enemyCharactersStats.forEach(charactersAndButton => { //charactersAndButton[0] = characters array, charactersAndButton[1] = fight button
+                    let enemyMedic = charactersAndButton[0][0]//assuming people usually play with 1 medic
+                    let highestEnemyHealingValue = charactersAndButton[0][0].healing
+                    let enemyTank = charactersAndButton[0][0]//same here
+                    let highestEnemyThreatValue = charactersAndButton[0][0].threat
+
+                    charactersAndButton[0].forEach(character => {
+                        if (character.healing > highestEnemyHealingValue){
+                            highestEnemyHealingValue = character.healing
+                            enemyMedic = character
+                        }
+                        if (character.threat > highestEnemyThreatValue){
+                            highestEnemyThreatValue = character.threat
+                            enemyTank = character
+                        }
+                    })
+                    let enemyAttackers = charactersAndButton[0].filter(obj => !isEqual(obj, enemyMedic)); //characters that are not medic nor tank
+                    enemyAttackers = enemyAttackers.filter(obj => !isEqual(obj, enemyTank));
+                    //console.log('enemyMedic: ',enemyMedic)
+                    //console.log('enemyTank: ',enemyTank)
+                    //console.log('enemy dps: ',enemyAttackers)
+                    //console.log('next enemy')
+
+                    let playerStrength = 0
+                    playerAttackers.forEach(character => {
+                        playerStrength += calculateStrength(character, enemyTank)
+                    })
+                    let attackerStrength = 0
+                    enemyAttackers.forEach(character => {
+                        attackerStrength += calculateStrength(character, playerTank)
+                    })
+                    //if someone wants here is a good place to take into consideration medic healing, i dont want to do that :D
+                    //nvm ill add something i came up with :D :D:D:D:D:D
+                    let healDifference = (playerMedic.healing - enemyMedic.healing) / 10 // idk how much to divide by !!! IMPORTANT TO CHECK IF IT FIRST AND CORRECT
+                    strengthArrayWithHealCorrection.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
+
+                    strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
+
+                })
+                console.log('original strengthArray :', strengthArray)
+                console.log('strengthArrayWithHealCorrection :', strengthArrayWithHealCorrection)
+
+
+                let strongestEnemy = strengthArrayWithHealCorrection[0]
+                let strongestEnemyStrength = strengthArrayWithHealCorrection[0][0] - strengthArrayWithHealCorrection[0][1] //initialize with first value
+                let weakestEnemy = strengthArrayWithHealCorrection[0]
+                let weakestEnemyStrength = strengthArrayWithHealCorrection[0][0] - strengthArrayWithHealCorrection[0][1]
+                strengthArrayWithHealCorrection.forEach(strengthArr => {
+                    if((strengthArr[0] - strengthArr[1]) > weakestEnemyStrength){
+                        weakestEnemyStrength = strengthArr[0] - strengthArr[1]
+                        weakestEnemy = strengthArr
+                    }
+                    else if((strengthArr[0] - strengthArr[1]) <= strongestEnemyStrength){
+                        strongestEnemyStrength = strengthArr[0] - strengthArr[1]
+                        strongestEnemy = strengthArr
+                    }
+                })
+
+                if (_selectcircusprovinciariummode == 0){
+                    if(weakestEnemyStrength < 30){ // fair cap to guarantee wins at high rate
+                        console.log('no valid enemies to fight, rerolling')
+                        document.querySelector('input.button1[name="actionButton"]').click()
+                    }
+                    console.log('weakestEnemy', weakestEnemy)
+                    weakestEnemy[2].click()
+                }
+                else if (_selectcircusprovinciariummode == 1){
+                    console.log('strongestEnemy', strongestEnemy)
+                    strongestEnemy[2].click()
+                }
+
+
+            })
+                .catch(error => {
+                console.error("Error occurred.");
+            });
+
+            //now calculate strength
+
+
+
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
@@ -1171,22 +1481,20 @@
                 location.href = arenaLink;
             }
             let loopBugCheck = document.getElementById('errorText').innerHTML
-            if (loopBugCheck){
-                if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
-                    console.log('bug detected')
-                    location.href = arenaLink;
-                    return;
-                }
-                else{
-                    console.log('lol bro just fought, reroll enemies')
-                    document.querySelector('input.button1[name="actionButton"]').click()
-                }
-
+            if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
+                console.log('bug detected')
+                location.href = arenaLink;
+                return;
             }
+            //else{
+            //    console.log('lil bro just fought, reroll enemies')
+            //    document.querySelector('input.button1[name="actionButton"]').click()
+            //}
+
             /*
 
             let enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
-            
+
             if (selectarenaprovinciariummode == 0){
                 let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
                 enemies[randomEnemy].click();
@@ -1199,7 +1507,7 @@
             }
 
             */
-            
+
 
             //let enemyElements = document.querySelectorAll('section#own2 table tbody tr a[target]');
 
@@ -1222,7 +1530,7 @@
                     .then(responseText => {
                         let dummyDiv = document.createElement('div');
                         dummyDiv.innerHTML = responseText;
-                        let scrappedEnemyStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy');
+                        let scrappedEnemyStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'arena');
                         enemyStats.push([scrappedEnemyStats, enemyButtonFight]);
                     })
                     .catch(error => {
@@ -1238,7 +1546,7 @@
                 .then(responseText => {
                     let dummyDiv = document.createElement('div');
                     dummyDiv.innerHTML = responseText;
-                    let scrappedUserStats = scrapStats(dummyDiv.getElementById('charstats'), 'user');
+                    let scrappedUserStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'arena');
                     userStats.push(scrappedUserStats);
                 })
                 .catch(error => {
