@@ -1244,11 +1244,12 @@
     async function checkCircusProvinciarium(_selectcircusprovinciariummode) {
 
         let selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode);
-        console.log('circus');
         let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
         let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
+        console.log('circus')
+
         if (content == 'To Circus Turma') {
-            if (!location.href.includes(circusLink)) {
+            if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=3&sh=')) {
                 location.href = circusLink;
             }
             let loopBugCheck = document.getElementById('errorText').innerHTML;
@@ -1256,13 +1257,11 @@
                 if (loopBugCheck.includes('can only challenge an opponent in the arena every')) {
                     console.log('bug detected');
                     location.href = circusLink;
-                    return;
                 } else {
                     console.log('lil bro just fought, reroll enemies');
                     document.querySelector('input.button1[name="actionButton"]').click();
                 }
             }
-
 
 
             let validEnemyCharacterUrls = await fetchCircusEnemyCharacters();
@@ -1331,7 +1330,7 @@
             })
 
 
-            Promise.all(promises)
+            await Promise.all(promises)
                 .then(() => {
                 //console.log('enemyCharactersStats :', enemyCharactersStats)
                 //console.log('playerCharactersStats :', playerCharactersStats)
@@ -1466,7 +1465,7 @@
 
 
 
-    function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
+    async function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
         //var arenahp = parseInt(_arenahp);
         console.log('arena');
         let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
@@ -1477,14 +1476,13 @@
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
         if(content == 'Go to the arena'){
-            if (!location.href.includes(arenaLink)){
+            if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=2&sh=')) {
                 location.href = arenaLink;
             }
             let loopBugCheck = document.getElementById('errorText').innerHTML
             if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
                 console.log('bug detected')
                 location.href = arenaLink;
-                return;
             }
             //else{
             //    console.log('lil bro just fought, reroll enemies')
@@ -1558,7 +1556,7 @@
 
 
             console.log('promises length: ', promises.length)
-            Promise.all(promises)
+            await Promise.all(promises)
                 .then(() => {
                 //console.log(enemyStats);
                 let enemyStrength = []
@@ -1956,14 +1954,14 @@
 
 
 
-    function eventChecker(){
+    async function eventChecker(){
         checkNotification()
         if (boton){
             if (!location.href.includes('index.php?mod=quests')){ //set main bots
                 if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
                 if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
-                if (autocircusprovinciariumok) checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
-                if (autoarenaprovinciariumok) checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
+                if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
+                if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
                 if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
             }
             if (location.href.includes('index.php?mod=quests')){ // quest bot
