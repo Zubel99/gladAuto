@@ -114,7 +114,7 @@
     expdatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_expeditionhp') || 50) +"%";
     expdatalabel.id="expdatalabel";
     if (autoexpeditionok==true){
-        expeditionboton.innerHTML="AUTO EXPEDITION ON";
+        expeditionboton.innerHTML="EXPEDITION ON";
         expeditionboton.style.textShadow = botOptionOn
         //selectexpeditionmap.setAttribute("style","display:none;margin-left:10px;");
         //selectexpeditiontarget.setAttribute("style","display:none;margin-left:10px;");
@@ -125,7 +125,7 @@
         expeditionhp.setAttribute("style","display:block;margin-left:10px;");
         expdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
-        expeditionboton.innerHTML="AUTO EXPEDITION OFF";
+        expeditionboton.innerHTML="EXPEDITION OFF";
         expeditionboton.style.textShadow = botOptionOff
         selectexpeditionmap.setAttribute("style","display:block;margin-left:10px;");
         selectexpeditiontarget.setAttribute("style","display:block;margin-left:10px;");
@@ -166,7 +166,7 @@
     dungeonboton.classList.add('menuitem');
     dungeonboton.style.cursor = "pointer";
     if (autodungeonok==true){
-        dungeonboton.innerHTML="AUTO DUNGEON ON";
+        dungeonboton.innerHTML="DUNGEON ON";
         dungeonboton.style.textShadow = botOptionOn
         //selectdungeonmap.setAttribute("style","display:none;margin-left:10px;");
         //avdanced.setAttribute("style","display:none;margin-left:10px;");
@@ -176,7 +176,7 @@
         skipboss.setAttribute("style","display:block;margin-left:10px;");
         fulldungclear.setAttribute("style","display:block;margin-left:10px;");
     }else{
-        dungeonboton.innerHTML="AUTO DUNGEON OFF";
+        dungeonboton.innerHTML="DUNGEON OFF";
         dungeonboton.style.textShadow = botOptionOff
         selectdungeonmap.setAttribute("style","display:block;margin-left:10px;");
         advanced.setAttribute("style","display:block;margin-left:10px;");
@@ -204,12 +204,12 @@
     circusprovinciariumboton.style.cursor = "pointer";
     //circusprovinciariumboton.href="#";
     if (autocircusprovinciariumok==true){
-        circusprovinciariumboton.innerHTML="AUTO CIRCUS PROV ON";
+        circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
         circusprovinciariumboton.style.textShadow = botOptionOn
         //selectcircusprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
         selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
     }else{
-        circusprovinciariumboton.innerHTML="AUTO CIRCUS PROV OFF";
+        circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
         circusprovinciariumboton.style.textShadow = botOptionOff
         selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
     }
@@ -235,20 +235,20 @@
     arenadatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_arenahp') || 50) +"%";
     arenadatalabel.id="arenadatalabel";
     if (autoarenaprovinciariumok==true){
-        arenaprovinciariumboton.innerHTML="AUTO ARENA PROV ON";
+        arenaprovinciariumboton.innerHTML="ARENA PROV ON";
         arenaprovinciariumboton.style.textShadow = botOptionOn
         //selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
         selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
         arenahp.setAttribute("style","display:block;margin-left:10px;");
         arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
-        arenaprovinciariumboton.innerHTML="AUTO ARENA PROV OFF";
+        arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
         arenaprovinciariumboton.style.textShadow = botOptionOff
         selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
         arenahp.setAttribute("style","display:block;margin-left:10px;");
         arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }
-    selectarenaprovinciariummode.innerHTML='<option value="0" selected>All lvls</option><option value="1">Lowest lvl</option><option value="2">Highest lvl</option>';
+    selectarenaprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
     selectarenaprovinciariummode.id="selectarenaprovinciariummode";
     selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 0;
 
@@ -265,12 +265,12 @@
     //autoworktime.innerHTML='<option value="1">1 HOUR</option><option value="2">2 HOURS</option><option value="3">3 HOURS</option><option value="4">4 HOURS</option><option value="5">5 HOURS</option><option value="6">6 HOURS</option><option value="7">7 HOURS</option><option value="8" selected>8 HOURS</option>';
     //autoworkboton.href="#";
     if (autoworkok==true){
-        autoworkboton.innerHTML="AUTO WORK ON";
+        autoworkboton.innerHTML="WORK ON";
         //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
         autoworkboton.style.textShadow = botOptionOn;
         autoworktype.setAttribute("style","display:block;margin-left:10px;");
     }else{
-        autoworkboton.innerHTML="AUTO WORK OFF";
+        autoworkboton.innerHTML="WORK OFF";
         autoworkboton.style.textShadow = botOptionOff;
         autoworktype.setAttribute("style","display:block;margin-left:10px;");
     }
@@ -353,7 +353,7 @@
     expeditionquestenemy.id="expeditionquestenemy";
     expeditionquestenemy.value= localStorage.getItem('_expeditionquestenemy') || '';
     if (autoquestok==true){//global for quests
-        autoquestboton.innerHTML="AUTO QUESTS ON";
+        autoquestboton.innerHTML="QUESTS ON";
         autoquestboton.style.textShadow = botOptionOn;
 
         //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
@@ -396,7 +396,7 @@
         expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
 
     }else{
-        autoquestboton.innerHTML="AUTO QUESTS OFF";
+        autoquestboton.innerHTML="QUESTS OFF";
         autoquestboton.style.textShadow = botOptionOff;
 
         if(arenaquestok){
@@ -547,7 +547,7 @@
         let expeditionhp=document.querySelector('#expeditionhp');
         if (autoexpeditionok==true){
             autoexpeditionok=false;
-            expeditionboton.innerHTML="AUTO EXPEDITION OFF";
+            expeditionboton.innerHTML="EXPEDITION OFF";
             expeditionboton.style.textShadow = botOptionOff
             selectedexpeditionmap.style.display="block";
             selectedexpeditiontarget.style.display="block";
@@ -555,7 +555,7 @@
             expeditionhp.style.display="block";
         }else{
             autoexpeditionok=true;
-            expeditionboton.innerHTML="AUTO EXPEDITION ON";
+            expeditionboton.innerHTML="EXPEDITION ON";
             expeditionboton.style.textShadow = botOptionOn
             //selectedexpeditionmap.style.display="none";
             //selectedexpeditiontarget.style.display="none";
@@ -592,7 +592,7 @@
         //localStorage.setItem('_skipboss', skipboss.value);
         if (autodungeonok==true){
             autodungeonok=false;
-            dungeonboton.innerHTML="AUTO DUNGEON OFF";
+            dungeonboton.innerHTML="DUNGEON OFF";
             dungeonboton.style.textShadow = botOptionOff
             advanced.style.display="block";
             selecteddungeonmap.style.display="block";
@@ -600,7 +600,7 @@
             fulldungclear.style.display="block";
         }else{
             autodungeonok=true;
-            dungeonboton.innerHTML="AUTO DUNGEON ON";
+            dungeonboton.innerHTML="DUNGEON ON";
             dungeonboton.style.textShadow = botOptionOn
             //selecteddungeonmap.style.display="none";
             //advanced.style.display="none";
@@ -631,12 +631,12 @@
         let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
         if (autocircusprovinciariumok==true){
             autocircusprovinciariumok=false;
-            circusprovinciariumboton.innerHTML="AUTO CIRCUS PROV OFF";
+            circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
             circusprovinciariumboton.style.textShadow = botOptionOff
             selectcircusprovinciariummode.style.display="block";
         }else{
             autocircusprovinciariumok=true;
-            circusprovinciariumboton.innerHTML="AUTO CIRCUS PROV ON";
+            circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
             circusprovinciariumboton.style.textShadow = botOptionOn
             //selectcircusprovinciariummode.style.display="none";
             selectcircusprovinciariummode.style.display="block";
@@ -652,12 +652,12 @@
         let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
         if (autoarenaprovinciariumok==true){
             autoarenaprovinciariumok=false;
-            arenaprovinciariumboton.innerHTML="AUTO ARENA PROV OFF";
+            arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
             arenaprovinciariumboton.style.textShadow = botOptionOff
             selectarenaprovinciariummode.style.display="block";
         }else{
             autoarenaprovinciariumok=true;
-            arenaprovinciariumboton.innerHTML="AUTO ARENA PROV ON";
+            arenaprovinciariumboton.innerHTML="ARENA PROV ON";
             arenaprovinciariumboton.style.textShadow = botOptionOn
             //selectarenaprovinciariummode.style.display="none";
             selectarenaprovinciariummode.style.display="block";
@@ -679,12 +679,12 @@
         let autoworktype=document.querySelector('#autoworktype');
         if (autoworkok==true){
             autoworkok=false;
-            autoworkboton.innerHTML="AUTO WORK OFF";
+            autoworkboton.innerHTML="WORK OFF";
             autoworkboton.style.textShadow = botOptionOff
             autoworktype.style.display="block";
         }else{
             autoworkok=true;
-            autoworkboton.innerHTML="AUTO WORK ON";
+            autoworkboton.innerHTML="WORK ON";
             autoworkboton.style.textShadow = botOptionOn
             //toworktype.style.display="none";
             autoworktype.style.display="block";
@@ -701,13 +701,13 @@
         let expeditionquestenemy=document.querySelector('#expeditionquestenemy');
         if (autoquestok==true){
             autoquestok=false;
-            autoquestboton.innerHTML="AUTO QUESTS OFF";
+            autoquestboton.innerHTML="QUESTS OFF";
             autoquestboton.style.textShadow = botOptionOff;
             expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
             expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
         }else{
             autoquestok=true;
-            autoquestboton.innerHTML="AUTO QUESTS ON";
+            autoquestboton.innerHTML="QUESTS ON";
             autoquestboton.style.textShadow = botOptionOn;
             expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
             expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
@@ -999,6 +999,163 @@
         }
     }
 
+
+    function filterStringToNumbers(text){
+        return parseInt(text.replace(/\D+/g, ''))
+    }
+
+    function scrapStats(statsDiv, type){
+        let stats = {}
+
+        let stringFix = type === 'enemy' ? 'Chance of avoiding critical hits:' : 'Chance for avoiding critical hits:' // XD !!!
+
+        let armorInfo = statsDiv.getElementById('char_panzer_tt').getAttribute('data-tooltip')
+        let avoidCritChanceAnchor = armorInfo.indexOf(stringFix)
+        let blockChanceAnchor = armorInfo.indexOf('Chance to block a hit:')
+        let dmgReductionAnchor = armorInfo.indexOf('Absorbs damage:')
+        let blockValueAnchor = armorInfo.indexOf('Blocking value:')
+
+        let dmgInfo = statsDiv.getElementById('char_schaden_tt').getAttribute('data-tooltip')
+        let critChanceAnchor = dmgInfo.indexOf('Chance for critical damage:')
+
+        let dmgString = filterStringToNumbers(statsDiv.getElementById('char_schaden').innerHTML).toString()
+        let dmgMin = 0
+        let dmgMax = 0
+        if ((dmgString.length % 2) == 0){
+            dmgMin = parseInt(dmgString.substring(0, dmgString.length/2))
+            dmgMax = parseInt(dmgString.substring(dmgString.length/2))
+        }
+        else{
+            if (dmgString.length == 1){//has to be bc when someone has 0 armor parseInt parses 0 - 0 into 0 and not 00
+                dmgMin = 0
+                dmgMax = 0
+            }
+            else{
+                dmgMin = parseInt(dmgString.substring(0, parseInt(dmgString.length/2)))
+                dmgMax = parseInt(dmgString.substring(parseInt(dmgString.length/2)))
+            }
+        }
+
+
+
+        let level = statsDiv.querySelector('div#char_level_tt span#char_level').innerHTML
+        let currentHealth = statsDiv.querySelector('div#char_leben_tt span#char_leben').innerHTML
+        let strength = statsDiv.querySelector('div#char_f0_tt span#char_f0').innerHTML
+        let dexterity = statsDiv.querySelector('div#char_f1_tt span#char_f1').innerHTML
+        let agility = statsDiv.querySelector('div#char_f2_tt span#char_f2').innerHTML
+        let constitution = statsDiv.querySelector('div#char_f3_tt span#char_f3').innerHTML
+        let charisma = statsDiv.querySelector('div#char_f4_tt span#char_f4').innerHTML
+        let intelligence = statsDiv.querySelector('div#char_f5_tt span#char_f5').innerHTML
+        let avoidCritChance = filterStringToNumbers(armorInfo.substring(avoidCritChanceAnchor+35, avoidCritChanceAnchor+42))
+        let blockChance = filterStringToNumbers(armorInfo.substring(blockChanceAnchor+24, blockChanceAnchor+32))
+        let critChance = filterStringToNumbers(dmgInfo.substring(critChanceAnchor+28, critChanceAnchor+35))
+        let blockValue = filterStringToNumbers(armorInfo.substring(blockValueAnchor+14, blockValueAnchor+24))
+
+
+        let dmgReductionStringCombined = filterStringToNumbers(armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30)).toString()
+        console.log('dmgReductionStringCombined: ', dmgReductionStringCombined)
+        console.log('armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30): ', armorInfo.substring(dmgReductionAnchor+10, dmgReductionAnchor+30))
+        let dmgLength = dmgReductionStringCombined.length
+        let dmgReductionMin = 0
+        let dmgReductionMax = 0
+        if ((dmgReductionStringCombined.toString().length % 2) == 0){
+            dmgReductionMin = parseInt(dmgReductionStringCombined.substring(0, dmgLength/2))
+            dmgReductionMax = parseInt(dmgReductionStringCombined.substring(dmgLength/2))
+        }
+        else{
+            if(dmgReductionStringCombined.toString().length == 1){//has to be bc when someone has 0 armor parseInt parses 0 - 0 into 0 and not 00
+                dmgReductionMin = 0
+                dmgReductionMax = 0
+            }
+            else{
+                dmgReductionMin = parseInt(dmgReductionStringCombined.substring(0, parseInt(dmgLength/2)))
+                dmgReductionMax = parseInt(dmgReductionStringCombined.substring(parseInt(dmgLength/2)))
+            }
+        }
+
+        return {
+            //'name':
+            'level': parseInt(level),
+            'currentHealth': parseInt(currentHealth),
+            'strength': parseInt(strength),
+            'dexterity': parseInt(dexterity),
+            'agility': parseInt(agility),
+            'constitution': parseInt(constitution),
+            'charisma': parseInt(charisma),
+            'intelligence': parseInt(intelligence),
+            'avoidCritChance': avoidCritChance,
+            'blockChance': blockChance,
+            'blockValue': blockValue,
+            'critChance': critChance,
+            'dmgReductionMin': dmgReductionMin,
+            'dmgReductionMax': dmgReductionMax,
+            'dmgMin': dmgMin,
+            'dmgMax': dmgMax,
+        }
+
+    }
+
+
+    function performRequest(url) {
+        return new Promise((resolve, reject) => {
+            GM.xmlHttpRequest({
+                method: "GET",
+                url: url,
+                onload: function(response) {
+                    resolve(response.responseText);
+                },
+                onerror: function(error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+
+    function calculateStrength(player, enemy){ //player perspective
+        let blockMultiplier = 0.5 //idk how much does block block, assuming 50%
+
+        let avgDmg = (player.dmgMin + player.dmgMax) / 2
+        console.log('avgDmg: ', avgDmg)
+        let avgEnemyDmgReduction = (enemy.dmgReductionMin + enemy.dmgReductionMax) / 2
+        let hitChance = ((player.dexterity) / (player.dexterity + enemy.agility)) * 100
+        let doubleHitChance = (((player.charisma * player.dexterity) / enemy.intelligence) / enemy.agility) * 10
+
+        let totalPower = avgDmg
+        let additionalCritDamage = (avgDmg * 1.5) * ((player.critChance / 100) * (1 - (enemy.avoidCritChance / 100)))
+        totalPower += additionalCritDamage // add avg crit value
+        totalPower -= avgEnemyDmgReduction // substract avg enemy block value, idk how much does block block XD // assuming 50%
+        let enemyBlockedDamage = (totalPower * (enemy.blockChance / 100)) * blockMultiplier
+        totalPower -= enemyBlockedDamage // substract avg block chance with block value
+        totalPower *= hitChance / 100
+        totalPower += totalPower*(doubleHitChance / 100)
+
+
+
+        //console.log('player :', player)
+        //console.log('enemy  :', enemy)
+        //console.log(totalPower)
+        //console.log('avgDmg :', avgDmg)
+        //console.log('avgDmgReduction :', avgDmgReduction)
+        //console.log('hitChance :', hitChance)
+        //console.log('doubleHitChance :', doubleHitChance)
+
+        //console.log('doubleHitChance :', doubleHitChance)
+
+
+
+
+
+
+
+        return totalPower
+
+
+
+
+    }
+
+
     function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
         //var arenahp = parseInt(_arenahp);
         console.log('arena');
@@ -1010,8 +1167,26 @@
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
         if(content == 'Go to the arena'){
-            location.href = arenaLink;
+            if (!location.href.includes(arenaLink)){
+                location.href = arenaLink;
+            }
+            let loopBugCheck = document.getElementById('errorText').innerHTML
+            if (loopBugCheck){
+                if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
+                    console.log('bug detected')
+                    location.href = arenaLink;
+                    return;
+                }
+                else{
+                    console.log('lol bro just fought, reroll enemies')
+                    document.querySelector('input.button1[name="actionButton"]').click()
+                }
+
+            }
+            /*
+
             let enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
+            
             if (selectarenaprovinciariummode == 0){
                 let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
                 enemies[randomEnemy].click();
@@ -1022,7 +1197,109 @@
             else if (selectarenaprovinciariummode == 2){ //attack highest lvl available
                 enemies[enemies.length-1].click();
             }
+
+            */
+            
+
+            //let enemyElements = document.querySelectorAll('section#own2 table tbody tr a[target]');
+
+            // WORKS PERFECTLY :D:D:D:D:D
+
+
+
+
+            let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
+            let enemyStats = [];
+            let promises = [];
+
+            enemyElements.forEach(enemy => {
+                let check = enemy.querySelector('td a[target="_blank"]')
+                let enemyButtonFight = enemy.querySelector('td div.attack'); //.click()
+                if (!check) return // checks for the first element which is column name
+
+                promises.push(
+                    performRequest(check.href)
+                    .then(responseText => {
+                        let dummyDiv = document.createElement('div');
+                        dummyDiv.innerHTML = responseText;
+                        let scrappedEnemyStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy');
+                        enemyStats.push([scrappedEnemyStats, enemyButtonFight]);
+                    })
+                    .catch(error => {
+                        console.error("Error occurred:", error);
+                    })
+                );
+            });
+
+            let playerOverviewLink = '/game/index.php?mod=overview&doll=1&sh='+sessionHash;
+            let userStats = []
+            promises.push(
+                performRequest(playerOverviewLink)
+                .then(responseText => {
+                    let dummyDiv = document.createElement('div');
+                    dummyDiv.innerHTML = responseText;
+                    let scrappedUserStats = scrapStats(dummyDiv.getElementById('charstats'), 'user');
+                    userStats.push(scrappedUserStats);
+                })
+                .catch(error => {
+                    console.error("Error occurred:", error);
+                })
+            );
+
+
+
+
+            console.log('promises length: ', promises.length)
+            Promise.all(promises)
+                .then(() => {
+                //console.log(enemyStats);
+                let enemyStrength = []
+                //console.log(userStats[0])
+                console.log('promise');
+
+                enemyStats.forEach(enemy => {
+                    //console.log(enemy)//[0] - stats, [1] .click() fight event
+                    console.log('enemyPromise')
+                    enemyStrength.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
+                })
+
+                console.log('enemy strengths: ', enemyStrength)
+
+                let strongestEnemy = enemyStrength[0][1]
+                let strongestEnemyStrength = enemyStrength[0][2] - enemyStrength[0][3] //initialize with first value
+                let weakestEnemy = enemyStrength[0][1]
+                let weakestEnemyStrength = enemyStrength[0][2] - enemyStrength[0][3]
+                enemyStrength.forEach(enemy => {
+                    if((enemy[2] - enemy[3]) > weakestEnemyStrength){
+                        weakestEnemyStrength = enemy[2] - enemy[3]
+                        weakestEnemy = enemy[1]
+                    }
+                    else if((enemy[2] - enemy[3]) <= strongestEnemyStrength){
+                        strongestEnemyStrength = enemy[2] - enemy[3]
+                        strongestEnemy = enemy[1]
+                    }
+                })
+
+                if (selectarenaprovinciariummode == 0){
+                    if(weakestEnemyStrength < 8){ // fair cap to guarantee wins at high rate
+                        console.log('no valid enemies to fight, rerolling')
+                        document.querySelector('input.button1[name="actionButton"]').click()
+                    }
+                    console.log('weakestEnemy', weakestEnemy)
+                    weakestEnemy.click()
+                }
+                else if (selectarenaprovinciariummode == 1){
+                    console.log('strongestEnemy', strongestEnemy)
+                    strongestEnemy.click()
+                }
+
+
+            })
+                .catch(error => {
+                console.error("Error occurred:", error);
+            });
         }
+
     }
 
 
@@ -1115,8 +1392,8 @@
         console.log("QUESTS")
         //console.log('looking for: ', expeditionenemy, ' in ', expeditionmap)
         let randomNumber = Math.random() * (100 - 0) + 0; //additional refresh cuz quests dont refresha s often as they should
-        if (randomNumber < 10){ //10% for refresh per loop (loop itself has couple seconds of delay)
-            //location.reload();
+        if (randomNumber < 10){ //15% for refresh per loop (loop itself has couple seconds of delay)
+            location.reload();
         }
 
         let rerollQuestsButton = document.querySelector('input[type="button"][value="New quests"]');
@@ -1128,20 +1405,21 @@
         let circusQuests = document.querySelectorAll('div#qcategory_grouparena div.contentboard_slot.contentboard_slot_inactive');
         let combatQuests = document.querySelectorAll('div#qcategory_combat div.contentboard_slot.contentboard_slot_inactive');
         let expeditionQuests = document.querySelectorAll('div#qcategory_expedition div.contentboard_slot.contentboard_slot_inactive');
+        let validQuests = 0;
 
         //let itemQuests = document.querySelectorAll('div#qcategory_items div.contentboard_slot.contentboard_slot_inactive')
+        completedQuests.forEach(quest => {
+            console.log('completedQuests: ', quest)
+            quest.click()
+            qc += 1;
+            localStorage.setItem('_questCounter', qc)
+            questCounter.innerHTML = qc;
+        })
+        failedQuests.forEach(quest => {
+            console.log('failedQuests: ', quest)
+            quest.click()
+        })
 
-        /*
-        let successionArena = true;
-        let successionCircus = true;
-        let successionCombat = true;
-        let successionExpedition = true;
-        let timedArena = true;
-        let timedCircus = true;
-        let timedCombat = true;
-        let timedExpedition = true;
-*/
-        let validQuests = 0;
         if (arenaon){
             arenaQuests.forEach(quest =>{
                 if (quest.querySelector('.quest_slot_time') && !arenatimedon){
@@ -1239,19 +1517,12 @@
         }
 
 
-        completedQuests.forEach(quest => {
-            console.log('completedQuests: ', quest)
-            quest.click()
-            qc += 1;
-            localStorage.setItem('_questCounter', qc)
-            questCounter.innerHTML = qc;
-        })
-        failedQuests.forEach(quest => {
-            console.log('failedQuests: ', quest)
-            quest.click()
-        })
-
         let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
+        console.log('valid quests to take: ',validQuests )
+        if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
+            rerollQuestsButton.click()
+            console.log("AUGH")
+        }
         //console.log('number of active quests: ', activeQuests.length)
 
         let isQuestCooldown = document.getElementById('quest_header_cooldown')
@@ -1353,25 +1624,20 @@
                 }
             })
         }
+    }
 
-
-        //itemQuests.forEach(quest => {
-        //    console.log('itemQuests: ', quest)
-        //    //quest.click()
-        //})  //idk, low gold and takes quest slot
-
-
-
-        //count valid quests *********
-
-        
-        //count valid quests
-        //console.log('number of valid quests to take: ', validQuests)
-
-
-        if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
-            rerollQuestsButton.click()
-            console.log("AUGH")
+    function checkNotification(){//like you lvled up or daily reward
+        let notificationCancelButton = document.querySelector('td#buttonrightnotification')
+        if(notificationCancelButton){
+            if (notificationCancelButton.getAttribute('style')){
+                document.querySelector('td#buttonrightnotification input').click()
+            }
+        }
+        let collectBonusButton = document.getElementById('blackoutDialogLoginBonus')
+        if (collectBonusButton){
+            if (collectBonusButton.getAttribute('style').includes('display: block')){
+                document.querySelector('div.loginbonus_buttons input[value="Collect Bonus"]').click()
+            }
         }
 
     }
@@ -1383,6 +1649,7 @@
 
 
     function eventChecker(){
+        checkNotification()
         if (boton){
             if (!location.href.includes('index.php?mod=quests')){ //set main bots
                 if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
