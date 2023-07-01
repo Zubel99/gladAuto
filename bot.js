@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Gladiatusik
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      1.3.3.7
 // @description  Better than p2w bobs
 // @author       You
 // @include      *s*-*.gladiatus.gameforge.com/game/index.php?*
 // @exclude      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
+// @icon         https://lens-storage.storage.googleapis.com/png/0bee43cb65064cfb9707760f648e737b
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -241,7 +241,7 @@
         circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
         circusprovinciariumboton.style.textShadow = botOptionOff
     }
-    selectcircusprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
+    selectcircusprovinciariummode.innerHTML='<option value="1" selected>10%+ weaker</option><option value="2">20%+ weaker</option><option value="3">30%+ weaker</option>';//if need more options just add <option value="4">40%+ weaker</option> etc...
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
     selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 0;
 
@@ -280,9 +280,9 @@
         arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
         arenaprovinciariumboton.style.textShadow = botOptionOff
     }
-    selectarenaprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
+    selectarenaprovinciariummode.innerHTML='<option value="1" selected>10%+ weaker</option><option value="2">20%+ weaker</option><option value="3">30%+ weaker</option>';//if need more options just add <option value="4">40%+ weaker</option> etc...
     selectarenaprovinciariummode.id="selectarenaprovinciariummode";
-    selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 0;
+    selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 1;
 
     // WORKON
     let autoworkboton=document.createElement('a');
@@ -1447,9 +1447,9 @@
     }
 
 
-    async function checkCircusProvinciarium(_selectcircusprovinciariummode) {
+    async function checkCircusProvinciarium(_percentCap) {
 
-        let selectcircusprovinciariummode = parseInt(_selectcircusprovinciariummode);
+        let percentCap = parseInt(_percentCap);
         let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
         let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
         console.log('circus')
@@ -1570,7 +1570,7 @@
 
 
                 let strengthArray = []
-                let strengthArrayWithHealCorrection = []
+                let powerArray = []
                 enemyCharactersStats.forEach(charactersAndButton => { //charactersAndButton[0] = characters array, charactersAndButton[1] = fight button
                     let enemyMedic = charactersAndButton[0][0]//assuming people usually play with 1 medic
                     let highestEnemyHealingValue = charactersAndButton[0][0].healing
@@ -1605,54 +1605,43 @@
                     //if someone wants here is a good place to take into consideration medic healing, i dont want to do that :D
                     //nvm ill add something i came up with :D :D:D:D:D:D
                     let healDifference = (playerMedic.healing - enemyMedic.healing) / 10 // idk how much to divide by !!! IMPORTANT TO CHECK IF IT FIRST AND CORRECT
-                    strengthArrayWithHealCorrection.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
+                    powerArray.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
 
-                    strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
+                    //strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
 
                 })
-                console.log('original strengthArray :', strengthArray)
-                console.log('strengthArrayWithHealCorrection :', strengthArrayWithHealCorrection)
 
+                let weakerEnemies = []
 
-                let strongestEnemy = strengthArrayWithHealCorrection[0]
-                let strongestEnemyStrength = strengthArrayWithHealCorrection[0][0] - strengthArrayWithHealCorrection[0][1] //initialize with first value
-                let weakestEnemy = strengthArrayWithHealCorrection[0]
-                let weakestEnemyStrength = strengthArrayWithHealCorrection[0][0] - strengthArrayWithHealCorrection[0][1]
-                strengthArrayWithHealCorrection.forEach(strengthArr => {
-                    if((strengthArr[0] - strengthArr[1]) > weakestEnemyStrength){
-                        weakestEnemyStrength = strengthArr[0] - strengthArr[1]
-                        weakestEnemy = strengthArr
-                    }
-                    else if((strengthArr[0] - strengthArr[1]) <= strongestEnemyStrength){
-                        strongestEnemyStrength = strengthArr[0] - strengthArr[1]
-                        strongestEnemy = strengthArr
+                powerArray.forEach(enemy => {
+                    let powerAmount = enemy[0] - enemy[1] - enemy[0] * (percentCap / 10)
+                    if((powerAmount > 0)){
+                        weakerEnemies.push([enemy[2], powerAmount])
                     }
                 })
+                console.log('powerArray: ', powerArray)
 
-                if (_selectcircusprovinciariummode == 0){
-                    if(weakestEnemyStrength < 30){ // fair cap to guarantee wins at high rate
-                        console.log('no valid enemies to fight, rerolling')
-                        document.querySelector('input.button1[name="actionButton"]').click()
+                if(weakerEnemies.length == 0){
+                    console.log('no valid enemies to fight, rerolling')
+                    //document.querySelector('input.button1[name="actionButton"]').click()
+                    return
+                }
+                let weakestEnemy = weakerEnemies[0]
+                weakerEnemies.forEach(enemy => {
+                    if (enemy[1] > weakestEnemy[1]){
+                        weakestEnemy = enemy
                     }
-                    console.log('weakestEnemy', weakestEnemy)
-                    weakestEnemy[2].click()
-                }
-                else if (_selectcircusprovinciariummode == 1){
-                    console.log('strongestEnemy', strongestEnemy)
-                    strongestEnemy[2].click()
-                }
+                })
+                console.log('weakerEnemies: ', weakerEnemies)
+                console.log('weakestEnemy: ', weakestEnemy)
+                //weakestEnemy[0].click()
+                return
 
 
             })
                 .catch(error => {
                 console.error("Error occurred.");
             });
-
-            //now calculate strength
-
-
-
-
 
         }
     }
@@ -1672,13 +1661,13 @@
 
 
 
-    async function checkArenaProvinciarium(_selectarenaprovinciariummode, arenahp){
+    async function checkArenaProvinciarium(_percentCap, arenahp){
         //var arenahp = parseInt(_arenahp);
         console.log('arena');
         let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
         //console.log('current and cap hp: ', currentHpPercentage , ' < ', arenahp, ' = ', currentHpPercentage < arenahp)
         if (currentHpPercentage < arenahp) return;
-        let selectarenaprovinciariummode = parseInt(_selectarenaprovinciariummode)
+        let percentCap = parseInt(_percentCap) // percent of power difference fro menemy (1 = 10%, 2 = 20% etc)
         let content = document.getElementById('cooldown_bar_text_arena').innerHTML;
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
@@ -1691,34 +1680,6 @@
                 console.log('bug detected')
                 location.href = arenaLink;
             }
-            //else{
-            //    console.log('lil bro just fought, reroll enemies')
-            //    document.querySelector('input.button1[name="actionButton"]').click()
-            //}
-
-            /*
-
-            let enemies = document.querySelectorAll('section#own2 table tbody tr td div.attack');
-
-            if (selectarenaprovinciariummode == 0){
-                let randomEnemy = Math.floor(Math.random() * ((enemies.length-1) - 0 + 1) + 0);
-                enemies[randomEnemy].click();
-            }
-            else if (selectarenaprovinciariummode == 1){//attack lowest lvl available
-                enemies[0].click();
-            }
-            else if (selectarenaprovinciariummode == 2){ //attack highest lvl available
-                enemies[enemies.length-1].click();
-            }
-
-            */
-
-
-            //let enemyElements = document.querySelectorAll('section#own2 table tbody tr a[target]');
-
-            // WORKS PERFECTLY :D:D:D:D:D
-
-
 
 
             let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
@@ -1766,47 +1727,42 @@
             await Promise.all(promises)
                 .then(() => {
                 //console.log(enemyStats);
-                let enemyStrength = []
+                let powerArray = []
                 //console.log(userStats[0])
                 console.log('promise');
 
                 enemyStats.forEach(enemy => {
                     //console.log(enemy)//[0] - stats, [1] .click() fight event
                     console.log('enemyPromise')
-                    enemyStrength.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
+                    powerArray.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
                 })
 
-                console.log('enemy strengths: ', enemyStrength)
+                console.log('enemy strengths: ', powerArray)
 
-                let strongestEnemy = enemyStrength[0][1]
-                let strongestEnemyStrength = enemyStrength[0][2] - enemyStrength[0][3] //initialize with first value
-                let weakestEnemy = enemyStrength[0][1]
-                let weakestEnemyStrength = enemyStrength[0][2] - enemyStrength[0][3]
-                enemyStrength.forEach(enemy => {
-                    if((enemy[2] - enemy[3]) > weakestEnemyStrength){
-                        weakestEnemyStrength = enemy[2] - enemy[3]
-                        weakestEnemy = enemy[1]
-                    }
-                    else if((enemy[2] - enemy[3]) <= strongestEnemyStrength){
-                        strongestEnemyStrength = enemy[2] - enemy[3]
-                        strongestEnemy = enemy[1]
+                let weakerEnemies = []
+
+                powerArray.forEach(enemy => {
+                    let powerAmount = enemy[2] - enemy[3] - enemy[2] * (percentCap / 10)
+                    if((powerAmount > 0)){
+                        weakerEnemies.push([enemy[1], powerAmount])
                     }
                 })
+                console.log('enemy strengths: ',powerArray)
 
-                if (selectarenaprovinciariummode == 0){
-                    if(weakestEnemyStrength < 8){ // fair cap to guarantee wins at high rate
-                        console.log('no valid enemies to fight, rerolling')
-                        document.querySelector('input.button1[name="actionButton"]').click()
+                if(weakerEnemies.length == 0){
+                    console.log('no valid enemies to fight, rerolling')
+                    document.querySelector('input.button1[name="actionButton"]').click()
+                    return
+                }
+                let weakestEnemy = weakerEnemies[0]
+                weakerEnemies.forEach(enemy => {
+                    if (enemy[1] > weakestEnemy[1]){
+                        weakestEnemy = enemy
                     }
-                    console.log('weakestEnemy', weakestEnemy)
-                    weakestEnemy.click()
-                }
-                else if (selectarenaprovinciariummode == 1){
-                    console.log('strongestEnemy', strongestEnemy)
-                    strongestEnemy.click()
-                }
-
-
+                })
+                console.log('weakerEnemies: ', weakerEnemies)
+                console.log('weakestEnemy: ', weakestEnemy)
+                weakestEnemy[0].click()
             })
                 .catch(error => {
                 console.error("Error occurred:", error);
