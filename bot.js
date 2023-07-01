@@ -4,8 +4,7 @@
 // @version      0.1
 // @description  Better than p2w bobs
 // @author       You
-// @match        https://s303-en.gladiatus.gameforge.com/game*
-// @match        https://lobby.gladiatus.gameforge.com/*
+// @include      *s*-*.gladiatus.gameforge.com/game/index.php?*
 // @exclude      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
 // @grant        GM_xmlhttpRequest
@@ -59,6 +58,13 @@
     let expeditionquesttimedok=localStorage.getItem('_expeditionquesttimedok') === 'true';
     let expeditionquestsuccessionok=localStorage.getItem('_expeditionquestsuccessionok') === 'true';
 
+    let expeditionSliderOk = localStorage.getItem('_expeditionSliderOk') === 'true';
+    let dungeonSliderOk = localStorage.getItem('_dungeonSliderOk') === 'true';
+    let circusSliderOk = localStorage.getItem('_circusSliderOk') === 'true';
+    let arenaSliderOk = localStorage.getItem('_arenaSliderOk') === 'true';
+    let questSliderOk = localStorage.getItem('_questSliderOk') === 'true';
+    let workSliderOk = localStorage.getItem('_workSliderOk') === 'true';
+
 
     //additional functionalities handle the same way
     let autoeventok=true
@@ -85,6 +91,19 @@
             return false;
         }}
 
+    function createMenuItemSlider(id){
+        let isOnByDefault = localStorage.getItem('_' + id + 'Ok') === 'true';
+
+        let arrowImg = document.createElement('img')
+        if (isOnByDefault) arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        else arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        arrowImg.setAttribute('height', 18);
+        arrowImg.setAttribute('width', 18);
+        arrowImg.id = id
+        arrowImg.setAttribute('style', 'position: absolute; cursor: pointer; filter: brightness(4); padding: 4.5px; left: 36px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));')//position: absolute; cursor: pointer; top: 0px; left:10px; filter: brightness(4); padding: 4.5px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));
+        return arrowImg
+    }
+
     if (boton==true) {
         menubot.setAttribute("style","display:none");
         //botTab.style.textShadow = botOptionOn
@@ -93,7 +112,8 @@
         //botTab.style.textShadow = botOptionOff
     }
     menubot.id="bot";
-    menubot.setAttribute("style","display:block");
+    menubot.setAttribute("style","display:block; ");//position: relative;
+
 
     // BOTON EXPEDICION
     let expeditionboton=document.createElement('a');
@@ -113,24 +133,25 @@
     let expdatalabel=document.createElement('span');
     expdatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_expeditionhp') || 50) +"%";
     expdatalabel.id="expdatalabel";
-    if (autoexpeditionok==true){
-        expeditionboton.innerHTML="EXPEDITION ON";
-        expeditionboton.style.textShadow = botOptionOn
-        //selectexpeditionmap.setAttribute("style","display:none;margin-left:10px;");
-        //selectexpeditiontarget.setAttribute("style","display:none;margin-left:10px;");
-        //expeditionhp.setAttribute("style","display:none;margin-left:10px;");
-        //expdatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
+    let expeditionSlider = createMenuItemSlider('expeditionSlider')
+    if (expeditionSliderOk){
         selectexpeditionmap.setAttribute("style","display:block;margin-left:10px;");
         selectexpeditiontarget.setAttribute("style","display:block;margin-left:10px;");
         expeditionhp.setAttribute("style","display:block;margin-left:10px;");
         expdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
+        selectexpeditionmap.setAttribute("style","display:none;margin-left:10px;");
+        selectexpeditiontarget.setAttribute("style","display:none;margin-left:10px;");
+        expeditionhp.setAttribute("style","display:none;margin-left:10px;");
+        expdatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
+    }
+    if (autoexpeditionok==true){
+        expeditionboton.innerHTML="EXPEDITION ON";
+        expeditionboton.style.textShadow = botOptionOn
+        
+    }else{
         expeditionboton.innerHTML="EXPEDITION OFF";
         expeditionboton.style.textShadow = botOptionOff
-        selectexpeditionmap.setAttribute("style","display:block;margin-left:10px;");
-        selectexpeditiontarget.setAttribute("style","display:block;margin-left:10px;");
-        expeditionhp.setAttribute("style","display:block;margin-left:10px;");
-        expdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }
     selectexpeditionmap.id="expeditionmap";
     let zonas= document.querySelectorAll("div#submenu2 a.menuitem");
@@ -165,23 +186,26 @@
     fulldungclear.value=localStorage.getItem('_fulldungclear') || false;
     dungeonboton.classList.add('menuitem');
     dungeonboton.style.cursor = "pointer";
-    if (autodungeonok==true){
-        dungeonboton.innerHTML="DUNGEON ON";
-        dungeonboton.style.textShadow = botOptionOn
-        //selectdungeonmap.setAttribute("style","display:none;margin-left:10px;");
-        //avdanced.setAttribute("style","display:none;margin-left:10px;");
-        //skipboss.setAttribute("style","display:none;margin-left:10px;");
+    let dungeonSlider = createMenuItemSlider('dungeonSlider')
+    if (dungeonSliderOk){
         selectdungeonmap.setAttribute("style","display:block;margin-left:10px;");
         advanced.setAttribute("style","display:block;margin-left:10px;");
         skipboss.setAttribute("style","display:block;margin-left:10px;");
         fulldungclear.setAttribute("style","display:block;margin-left:10px;");
     }else{
+        selectdungeonmap.setAttribute("style","display:none;margin-left:10px;");
+        advanced.setAttribute("style","display:none;margin-left:10px;");
+        skipboss.setAttribute("style","display:none;margin-left:10px;");
+        fulldungclear.setAttribute("style","display:none;margin-left:10px;");
+    }
+
+    if (autodungeonok==true){
+        dungeonboton.innerHTML="DUNGEON ON";
+        dungeonboton.style.textShadow = botOptionOn
+
+    }else{
         dungeonboton.innerHTML="DUNGEON OFF";
         dungeonboton.style.textShadow = botOptionOff
-        selectdungeonmap.setAttribute("style","display:block;margin-left:10px;");
-        advanced.setAttribute("style","display:block;margin-left:10px;");
-        skipboss.setAttribute("style","display:block;margin-left:10px;");
-        fulldungclear.setAttribute("style","display:block;margin-left:10px;");
     }
     selectdungeonmap.id="dungeonmap";
     let zonas2= document.querySelectorAll("div#submenu2 a.menuitem");
@@ -203,15 +227,19 @@
     circusprovinciariumboton.classList.add('menuitem');
     circusprovinciariumboton.style.cursor = "pointer";
     //circusprovinciariumboton.href="#";
+    let circusSlider = createMenuItemSlider('circusSlider')
+    if (circusSliderOk){
+        selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
+    }else{
+        selectcircusprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
+    }
+
     if (autocircusprovinciariumok==true){
         circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
         circusprovinciariumboton.style.textShadow = botOptionOn
-        //selectcircusprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
-        selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
     }else{
         circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
         circusprovinciariumboton.style.textShadow = botOptionOff
-        selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
     }
     selectcircusprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
@@ -234,19 +262,23 @@
     let arenadatalabel=document.createElement('span');
     arenadatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_arenahp') || 50) +"%";
     arenadatalabel.id="arenadatalabel";
-    if (autoarenaprovinciariumok==true){
-        arenaprovinciariumboton.innerHTML="ARENA PROV ON";
-        arenaprovinciariumboton.style.textShadow = botOptionOn
-        //selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
+
+    let arenaSlider = createMenuItemSlider('arenaSlider')
+    if (arenaSliderOk){
         selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
         arenahp.setAttribute("style","display:block;margin-left:10px;");
         arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
+        selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
+        arenahp.setAttribute("style","display:none;margin-left:10px;");
+        arenadatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
+    }
+    if (autoarenaprovinciariumok==true){
+        arenaprovinciariumboton.innerHTML="ARENA PROV ON";
+        arenaprovinciariumboton.style.textShadow = botOptionOn
+    }else{
         arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
         arenaprovinciariumboton.style.textShadow = botOptionOff
-        selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
-        arenahp.setAttribute("style","display:block;margin-left:10px;");
-        arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }
     selectarenaprovinciariummode.innerHTML='<option value="0" selected>Weakest enemy</option><option value="1">Strongest enemy</option>';
     selectarenaprovinciariummode.id="selectarenaprovinciariummode";
@@ -264,15 +296,18 @@
     //autoworktime.id="autoworktime";
     //autoworktime.innerHTML='<option value="1">1 HOUR</option><option value="2">2 HOURS</option><option value="3">3 HOURS</option><option value="4">4 HOURS</option><option value="5">5 HOURS</option><option value="6">6 HOURS</option><option value="7">7 HOURS</option><option value="8" selected>8 HOURS</option>';
     //autoworkboton.href="#";
+    let workSlider = createMenuItemSlider('workSlider')
+    if (workSliderOk){
+        autoworktype.setAttribute("style","display:block;margin-left:10px;");
+    }else{
+        autoworktype.setAttribute("style","display:none;margin-left:10px;");
+    }
     if (autoworkok==true){
         autoworkboton.innerHTML="WORK ON";
-        //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
         autoworkboton.style.textShadow = botOptionOn;
-        autoworktype.setAttribute("style","display:block;margin-left:10px;");
     }else{
         autoworkboton.innerHTML="WORK OFF";
         autoworkboton.style.textShadow = botOptionOff;
-        autoworktype.setAttribute("style","display:block;margin-left:10px;");
     }
 
     // QUESTS ON
@@ -352,12 +387,55 @@
     let expeditionquestenemy=document.createElement('input');
     expeditionquestenemy.id="expeditionquestenemy";
     expeditionquestenemy.value= localStorage.getItem('_expeditionquestenemy') || '';
+
+    let questSlider = createMenuItemSlider('questSlider')
+    if (questSliderOk){
+        arenaqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        arenaquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+        arenaquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+        circusqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        circusquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+        circusquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+        combatqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        combatquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+        combatquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+        expeditionqueston.setAttribute("style","display:block; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        expeditionquesttimedon.setAttribute("style","display:block;margin-left:10px;");
+        expeditionquestsuccessionon.setAttribute("style","display:block;margin-left:10px;");
+
+        expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+    }else{
+        arenaqueston.setAttribute("style","display:none; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        arenaquesttimedon.setAttribute("style","display:none;margin-left:10px;");
+        arenaquestsuccessionon.setAttribute("style","display:none;margin-left:10px;");
+
+        circusqueston.setAttribute("style","display:none; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        circusquesttimedon.setAttribute("style","display:none;margin-left:10px;");
+        circusquestsuccessionon.setAttribute("style","display:none;margin-left:10px;");
+
+        combatqueston.setAttribute("style","display:none; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        combatquesttimedon.setAttribute("style","display:none;margin-left:10px;");
+        combatquestsuccessionon.setAttribute("style","display:none;margin-left:10px;");
+
+        expeditionqueston.setAttribute("style","display:none; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
+        expeditionquesttimedon.setAttribute("style","display:none;margin-left:10px;");
+        expeditionquestsuccessionon.setAttribute("style","display:none;margin-left:10px;");
+
+        expeditionquestmaplabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestmap.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        expeditionquestenemylabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        expeditionquestenemy.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+    }
+
     if (autoquestok==true){//global for quests
         autoquestboton.innerHTML="QUESTS ON";
         autoquestboton.style.textShadow = botOptionOn;
-
-        //autoworktype.setAttribute("style","display:none;margin-left:10px;"); //previously was dissapearing on active
-        //now components
         if(arenaquestok){
             arenaqueston.innerHTML = 'ARENA ON'
             arenaqueston.style.textShadow = smallButtonBotOptionOn;
@@ -384,17 +462,12 @@
 
         if(expeditionquestok){
             expeditionqueston.innerHTML = 'EXPEDITION ON'
+
             expeditionqueston.style.textShadow = smallButtonBotOptionOn;
         }else{
             expeditionqueston.innerHTML = 'EXPEDITION OFF'
             expeditionqueston.style.textShadow = smallButtonBotOptionOff;
         }
-
-        expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-        expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-
     }else{
         autoquestboton.innerHTML="QUESTS OFF";
         autoquestboton.style.textShadow = botOptionOff;
@@ -480,27 +553,46 @@
         menubotboton.innerHTML="BOT OFF";
         menubotboton.style.textShadow = botOptionOff;
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var element = document.getElementById('dungeonSlider');
+
+        if (element) {
+            var currentTop = parseFloat(element.style.top);
+            var newTop = currentTop - 10;
+            element.style.top = newTop + 'px';
+        }
+        console.log('loaded')
+    });
+
+
+
     menubotboton.id="botboton";
     //menubotboton.href="#";
     //APPENDCHILLD
+    menubot.appendChild(expeditionSlider) //slider
     menubot.appendChild(expeditionboton);
     menubot.appendChild(selectexpeditionmap);
     menubot.appendChild(selectexpeditiontarget);
     menubot.appendChild(expdatalabel);
     menubot.appendChild(expeditionhp);
     menubot.appendChild(expdatalist);
+    menubot.appendChild(dungeonSlider); //slider
     menubot.appendChild(dungeonboton);
     menubot.appendChild(selectdungeonmap);
     menubot.appendChild(advanced);
     menubot.appendChild(skipboss);
     menubot.appendChild(fulldungclear);
+    menubot.appendChild(circusSlider); //slider
     menubot.appendChild(circusprovinciariumboton)
     menubot.appendChild(selectcircusprovinciariummode)
+    menubot.appendChild(arenaSlider); //slider
     menubot.appendChild(arenaprovinciariumboton)
     menubot.appendChild(selectarenaprovinciariummode)
     menubot.appendChild(arenadatalabel);
     menubot.appendChild(arenahp);
     menubot.appendChild(arenadatalist);
+    menubot.appendChild(questSlider); //slider
     menubot.appendChild(autoquestboton);
 
     menubot.appendChild(arenaqueston)
@@ -520,6 +612,7 @@
     menubot.appendChild(expeditionquestmap);
     menubot.appendChild(expeditionquestenemylabel);
     menubot.appendChild(expeditionquestenemy);
+    menubot.appendChild(workSlider); //slider
     menubot.appendChild(autoworkboton);
     menubot.appendChild(autoworktype);
     //menubot.appendChild(autoworktime);
@@ -537,34 +630,19 @@
     //--- autoworktype.addEventListener("change",function(){
     //---     createworkselect(autoworktype.value);
     //--- });
+
     //EVENTS
     //   EXPEDITION LOGIC
 
     expeditionboton.addEventListener("click",function(){
-        let selectedexpeditionmap=document.querySelector('#expeditionmap');
-        let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
-        let expdatalabel=document.querySelector('#expdatalabel');
-        let expeditionhp=document.querySelector('#expeditionhp');
         if (autoexpeditionok==true){
             autoexpeditionok=false;
             expeditionboton.innerHTML="EXPEDITION OFF";
             expeditionboton.style.textShadow = botOptionOff
-            selectedexpeditionmap.style.display="block";
-            selectedexpeditiontarget.style.display="block";
-            expdatalabel.style.display="block";
-            expeditionhp.style.display="block";
         }else{
             autoexpeditionok=true;
             expeditionboton.innerHTML="EXPEDITION ON";
             expeditionboton.style.textShadow = botOptionOn
-            //selectedexpeditionmap.style.display="none";
-            //selectedexpeditiontarget.style.display="none";
-            //expdatalabel.style.display="none";
-            //expeditionhp.style.display="none";
-            selectedexpeditionmap.style.display="block";
-            selectedexpeditiontarget.style.display="block";
-            expdatalabel.style.display="block";
-            expeditionhp.style.display="block";
         }
         localStorage.setItem('_autoexpeditionok', autoexpeditionok)
     });
@@ -579,36 +657,41 @@
     selectexpeditiontarget.addEventListener("change", function(){
         localStorage.setItem('_selectedexpeditiontarget', selectexpeditiontarget.value);
     })
+    expeditionSlider.addEventListener('click', function(){
+        let selectedexpeditionmap=document.querySelector('#expeditionmap');
+        let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
+        let expdatalabel=document.querySelector('#expdatalabel');
+        let expeditionhp=document.querySelector('#expeditionhp');
+        if (expeditionSliderOk==true){
+            expeditionSliderOk = false;
+            selectedexpeditionmap.style.display="none";
+            selectedexpeditiontarget.style.display="none";
+            expdatalabel.style.display="none";
+            expeditionhp.style.display="none";
+            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            expeditionSliderOk = true;
+            selectedexpeditionmap.style.display="block";
+            selectedexpeditiontarget.style.display="block";
+            expdatalabel.style.display="block";
+            expeditionhp.style.display="block";
+            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_expeditionSliderOk', expeditionSliderOk);
+    })
 
     //   DUNGEON LOGIC
 
     dungeonboton.addEventListener("click",function(){
-        let selecteddungeonmap=document.querySelector('#dungeonmap');
-        let advanced=document.querySelector('#advanced');
-        let skipboss=document.querySelector('#skipboss');
-        let fulldungclear=document.querySelector('#fulldungclear');
-        //localStorage.setItem('_selecteddungeonmap', selecteddungeonmap.value);
-        //localStorage.setItem('_advanced', advanced.value);
-        //localStorage.setItem('_skipboss', skipboss.value);
         if (autodungeonok==true){
             autodungeonok=false;
             dungeonboton.innerHTML="DUNGEON OFF";
             dungeonboton.style.textShadow = botOptionOff
-            advanced.style.display="block";
-            selecteddungeonmap.style.display="block";
-            skipboss.style.display="block";
-            fulldungclear.style.display="block";
         }else{
             autodungeonok=true;
             dungeonboton.innerHTML="DUNGEON ON";
             dungeonboton.style.textShadow = botOptionOn
-            //selecteddungeonmap.style.display="none";
-            //advanced.style.display="none";
-            //skipboss.style.display="none";
-            advanced.style.display="block";
-            selecteddungeonmap.style.display="block";
-            skipboss.style.display="block";
-            fulldungclear.style.display="block";
         }
         localStorage.setItem('_autodungeonok', autodungeonok)
     });
@@ -624,43 +707,72 @@
     fulldungclear.addEventListener("change", function(){
         localStorage.setItem('_fulldungclear', fulldungclear.value);
     })
+    dungeonSlider.addEventListener('click', function(){
+        let selecteddungeonmap=document.querySelector('#dungeonmap');
+        let advanced=document.querySelector('#advanced');
+        let skipboss=document.querySelector('#skipboss');
+        let fulldungclear=document.querySelector('#fulldungclear');
+        if (dungeonSliderOk==true){
+            dungeonSliderOk = false;
+            advanced.style.display="none";
+            selecteddungeonmap.style.display="none";
+            skipboss.style.display="none";
+            fulldungclear.style.display="none";
+            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            dungeonSliderOk = true;
+            advanced.style.display="block";
+            selecteddungeonmap.style.display="block";
+            skipboss.style.display="block";
+            fulldungclear.style.display="block";
+            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_dungeonSliderOk', dungeonSliderOk);
+    })
 
 
-    // CIRCUS PROV LOGIC
+    // CIRCUS LOGIC
     circusprovinciariumboton.addEventListener('click', function(){
-        let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
         if (autocircusprovinciariumok==true){
             autocircusprovinciariumok=false;
             circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
             circusprovinciariumboton.style.textShadow = botOptionOff
-            selectcircusprovinciariummode.style.display="block";
         }else{
             autocircusprovinciariumok=true;
             circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
             circusprovinciariumboton.style.textShadow = botOptionOn
-            //selectcircusprovinciariummode.style.display="none";
-            selectcircusprovinciariummode.style.display="block";
         }
         localStorage.setItem('_autocircusprovinciariumok', autocircusprovinciariumok);
     })
     selectcircusprovinciariummode.addEventListener('change', function(){
         localStorage.setItem('_selectcircusprovinciariummode', selectcircusprovinciariummode.value);
     })
+    circusSlider.addEventListener('click', function(){
+        let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
+        if (circusSliderOk==true){
+            circusSliderOk = false;
+            selectcircusprovinciariummode.style.display="none";
+            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            circusSliderOk = true;
+            selectcircusprovinciariummode.style.display="block";
+            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
 
-    // ARENA PROV LOGIC
+        }
+        localStorage.setItem('_circusSliderOk', circusSliderOk);
+    })
+
+    // ARENA LOGIC
     arenaprovinciariumboton.addEventListener('click', function(){
-        let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
         if (autoarenaprovinciariumok==true){
             autoarenaprovinciariumok=false;
             arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
             arenaprovinciariumboton.style.textShadow = botOptionOff
-            selectarenaprovinciariummode.style.display="block";
         }else{
             autoarenaprovinciariumok=true;
             arenaprovinciariumboton.innerHTML="ARENA PROV ON";
             arenaprovinciariumboton.style.textShadow = botOptionOn
-            //selectarenaprovinciariummode.style.display="none";
-            selectarenaprovinciariummode.style.display="block";
         }
         localStorage.setItem('_autoarenaprovinciariumok', autoarenaprovinciariumok);
     })
@@ -672,30 +784,28 @@
         arenadatalabel.innerHTML="NOT ATTACK HP < "+arenahp.value+"%";
         localStorage.setItem('_arenahp', arenahp.value);
     });
-
-
-    // WORKON
-    autoworkboton.addEventListener('click', function(){
-        let autoworktype=document.querySelector('#autoworktype');
-        if (autoworkok==true){
-            autoworkok=false;
-            autoworkboton.innerHTML="WORK OFF";
-            autoworkboton.style.textShadow = botOptionOff
-            autoworktype.style.display="block";
+    arenaSlider.addEventListener('click', function(){
+        let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
+        let arenadatalabel=document.querySelector('#arenadatalabel');
+        let arenahp=document.querySelector('#arenahp');
+        if (arenaSliderOk==true){
+            arenaSliderOk = false;
+            selectarenaprovinciariummode.style.display="none";
+            arenadatalabel.style.display="none";
+            arenahp.style.display="none";
+            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
         }else{
-            autoworkok=true;
-            autoworkboton.innerHTML="WORK ON";
-            autoworkboton.style.textShadow = botOptionOn
-            //toworktype.style.display="none";
-            autoworktype.style.display="block";
+            arenaSliderOk = true;
+            selectarenaprovinciariummode.style.display="block";
+            arenadatalabel.style.display="block";
+            arenahp.style.display="block";
+            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
         }
-        localStorage.setItem('_autoworkok', autoworkok);
-    })
-    autoworktype.addEventListener('change', function(){
-        localStorage.setItem('_worktype', autoworktype.value);
+        localStorage.setItem('_arenaSliderOk', arenaSliderOk);
     })
 
-    //QUEST ON
+    //QUEST LOGIC
     autoquestboton.addEventListener('click', function(){ //main quests button
         let expeditionquestmap=document.querySelector('#expeditionquestmap');
         let expeditionquestenemy=document.querySelector('#expeditionquestenemy');
@@ -703,14 +813,14 @@
             autoquestok=false;
             autoquestboton.innerHTML="QUESTS OFF";
             autoquestboton.style.textShadow = botOptionOff;
-            expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
-            expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            //expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
         }else{
             autoquestok=true;
             autoquestboton.innerHTML="QUESTS ON";
             autoquestboton.style.textShadow = botOptionOn;
-            expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
-            expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            //expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+            //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
         }
         localStorage.setItem('_autoquestok', autoquestok);
     })
@@ -817,6 +927,102 @@
         localStorage.setItem('_expeditionquestenemy', expeditionquestenemy.value);
         console.log(expeditionquestenemy.value)
     })
+    questSlider.addEventListener('click', function(){
+        arenaqueston.getElementById('arenaqueston')
+        arenaquesttimedon.getElementById('arenaquesttimedon')
+        arenaquestsuccessionon.getElementById('arenaquestsuccessionon')
+        circusqueston.getElementById('circusqueston')
+        circusquesttimedon.getElementById('circusquesttimedon')
+        circusquestsuccessionon.getElementById('circusquestsuccessionon')
+        combatqueston.getElementById('combatqueston')
+        combatquesttimedon.getElementById('combatquesttimedon')
+        combatquestsuccessionon.getElementById('combatquestsuccessionon')
+        expeditionqueston.getElementById('expeditionqueston')
+        expeditionquesttimedon.getElementById('expeditionquesttimedon')
+        expeditionquestsuccessionon.getElementById('expeditionquestsuccessionon')
+        expeditionquestmaplabel.getElementById('expeditionquestmaplabel')
+        expeditionquestmap.getElementById('expeditionquestmap')
+        expeditionquestenemylabel.getElementById('expeditionquestenemylabel')
+        expeditionquestenemy.getElementById('expeditionquestenemy')
+        if (questSliderOk==true){
+            questSliderOk = false;
+            arenaqueston.style.display = 'none'
+            arenaquesttimedon.style.display = 'none'
+            arenaquestsuccessionon.style.display = 'none'
+            circusqueston.style.display = 'none'
+            circusquesttimedon.style.display = 'none'
+            circusquestsuccessionon.style.display = 'none'
+            combatqueston.style.display = 'none'
+            combatquesttimedon.style.display = 'none'
+            combatquestsuccessionon.style.display = 'none'
+            expeditionqueston.style.display = 'none'
+            expeditionquesttimedon.style.display = 'none'
+            expeditionquestsuccessionon.style.display = 'none'
+            expeditionquestmaplabel.style.display = 'none'
+            expeditionquestmap.style.display = 'none'
+            expeditionquestenemylabel.style.display = 'none'
+            expeditionquestenemy.style.display = 'none'
+            questSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            questSliderOk = true;
+            arenaqueston.style.display = 'block'
+            arenaquesttimedon.style.display = 'block'
+            arenaquestsuccessionon.style.display = 'block'
+            circusqueston.style.display = 'block'
+            circusquesttimedon.style.display = 'block'
+            circusquestsuccessionon.style.display = 'block'
+            combatqueston.style.display = 'block'
+            combatquesttimedon.style.display = 'block'
+            combatquestsuccessionon.style.display = 'block'
+            expeditionqueston.style.display = 'block'
+            expeditionquesttimedon.style.display = 'block'
+            expeditionquestsuccessionon.style.display = 'block'
+            expeditionquestmaplabel.style.display = 'block'
+            expeditionquestmap.style.display = 'block'
+            expeditionquestenemylabel.style.display = 'block'
+            expeditionquestenemy.style.display = 'block'
+            questSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        }
+        localStorage.setItem('_questSliderOk', questSliderOk);
+    })
+
+
+    // WORK LOGIC
+    autoworkboton.addEventListener('click', function(){
+        if (autoworkok==true){
+            autoworkok=false;
+            autoworkboton.innerHTML="WORK OFF";
+            autoworkboton.style.textShadow = botOptionOff
+        }else{
+            autoworkok=true;
+            autoworkboton.innerHTML="WORK ON";
+            autoworkboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoworkok', autoworkok);
+    })
+    autoworktype.addEventListener('change', function(){
+        localStorage.setItem('_worktype', autoworktype.value);
+    })
+    workSlider.addEventListener('click', function(){
+        let autoworktype=document.querySelector('#autoworktype');
+
+        if (workSliderOk==true){
+            workSliderOk = false;
+            autoworktype.style.display="none";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            workSliderOk = true;
+            autoworktype.style.display="block";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_workSliderOk', workSliderOk);
+    })
+
+
+
+
+
 
     // EVENT IDK LEAVE FOR NOW
     if (existevent()){
@@ -888,9 +1094,9 @@
 
 
     function checkExpedition(selectexpeditionmap, selectexpeditiontarget, expeditionhp){
+        console.log('expedition')
         let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
         if (currentHpPercentage < expeditionhp) return;
-        console.log('expedition')
         let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
         //alert(content);
 
@@ -1257,6 +1463,7 @@
                 if (loopBugCheck.includes('can only challenge an opponent in the arena every')) {
                     console.log('bug detected');
                     location.href = circusLink;
+                    return
                 } else {
                     console.log('lil bro just fought, reroll enemies');
                     document.querySelector('input.button1[name="actionButton"]').click();
