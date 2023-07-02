@@ -148,7 +148,7 @@
     if (autoexpeditionok==true){
         expeditionboton.innerHTML="EXPEDITION ON";
         expeditionboton.style.textShadow = botOptionOn
-        
+
     }else{
         expeditionboton.innerHTML="EXPEDITION OFF";
         expeditionboton.style.textShadow = botOptionOff
@@ -1613,17 +1613,17 @@
 
                 let weakerEnemies = []
 
-                powerArray.forEach(enemy => {
-                    let powerAmount = enemy[0] - enemy[1] - enemy[0] * (percentCap / 10)
+                powerArray.forEach(powerData => { //[0] = my power, [1] = enemy power, [2] = attack button
+                    let powerAmount = powerData[0] - powerData[1] - powerData[0] * (percentCap / 10)
                     if((powerAmount > 0)){
-                        weakerEnemies.push([enemy[2], powerAmount])
+                        weakerEnemies.push([powerData[2], powerAmount])
                     }
                 })
                 console.log('powerArray: ', powerArray)
 
                 if(weakerEnemies.length == 0){
                     console.log('no valid enemies to fight, rerolling')
-                    //document.querySelector('input.button1[name="actionButton"]').click()
+                    document.querySelector('input.button1[name="actionButton"]').click()
                     return
                 }
                 let weakestEnemy = weakerEnemies[0]
@@ -1634,7 +1634,7 @@
                 })
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
-                //weakestEnemy[0].click()
+                weakestEnemy[0].click()
                 return
 
 
@@ -1763,6 +1763,7 @@
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
                 weakestEnemy[0].click()
+                return
             })
                 .catch(error => {
                 console.error("Error occurred:", error);
@@ -1918,11 +1919,11 @@
                 }
                 let questText = quest.children[1].innerHTML;
                 if (!questText.includes('succession')){
-                    console.log('AKCEPTUJ: ', questText)
+                    console.log('valid: ', questText)
                     validQuests += 1
                 }
                 else if (questText.includes('succession') && circussuccessionon){
-                    console.log('[S]AKCEPTUJ: ', questText)
+                    console.log('valid: ', questText)
                     validQuests += 1
                 }
                 else {
@@ -1990,7 +1991,7 @@
         console.log('valid quests to take: ',validQuests )
         if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
             rerollQuestsButton.click()
-            console.log("AUGH")
+            console.log("no quests to take, reroll")
         }
         //console.log('number of active quests: ', activeQuests.length)
 
