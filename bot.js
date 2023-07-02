@@ -1890,26 +1890,6 @@
             quest.click()
         })
 
-        if (arenaon){
-            arenaQuests.forEach(quest =>{
-                if (quest.querySelector('.quest_slot_time') && !arenatimedon){
-                    //console.log('czasowka')
-                    return
-                }
-                let questText = quest.children[1].innerHTML;
-                if (!questText.includes('succession')){
-                    console.log('valid: ',questText)
-                    validQuests += 1
-                }
-                else if (questText.includes('succession') && arenasuccessionon){
-                    console.log('valid: ',questText)
-                    validQuests += 1
-                }
-                else {
-                    return
-                }
-            })
-        }
 
         if (circuson){
             circusQuests.forEach(quest => {
@@ -1931,7 +1911,26 @@
                 }
             })
         }
-
+        if (arenaon){
+            arenaQuests.forEach(quest =>{
+                if (quest.querySelector('.quest_slot_time') && !arenatimedon){
+                    //console.log('czasowka')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else if (questText.includes('succession') && arenasuccessionon){
+                    console.log('valid: ',questText)
+                    validQuests += 1
+                }
+                else {
+                    return
+                }
+            })
+        }
         if (combaton){
             combatQuests.forEach(quest => {
                 if (quest.querySelector('.quest_slot_time') && !combattimedon){ //if quest is timed and user specifies he doesnt want it
@@ -1952,7 +1951,6 @@
                 }
             })
         }
-
         if (expeditionon){
             expeditionQuests.forEach(quest => {
                 if (quest.querySelector('.quest_slot_time') && !expeditiontimedon){ //if quest is timed and user specifies he doesnt want it
@@ -2002,26 +2000,6 @@
         }
 
 
-        if (arenaon){
-            arenaQuests.forEach(quest => {
-                if (quest.querySelector('.quest_slot_time') && !arenatimedon){ //if quest is timed and user specifies he doesnt want it
-                    //console.log('TIMED YUCK')
-                    return
-                }
-                let questText = quest.children[1].innerHTML;
-                if (!questText.includes('succession')){
-                    //console.log('AKCEPTUJ: ', quest)
-                    quest.children[3].click()
-                }
-                else if (questText.includes('succession') && arenasuccessionon){
-                    //console.log('[S]AKCEPTUJ: ', quest)
-                    quest.children[3].click()
-                }
-                else {
-                    //console.log('NIE AKCEPTUJ: ', questText)
-                }
-            })
-        }
         if (circuson){
             circusQuests.forEach(quest => {
                 if (quest.querySelector('.quest_slot_time') && !circustimedon){ //if quest is timed and user specifies he doesnt want it
@@ -2042,7 +2020,26 @@
                 }
             })
         }
-
+        if (arenaon){
+            arenaQuests.forEach(quest => {
+                if (quest.querySelector('.quest_slot_time') && !arenatimedon){ //if quest is timed and user specifies he doesnt want it
+                    //console.log('TIMED YUCK')
+                    return
+                }
+                let questText = quest.children[1].innerHTML;
+                if (!questText.includes('succession')){
+                    //console.log('AKCEPTUJ: ', quest)
+                    quest.children[3].click()
+                }
+                else if (questText.includes('succession') && arenasuccessionon){
+                    //console.log('[S]AKCEPTUJ: ', quest)
+                    quest.children[3].click()
+                }
+                else {
+                    //console.log('NIE AKCEPTUJ: ', questText)
+                }
+            })
+        }
         if (combaton){
             combatQuests.forEach(quest => {
                 if (quest.querySelector('.quest_slot_time') && !combattimedon){ //if quest is timed and user specifies he doesnt want it
