@@ -1093,7 +1093,7 @@
     }
 
 
-    function checkExpedition(selectexpeditionmap, selectexpeditiontarget, expeditionhp){
+    async function checkExpedition(selectexpeditionmap, selectexpeditiontarget, expeditionhp){
         console.log('expedition')
         let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
         if (currentHpPercentage < expeditionhp) return;
@@ -1103,12 +1103,11 @@
         if(content == 'Go to expedition'){
             location.href = expeditionLocations[selectexpeditionmap];
             document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
-
         }
     }
 
 
-    function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
+    async function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
         let selectdungeonmap = parseInt(_selectdungeonmap)
         let advanced = _advanced === 'true'
         let skipboss = _skipboss === 'true'
@@ -1774,7 +1773,7 @@
 
 
 
-    function checkWork(_autoworktype){
+    async function checkWork(_autoworktype){
         let autoworktype = parseInt(_autoworktype);
         console.log('work')
         let expeditionsLeft = document.getElementById('expeditionpoints_value_point').innerHTML;
@@ -2112,42 +2111,41 @@
 
 
 
-
-
-
-    async function eventChecker(){
-        checkNotification()
-        if (boton){
-            if (!location.href.includes('index.php?mod=quests')){ //set main bots
-                if (autoexpeditionok) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value)//console.log('autoexpeditionok: ',selectexpeditionmap.value , selectexpeditiontarget.value, expeditionhp.value ) //checkExpedition()
-                if (autodungeonok) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value) //console.log('autodungeonok: ', selectdungeonmap.value, advanced.value, skipboss.value ) //checkDungeon()
-                if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value) //console.log('autocircusprovinciariumok: ', selectcircusprovinciariummode.value ) //checkCircusProvinciarium()
-                if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value)
-                if (autoworkok) checkWork(autoworktype.value)//console.log('autowork: ', autoworktype.value)//checkWork()
+    async function eventChecker() {
+        checkNotification();
+        if (boton) {
+            if (!location.href.includes('index.php?mod=quests')) {
+                if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
+                if (autodungeonok) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value);
+                if (autoworkok) await checkWork(autoworktype.value);
             }
-            if (location.href.includes('index.php?mod=quests')){ // quest bot
+
+            if (location.href.includes('index.php?mod=quests')) {
                 if (autoquestok) {
-                    checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value, //arena
-                                circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value, //circus
-                                combatqueston.getAttribute('value'), combatquesttimedon.value, combatquestsuccessionon.value, //combat
-                                expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value, //expedition
-                                expeditionquestmap.value, expeditionquestenemy.value) //expedition
+                    checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value,
+                                circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value,
+                                combatqueston.getAttribute('value'), combatquesttimedon.value, combatquestsuccessionon.value,
+                                expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
+                                expeditionquestmap.value, expeditionquestenemy.value);
                 }
             }
         }
     }
 
-
-    let refreshPageCounter = 0
-    //dont touch these 2 :)
-    function loop() {
+    async function loop() {
         let rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
-        setTimeout(function() {
-            eventChecker();
-            loop();
-        }, rand);
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                eventChecker();
+                resolve();
+            }, rand);
+        });
+        loop();
     }
 
+    let refreshPageCounter = 0
     setInterval(function(){
         refreshPageCounter += 1
         console.log(refreshPageCounter)
