@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Gladiatus: Auction house notification tool
+// @name         Auction houuse tool
 // @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  try to take over the world!
-// @author       Scipio
+// @version      1.0
+// @description  
+// @author       Zubel
 // @include      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
 // @grant        none
 // ==/UserScript==
@@ -22,7 +22,8 @@
 
     const timeShort = null;
     const timeVeryShort = null;
-    let statusAuction = document.querySelector(".description_span_right b").innerHTML.toLowerCase();
+    //let statusAuction = document.querySelector(".description_span_right b").innerHTML.toLowerCase();
+    let statusAuction = 'short'
 
 
     function main() {
@@ -41,19 +42,25 @@
         contentElement.style.display="block";
         contentElement.style.textAlign = "left";
 
-        if (statusAuction !== shortStr && statusAuction !== veryShortStr) {
+        if (statusAuction !== shortStr) {
             if (localStorageShortTime) {
                 localStorage.removeItem(keyShort);
                 localStorageShortTime = null;
             }
 
+
+        }
+        if (statusAuction !== veryShortStr) {
             if (localStorageVeryShortTime) {
                 localStorage.removeItem(keyVeryShort);
                 localStorageVeryShortTime = null;
             }
         }
 
+        let content = "<b>Your current time:</b> <span id='my-timer'></span></br>";
+
         if (statusAuction === shortStr) {
+            content += "<b>Short: </b>" + localStorageShortTime + "(<span id='diff-short-time'></span>)</br>";
             //new Audio('https://freesound.org/data/previews/91/91926_7037-lq.mp3').play(); //play every time on short
             if (!localStorageShortTime) { //if doesnt exist in localstorage - means short status just came up, play sound only once
                 new Audio('https://freesound.org/data/previews/91/91926_7037-lq.mp3').play();
@@ -61,26 +68,20 @@
                 //location.reload();
             }
         } else if (statusAuction === veryShortStr) {
+            content += "<b>Very Short: </b>" + localStorageVeryShortTime + "(<span id='diff-very-short-time'></span>)</br>";
             //new Audio('http://soundbible.com/grab.php?id=2155&type=mp3').play(); //play every time on  very short
             if (!localStorageVeryShortTime) {//if doesnt exist in localstorage - means very short status just came up, play sound twice
-                new Audio('http://soundbible.com/grab.php?id=2155&type=mp3').play();
-                new Audio('http://soundbible.com/grab.php?id=2155&type=mp3').play();
+                new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
+                setTimeout(() => {
+                    new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
+                }, 1000);
+                //new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
                 localStorage.setItem(keyVeryShort, getCurrentTime());
                 //location.reload();
             }
         }
-
-        let content = "<b>Your current time:</b> <span id='my-timer'></span>" + "</br>";
-
-        if (localStorageShortTime) {
-            content += "<b>Short: </b>" + localStorageShortTime + "(<span id='diff-short-time'></span>)" + "</br>";
-        }
-
-        if (localStorageVeryShortTime) {
-            content += "<b>Very Short: </b>" + localStorageVeryShortTime + "(<span id='diff-very-short-time'></span>)" + "</br>";
-        }
-
         content += "<p><b>Time refresh:</b><span id='container_short_time_refrest'></span></p>";
+
 
         contentElement.innerHTML = content;
         containerElement.appendChild(titleElement);
@@ -92,7 +93,7 @@
         let myVar = setInterval(myTimer ,1000); //cos tu zmienic potem
 
 
-        if (shortTimeRefresh && (statusAuction.includes('short') || statusAuction.includes('very short'))){
+        if (shortTimeRefresh && (statusAuction == 'short' || statusAuction == 'very short')){
             console.log('auction type: ', auctionType)
             console.log('short or very short')
             if (parseInt(shortTimeRefresh) == 1) refresh(1/4); //15secs
@@ -166,7 +167,7 @@
             document.getElementById("diff-short-time").innerHTML = diffObj.minutes + " minutes, " + diffObj.second + " second";
         }
 
-        if (localStorageVeryShortTime) {
+        if (localStorageVeryShortTime && !localStorageShortTime) {
             let diffObj = diffMinutest(getCurrentTime(), localStorageVeryShortTime);
             document.getElementById("diff-very-short-time").innerHTML = diffObj.minutes + " minutes, " + diffObj.second + " second";
         }
@@ -218,11 +219,11 @@
 
     window.addEventListener("load", (event) => {
         const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.get('sortBy')) sortBy.value = urlParams.get('sortBy');
-        if (urlParams.get('orderBy')) orderBy.value = urlParams.get('orderBy');
         let sortBy = document.getElementById('gca-auction-sort-select');
         let orderBy = document.getElementById('gca-auction-sort-order-select');
         let sortButton = document.querySelector('button.awesome-button.gca-auction-sort-button');
+        sortBy.value = urlParams.get('sortBy') || 'level';
+        orderBy.value = urlParams.get('orderBy') || 'desc';
         sortButton.click();
 
         sortBy.addEventListener('change', function() {
