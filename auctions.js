@@ -22,8 +22,7 @@
 
     const timeShort = null;
     const timeVeryShort = null;
-    //let statusAuction = document.querySelector(".description_span_right b").innerHTML.toLowerCase();
-    let statusAuction = 'short'
+    let statusAuction = document.querySelector(".description_span_right b").innerHTML.toLowerCase();
 
 
     function main() {
