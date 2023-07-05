@@ -1075,7 +1075,8 @@
 
    // FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS FUNCTIONS
 
-    function changePageIcon(){
+    function changePageInfo(){
+        document.getElementById("wrapper_game").style.fontWeight = "600";
         let link = document.querySelector("link[rel~='icon']");
         if (!link) {
             link = document.createElement('link');
@@ -1633,6 +1634,9 @@
                 })
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
+                localStorage.setItem('_enemyCharactersStatsCircus', JSON.stringify(enemyCharactersStats))
+                localStorage.setItem('_weakerEnemiesCircus', JSON.stringify(weakerEnemies))
+                localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
                 weakestEnemy[0].click()
                 return
 
@@ -1691,7 +1695,7 @@
                 if (!check) return // checks for the first element which is column name
 
                 promises.push(
-                    performRequest(check.href)
+                    performRequest(check.href + '&doll=1')//fix cuz sometimes fetches wrong data idk ..
                     .then(responseText => {
                         let dummyDiv = document.createElement('div');
                         dummyDiv.innerHTML = responseText;
@@ -1728,15 +1732,14 @@
                 //console.log(enemyStats);
                 let powerArray = []
                 //console.log(userStats[0])
-                console.log('promise');
+                //console.log('promise');
 
                 enemyStats.forEach(enemy => {
-                    //console.log(enemy)//[0] - stats, [1] .click() fight event
-                    console.log('enemyPromise')
+                    //console.log('enemy :', enemy)//[0] - stats, [1] .click() fight event
+                    //console.log('enemyPromise')
                     powerArray.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
                 })
 
-                console.log('enemy strengths: ', powerArray)
 
                 let weakerEnemies = []
 
@@ -1746,7 +1749,8 @@
                         weakerEnemies.push([enemy[1], powerAmount])
                     }
                 })
-                console.log('enemy strengths: ',powerArray)
+                //console.log('enemy strengths: ',powerArray)
+                //console.log('weaker enemies: ', weakerEnemies)
 
                 if(weakerEnemies.length == 0){
                     console.log('no valid enemies to fight, rerolling')
@@ -1761,6 +1765,9 @@
                 })
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
+                localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
+                localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
+                localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
                 weakestEnemy[0].click()
                 return
             })
@@ -2109,10 +2116,22 @@
     }
 
 
+    let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
+    let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
+    let arr3 = JSON.parse(localStorage.getItem('_weakestEnemyCircus'))
+    let arr4 = JSON.parse(localStorage.getItem('_enemyStatsArena'))
+    let arr5 = JSON.parse(localStorage.getItem('_weakerEnemiesArena'))
+    let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
 
 
     async function eventChecker() {
         checkNotification();
+        console.log('_enemyCharactersStatsCircus: ', arr1);
+        console.log('_weakerEnemiesCircus: ', arr2);
+        console.log('_weakestEnemyCircus: ', arr3);
+        console.log('_enemyStatsArena: ', arr4);
+        console.log('_weakerEnemiesArena: ', arr5);
+        console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
             if (!location.href.includes('index.php?mod=quests')) {
                 if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
@@ -2133,6 +2152,7 @@
             }
         }
     }
+
 
     async function loop() {
         let rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
@@ -2163,8 +2183,6 @@
 
 
 
-
-
-    changePageIcon()
+    changePageInfo()
     loop()
 })();
