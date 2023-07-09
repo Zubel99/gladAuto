@@ -1481,7 +1481,6 @@
             let enemyCharactersStats = []
 
 
-            //XD BEDIZE SIE DZIALO
             let enemyStats = [];
             let promises = [];
 
@@ -1493,6 +1492,7 @@
                         index++;
                        // console.log('link: ', link)
 
+                        let randDelay = Math.round(Math.random() * (200 - 50)) + 50;
                         promises.push(
                             new Promise((resolve, reject) => {
                                 setTimeout(() => { //timeout
@@ -1503,13 +1503,14 @@
                                         //console.log("text: \n\n\n", responseText);
                                         let scrappedEnemyCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'circus');
                                         statsBuffer.push(scrappedEnemyCharacterStats);
+                                        console.log('FETCH: ', index)
                                         resolve();
                                     })
                                         .catch(error => {
                                         console.error("Error occurred:", error);
                                         reject();
                                     });
-                                }, index * 300);
+                                }, (index * 300) + randDelay);
                             })
                         );
 
@@ -1634,9 +1635,9 @@
                 })
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
-                localStorage.setItem('_enemyCharactersStatsCircus', JSON.stringify(enemyCharactersStats))
-                localStorage.setItem('_weakerEnemiesCircus', JSON.stringify(weakerEnemies))
-                localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
+                //localStorage.setItem('_enemyCharactersStatsCircus', JSON.stringify(enemyCharactersStats))
+                //localStorage.setItem('_weakerEnemiesCircus', JSON.stringify(weakerEnemies))
+                //localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
                 weakestEnemy[0].click()
                 return
 
@@ -1771,9 +1772,9 @@
                 })
                 console.log('weakerEnemies: ', weakerEnemies)
                 console.log('weakestEnemy: ', weakestEnemy)
-                localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
-                localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
-                localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
+                //localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
+                //localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
+                //localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
                 weakestEnemy[0].click()
                 return
             })
@@ -2122,22 +2123,22 @@
     }
 
 
-    let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
-    let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
-    let arr3 = JSON.parse(localStorage.getItem('_weakestEnemyCircus'))
-    let arr4 = JSON.parse(localStorage.getItem('_enemyStatsArena'))
-    let arr5 = JSON.parse(localStorage.getItem('_weakerEnemiesArena'))
-    let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
+    //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
+    //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
+    //let arr3 = JSON.parse(localStorage.getItem('_weakestEnemyCircus'))
+    //let arr4 = JSON.parse(localStorage.getItem('_enemyStatsArena'))
+    //let arr5 = JSON.parse(localStorage.getItem('_weakerEnemiesArena'))
+    //let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
 
 
     async function eventChecker() {
         checkNotification();
-        console.log('_enemyCharactersStatsCircus: ', arr1);
-        console.log('_weakerEnemiesCircus: ', arr2);
-        console.log('_weakestEnemyCircus: ', arr3);
-        console.log('_enemyStatsArena: ', arr4);
-        console.log('_weakerEnemiesArena: ', arr5);
-        console.log('_weakestEnemyArena: ', arr6);
+        //console.log('_enemyCharactersStatsCircus: ', arr1);
+        //console.log('_weakerEnemiesCircus: ', arr2);
+        //console.log('_weakestEnemyCircus: ', arr3);
+        //console.log('_enemyStatsArena: ', arr4);
+        //console.log('_weakerEnemiesArena: ', arr5);
+        //console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
             if (!location.href.includes('index.php?mod=quests')) {
                 if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
@@ -2161,7 +2162,7 @@
 
 
     async function loop() {
-        let rand = Math.round(Math.random() * (5000 - 1500)) + 1500;
+        let rand = Math.round(Math.random() * (6500 - 2100)) + 2100;
         await new Promise((resolve) => {
             setTimeout(() => {
                 eventChecker();
