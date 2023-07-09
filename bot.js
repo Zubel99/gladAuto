@@ -1674,7 +1674,13 @@
         let content = document.getElementById('cooldown_bar_text_arena').innerHTML;
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
-        if(content == 'Go to the arena'){
+        let contentCircusGuard = document.getElementById('cooldown_bar_text_ct').innerHTML;
+        //autocircusprovinciariumok
+        if (autocircusprovinciariumok && (contentCircusGuard == 'To Circus Turma')){
+            return
+        }
+
+        if (content == 'Go to the arena'){
             if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=2&sh=')) {
                 location.href = arenaLink;
             }
