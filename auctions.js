@@ -23,6 +23,13 @@
     const timeShort = null;
     const timeVeryShort = null;
     let statusAuction = document.querySelector(".description_span_right b").innerHTML.toLowerCase();
+    //let statusAuction = 'very short'
+
+    let confirmButton = document.createElement('button')
+    confirmButton.innerHTML = "CONFIRM"
+    confirmButton.classList.add('scroll-to-bottom')
+    confirmButton.style = 'width: 75px; height: 30px; margin: 0px'
+    confirmButton.id = 'confirmButton'
 
 
     function main() {
@@ -30,6 +37,7 @@
 
         let localStorageShortTime = localStorage.getItem(keyShort);
         let localStorageVeryShortTime = localStorage.getItem(keyVeryShort);
+        let veryShortNotification = localStorage.getItem('veryShortNotification' + auctionType)
 
         let containerElement = document.querySelector("#content article");
 
@@ -54,6 +62,10 @@
                 localStorage.removeItem(keyVeryShort);
                 localStorageVeryShortTime = null;
             }
+            if (veryShortNotification) {
+                localStorage.removeItem('veryShortNotification' + auctionType);
+                veryShortNotification = null;
+            }
         }
 
         let content = "<b>Your current time:</b> <span id='my-timer'></span></br>";
@@ -62,21 +74,26 @@
             content += "<b>Short: </b>" + localStorageShortTime + "(<span id='diff-short-time'></span>)</br>";
             //new Audio('https://freesound.org/data/previews/91/91926_7037-lq.mp3').play(); //play every time on short
             if (!localStorageShortTime) { //if doesnt exist in localstorage - means short status just came up, play sound only once
-                new Audio('https://freesound.org/data/previews/91/91926_7037-lq.mp3').play();
+                setTimeout(() => {
+                    new Audio('https://freesound.org/data/previews/91/91926_7037-lq.mp3').play();
+                }, 2000);
+                //document.querySelector('#content article p').appendChild(confirmButton)
                 localStorage.setItem(keyShort, getCurrentTime());
-                //location.reload();
             }
         } else if (statusAuction === veryShortStr) {
             content += "<b>Very Short: </b>" + localStorageVeryShortTime + "(<span id='diff-very-short-time'></span>)</br>";
             //new Audio('http://soundbible.com/grab.php?id=2155&type=mp3').play(); //play every time on  very short
-            if (!localStorageVeryShortTime) {//if doesnt exist in localstorage - means very short status just came up, play sound twice
-                new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
+            if (!veryShortNotification) {
                 setTimeout(() => {
                     new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
                 }, 1000);
-                //new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
+                setTimeout(() => {
+                    new Audio('https://soundbible.com/grab.php?id=2155&type=mp3').play();
+                }, 2000);
+                document.querySelector('#content article p').appendChild(confirmButton)
+            }
+            if (!localStorageVeryShortTime){
                 localStorage.setItem(keyVeryShort, getCurrentTime());
-                //location.reload();
             }
         }
         content += "<p><b>Time refresh:</b><span id='container_short_time_refrest'></span></p>";
@@ -246,6 +263,20 @@
             url.search = params.toString();
             window.history.pushState({}, '', url.href);
         });
+
+        confirmButton.addEventListener('click', function(){
+            //let localStorageShortTime = getLocalStorageItem(keyShort);
+            //let localStorageVeryShortTime = getLocalStorageItem(keyVeryShort);
+            let veryShortNotification = localStorage.getItem('veryShortNotification' + auctionType)
+            //if (statusAuction === shortStr && !localStorageShortTime){ //ignore this cuz i dont want to confirm notifications on shoty, only on very short
+            //    localStorage.setItem(keyShort, getCurrentTime())
+            //}
+            if (statusAuction === veryShortStr && !veryShortNotification){
+                localStorage.setItem('veryShortNotification' + auctionType, getCurrentTime())
+            }
+            confirmButton.style.display = 'none'
+
+        })
     });
 
     let aucionsInfo = [];
