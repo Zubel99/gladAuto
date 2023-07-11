@@ -2,9 +2,9 @@
 // @name         autobid
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  trsting
+// @description  
 // @author       You
-// @include      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
+// @include      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*&zubab=*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
 // @grant        none
 // ==/UserScript==
