@@ -92,7 +92,6 @@
     const REFRESH_TIME = 600 //seconds
 
     const url = location.href;
-    const HOUR = 1000 * 60 * 60;
 
 
     function buyItems(){
@@ -169,6 +168,7 @@
 
             var interval = 1000; // how much time should the delay between two iterations be (in milliseconds)?
             auctionItemsData.forEach(function (el, index) {
+                const randomDelay = Math.random() * (1000 - 0) + 0;
                 setTimeout(function () {
                     //console.log(el);
                     checkNoMoreGold()
@@ -176,7 +176,7 @@
                         el[2].click();
                         console.log('click: ', el);
                     }
-                }, index * interval);
+                }, (index * interval) + randomDelay);
             });
 
 
