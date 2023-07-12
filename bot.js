@@ -1108,77 +1108,101 @@
     }
 
 
-    async function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
-        let selectdungeonmap = parseInt(_selectdungeonmap)
-        let advanced = _advanced === 'true'
-        let skipboss = _skipboss === 'true'
-        let fulldungclear = _fulldungclear === 'true'
-        console.log('dungeon');
-        let content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
-        if(content == 'Go to dungeon'){
-            location.href = dungeonLocations[selectdungeonmap];
 
+    function resolveAfter2Seconds() {
+        return new Promise(resolve => {
 
-            if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
-                if (advanced){
-                    document.querySelector('input.button1[value="Advanced"]').click();
-                }
-                else{
-                    document.querySelector('input.button1[value="Normal"]').click();
-                }
+        });
+}
+    function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
+        return new Promise(resolve => {
+            let selectdungeonmap = parseInt(_selectdungeonmap)
+            let advanced = _advanced === 'true'
+            let skipboss = _skipboss === 'true'
+            let fulldungclear = _fulldungclear === 'true'
+            console.log('dungeon');
+            let content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
+
+            let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+            if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
+                resolve();
+                //return
             }
 
-            let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
-            let furthestEnemyIndex = 0;
-            let furthestEnemy = '';
-            let closestEnemyIndex = 0;
-            let closestEnemy = '';
-            let firstLoop = true;
-            for (var i = 0; i < enemiesImgs.length; i++) {
-                let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                if (firstLoop){
-                    firstLoop = false;
-                    closestEnemyIndex = enemyMapIndex;
-                    furthestEnemyIndex = enemyMapIndex;
-                    closestEnemy = enemiesImgs[i];
-                    furthestEnemy = enemiesImgs[i];
+            if(content == 'Go to dungeon'){
+                location.href = dungeonLocations[selectdungeonmap];
+
+
+                if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
+                    if (advanced){
+                        document.querySelector('input.button1[value="Advanced"]').click();
+                    }
+                    else{
+                        document.querySelector('input.button1[value="Normal"]').click();
+                    }
                 }
-                if (enemyMapIndex > furthestEnemyIndex){
-                    furthestEnemyIndex = enemyMapIndex;
-                    furthestEnemy = enemiesImgs[i]
+
+                let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
+                let furthestEnemyIndex = 0;
+                let furthestEnemy = '';
+                let closestEnemyIndex = 0;
+                let closestEnemy = '';
+                let firstLoop = true;
+                for (var i = 0; i < enemiesImgs.length; i++) {
+                    let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                    if (firstLoop){
+                        firstLoop = false;
+                        closestEnemyIndex = enemyMapIndex;
+                        furthestEnemyIndex = enemyMapIndex;
+                        closestEnemy = enemiesImgs[i];
+                        furthestEnemy = enemiesImgs[i];
+                    }
+                    if (enemyMapIndex > furthestEnemyIndex){
+                        furthestEnemyIndex = enemyMapIndex;
+                        furthestEnemy = enemiesImgs[i]
+                    }
+                    if (enemyMapIndex < closestEnemyIndex){
+                        closestEnemyIndex = enemyMapIndex;
+                        closestEnemy = enemiesImgs[i]
+                    }
                 }
-                if (enemyMapIndex < closestEnemyIndex){
-                    closestEnemyIndex = enemyMapIndex;
-                    closestEnemy = enemiesImgs[i]
-                }
-            }
-            let compareObject = {}
-            let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
-            enemiesDivs.forEach(enemy => {
-                let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                compareObject={
-                    ...compareObject,
-                    [enemyMapIndex]: enemy.innerHTML,
-                }
-            })
-            let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
-            if (fulldungclear){
-                if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
-                    cancelBtn.click()
+                let compareObject = {}
+                let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
+                enemiesDivs.forEach(enemy => {
+                    let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                    compareObject={
+                        ...compareObject,
+                        [enemyMapIndex]: enemy.innerHTML,
+                    }
+                })
+                console.log('compareObject: ', compareObject)
+                let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
+                if (fulldungclear){
+                    if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
+                        console.log('CLICK1')
+                        cancelBtn.click()
+                    }
+                    else{
+                        closestEnemy.click();
+                    }
                 }
                 else{
-                    closestEnemy.click();
+                    if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
+                        console.log('CLICK2')
+                        cancelBtn.click()
+                    }
+                    else{
+                        furthestEnemy.click();
+                    }
                 }
+                setTimeout(function(){
+                    resolve();
+                }, 1000)
             }
             else{
-                if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
-                    cancelBtn.click()
-                }
-                else{
-                    furthestEnemy.click();
-                }
+                resolve();
             }
-        }
+        });
     }
 
     function scrapStats(statsDiv, type, arenaOrCircus){
