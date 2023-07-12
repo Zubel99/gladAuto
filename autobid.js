@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  
 // @author       You
-// @include      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*&zubab=*
+// @include      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gameforge.com
 // @grant        none
 // ==/UserScript==
@@ -94,8 +94,8 @@
     const url = location.href;
     const HOUR = 1000 * 60 * 60;
 
-    
-    window.addEventListener("load", (event) => {
+
+    function buyItems(){
         if (!url.includes('&zubab=')){ // exit if on regural auctions
             return
         }
@@ -196,21 +196,25 @@
 
         }
 
-
-    });
-
+    }
 
 
+    setTimeout(buyItems, 10000)
 
+    let refreshCounter = 0;
+    setInterval(function(){
+        console.log(refreshCounter)
+        refreshCounter++;
+        if (refreshCounter > REFRESH_TIME) location.reload();
+    }, 1000)
 
-
-
-
+    
     setTimeout(function () {
-        location.reload()
-    }, REFRESH_TIME * 1000);
-
-    changePageInfo();
+        if (location.href.includes('&zubab=rdy')){ //ready to keep refreshing
+            changePageInfo()
+        }
+    }, 1000);
+    
 
 
 })();
