@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         autobid
+// @name         autobuy items
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  
@@ -11,6 +11,11 @@
 
 (function() {
     'use strict';
+
+    let auctionType = ''
+    if (location.href.includes('ttype=3')) auctionType = '_mercenary'
+    else auctionType = '_gladiator'
+
     let navBar = document.querySelector('ul#mainnav li table tr')
     let gladiatorAutobidButton=document.createElement('button');
     gladiatorAutobidButton.id='gladiatorAB'
@@ -21,10 +26,36 @@
 
     let mercenaryAutobidButton=document.createElement('button');
     mercenaryAutobidButton.id='gladiatorAB'
-    mercenaryAutobidButton.setAttribute("style","position:absolute; left:100; padding: 3px; cursor:pointer")
+    mercenaryAutobidButton.setAttribute("style","position:absolute; padding: 3px; cursor:pointer")
     mercenaryAutobidButton.classList.add('awesome-tabs');
     mercenaryAutobidButton.innerHTML = 'AB'
     navBar.children[1].appendChild(mercenaryAutobidButton)
+
+    let abButtonOn =document.createElement('button');
+    abButtonOn.id='abOnButton'
+    abButtonOn.setAttribute("style","position:absolute; left:400px; top: 0px; padding: 3px; cursor:pointer")
+    abButtonOn.classList.add('awesome-tabs');
+    abButtonOn.setAttribute('value', localStorage.getItem('abButtonOn'+auctionType))
+    abButtonOn.innerHTML = abButtonOn.getAttribute('value') == 'true' ? 'Autobuy on' : 'Autobuy off'
+    abButtonOn.style.fontSize = 'medium'
+    const mainNav = document.getElementById('mainnav')
+    mainNav.appendChild(abButtonOn)
+
+    abButtonOn.addEventListener('click', function(){
+        if (abButtonOn.getAttribute('value') == 'true'){
+            abButtonOn.setAttribute('value', 'false')
+            abButtonOn.innerHTML = 'Autobuy off'
+            localStorage.setItem('abButtonOn'+auctionType, 'false')
+            console.log('button off')
+        }
+        else {
+            abButtonOn.innerHTML = 'Autobuy on'//i dont set attribute to false here cuz on true it refreshes the page anyway and it doesnt interfere with autobuy function below (buy actions can sneak in if connection in slow)
+            localStorage.setItem('abButtonOn'+auctionType, 'true')
+            console.log('button on')
+            location.reload();
+        }
+    })
+
 
     function changePageInfo(){
         document.getElementById("wrapper_game").style.fontWeight = "600";
@@ -89,7 +120,7 @@
 
     const MINIMUM_PRICE = 10000
     let STOP_BUYING = false
-    const REFRESH_TIME = 600 //seconds
+    const REFRESH_TIME = 150 //seconds
 
     const url = location.href;
 
@@ -105,7 +136,7 @@
             document.querySelector('div#main_inner div#content article section form table tbody tr td input[type="submit"]').click(); //filter button
 
         }
-        else if (url.includes('&zubab=rdy')){ //ready to keep refreshing
+        else if (url.includes('&zubab=rdy') && abButtonOn.getAttribute('value') == 'true' && !STOP_BUYING){ //ready to keep refreshing
             //if (location.href.
             let remainingAuctionTime = document.querySelector('article span.description_span_right b').innerHTML.toLowerCase(); //short, very short etc
             //if (remainingAuctionTime != 'very short') {return} //later delete short
@@ -172,7 +203,7 @@
                 setTimeout(function () {
                     //console.log(el);
                     checkNoMoreGold()
-                    if (STOP_BUYING == false) {
+                    if (STOP_BUYING == false && abButtonOn.getAttribute('value') == 'true') {
                         el[2].click();
                         console.log('click: ', el);
                     }
@@ -199,7 +230,7 @@
     }
 
 
-    setTimeout(buyItems, 10000)
+    setInterval(buyItems, 5000)
 
     let refreshCounter = 0;
     setInterval(function(){
