@@ -38,6 +38,7 @@
     abButtonOn.setAttribute('value', localStorage.getItem('abButtonOn'+auctionType))
     abButtonOn.innerHTML = abButtonOn.getAttribute('value') == 'true' ? 'Autobuy on' : 'Autobuy off'
     abButtonOn.style.fontSize = 'medium'
+    abButtonOn.style.display = location.href.includes('&zubab=') ? 'block' : 'none'
     const mainNav = document.getElementById('mainnav')
     mainNav.appendChild(abButtonOn)
 
@@ -72,6 +73,8 @@
 
     function setSearchParameters(){
         //filter options
+        let itemName = document.querySelector('input[type="text"][name="qry"]')
+        itemName.value = '';
         let minLvl = document.querySelector('select[name="itemLevel"]');
         minLvl.value = minLvl.children[0].getAttribute('value');
         let itemType = document.querySelector('select[name="itemType"]');
@@ -80,10 +83,10 @@
         itemQuality.value = -1;
 
         //sort
-        let sortBy = document.querySelector('select#gca-auction-sort-select');
-        sortBy.value = 'level';
-        let order = document.querySelector('select#gca-auction-sort-order-select');
-        order.value = 'asc';
+        //let sortBy = document.querySelector('select#gca-auction-sort-select');
+        //sortBy.value = 'level';
+        //let order = document.querySelector('select#gca-auction-sort-order-select');
+        //order.value = 'asc';
     }
 
     function createNotRdyUrl(type){
@@ -120,7 +123,7 @@
 
     const MINIMUM_PRICE = 10000
     let STOP_BUYING = false
-    const REFRESH_TIME = 150 //seconds
+    const REFRESH_TIME = 125 + (Math.random() * (50 - 0) + 0); //seconds
 
     const url = location.href;
 
@@ -189,7 +192,7 @@
             function checkNoMoreGold(){
                 const notificationError = document.querySelector('div.notification-area div.notification-error')
                 if (notificationError){
-                    if((notificationError.innerHTML).includes("have enough gold")){
+                    if((notificationError.innerHTML).includes("have enough gold") || (notificationError.innerHTML).includes("is closing") || (notificationError.innerHTML).includes("ot possible")){
                         console.log(notificationError.innerHTML);
                         STOP_BUYING = true;
                     }
