@@ -504,10 +504,10 @@
             expeditionqueston.style.textShadow = smallButtonBotOptionOff;
         }
 
-        expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow;white-space: nowrap;");
-        expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
-        expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+        //expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow;white-space: nowrap;");
+        //peditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
+        //expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
     }
 
     //BOTON EVENTON
@@ -1094,115 +1094,119 @@
     }
 
 
-    async function checkExpedition(selectexpeditionmap, selectexpeditiontarget, expeditionhp){
-        console.log('expedition')
-        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
-        if (currentHpPercentage < expeditionhp) return;
-        let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+    async function checkExpedition(selectexpeditionmap, selectexpeditiontarget){
+
         //alert(content);
 
-        if(content == 'Go to expedition'){
-            location.href = expeditionLocations[selectexpeditionmap];
-            document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
-        }
+        location.href = expeditionLocations[selectexpeditionmap];
+        document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
+    }
+
+    function checkExpeditionCondition(autoexpeditionok, expeditionhp){
+        if (!autoexpeditionok) return 0
+        console.log('expedition')
+        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        //console.log('currentHpPercentage < expeditionhp: ', currentHpPercentage < expeditionhp)
+        if (currentHpPercentage < expeditionhp) return 0;
+        let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+        //console.log('content != "Go to expedition"', content != 'Go to expedition')
+        if(content != 'Go to expedition') return 0
+        return 1
     }
 
 
-
-    function resolveAfter2Seconds() {
-        return new Promise(resolve => {
-
-        });
-}
-    function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){ //TODO advanced //TODO boss skiping
+    function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){
         return new Promise(resolve => {
             let selectdungeonmap = parseInt(_selectdungeonmap)
             let advanced = _advanced === 'true'
             let skipboss = _skipboss === 'true'
             let fulldungclear = _fulldungclear === 'true'
-            console.log('dungeon');
-            let content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
+            
 
-            let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
-            if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
-                resolve();
-                //return
-            }
+            //let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+            //if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
+            //    resolve();
+            //    //return
+            //}
 
-            if(content == 'Go to dungeon'){
-                location.href = dungeonLocations[selectdungeonmap];
+            location.href = dungeonLocations[selectdungeonmap];
 
 
-                if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
-                    if (advanced){
-                        document.querySelector('input.button1[value="Advanced"]').click();
-                    }
-                    else{
-                        document.querySelector('input.button1[value="Normal"]').click();
-                    }
-                }
-
-                let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
-                let furthestEnemyIndex = 0;
-                let furthestEnemy = '';
-                let closestEnemyIndex = 0;
-                let closestEnemy = '';
-                let firstLoop = true;
-                for (var i = 0; i < enemiesImgs.length; i++) {
-                    let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                    if (firstLoop){
-                        firstLoop = false;
-                        closestEnemyIndex = enemyMapIndex;
-                        furthestEnemyIndex = enemyMapIndex;
-                        closestEnemy = enemiesImgs[i];
-                        furthestEnemy = enemiesImgs[i];
-                    }
-                    if (enemyMapIndex > furthestEnemyIndex){
-                        furthestEnemyIndex = enemyMapIndex;
-                        furthestEnemy = enemiesImgs[i]
-                    }
-                    if (enemyMapIndex < closestEnemyIndex){
-                        closestEnemyIndex = enemyMapIndex;
-                        closestEnemy = enemiesImgs[i]
-                    }
-                }
-                let compareObject = {}
-                let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
-                enemiesDivs.forEach(enemy => {
-                    let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                    compareObject={
-                        ...compareObject,
-                        [enemyMapIndex]: enemy.innerHTML,
-                    }
-                })
-                console.log('compareObject: ', compareObject)
-                let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
-                if (fulldungclear){
-                    if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
-                        console.log('CLICK1')
-                        cancelBtn.click()
-                    }
-                    else{
-                        closestEnemy.click();
-                    }
+            if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
+                if (advanced){
+                    document.querySelector('input.button1[value="Advanced"]').click();
                 }
                 else{
-                    if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
-                        console.log('CLICK2')
-                        cancelBtn.click()
-                    }
-                    else{
-                        furthestEnemy.click();
-                    }
+                    document.querySelector('input.button1[value="Normal"]').click();
                 }
-                setTimeout(function(){
-                    resolve();
-                }, 1000)
+            }
+
+            let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
+            let furthestEnemyIndex = 0;
+            let furthestEnemy = '';
+            let closestEnemyIndex = 0;
+            let closestEnemy = '';
+            let firstLoop = true;
+            for (var i = 0; i < enemiesImgs.length; i++) {
+                let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                if (firstLoop){
+                    firstLoop = false;
+                    closestEnemyIndex = enemyMapIndex;
+                    furthestEnemyIndex = enemyMapIndex;
+                    closestEnemy = enemiesImgs[i];
+                    furthestEnemy = enemiesImgs[i];
+                }
+                if (enemyMapIndex > furthestEnemyIndex){
+                    furthestEnemyIndex = enemyMapIndex;
+                    furthestEnemy = enemiesImgs[i]
+                }
+                if (enemyMapIndex < closestEnemyIndex){
+                    closestEnemyIndex = enemyMapIndex;
+                    closestEnemy = enemiesImgs[i]
+                }
+            }
+            let compareObject = {}
+            let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
+            enemiesDivs.forEach(enemy => {
+                let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+                compareObject={
+                    ...compareObject,
+                    [enemyMapIndex]: enemy.innerHTML,
+                }
+            })
+            console.log('compareObject: ', compareObject)
+            let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
+            if (fulldungclear){
+                if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
+                    console.log('CLICK1')
+                    cancelBtn.click()
+                }
+                else{
+                    closestEnemy.click();
+                }
             }
             else{
-                resolve();
+                if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
+                    console.log('CLICK2')
+                    cancelBtn.click()
+                }
+                else{
+                    furthestEnemy.click();
+                }
             }
+            setTimeout(function(){
+                resolve();
+            }, 1000)
+
         });
+    }
+
+    function checkDungeonCondition(autodungeonok){
+        if (!autodungeonok) return 0
+        console.log('dungeon');
+        let content = document.getElementById('cooldown_bar_text_dungeon').innerHTML;
+        if(content != 'Go to dungeon') return 0
+        return 1
     }
 
     function scrapStats(statsDiv, type, arenaOrCircus){
@@ -1474,204 +1478,210 @@
     async function checkCircusProvinciarium(_percentCap) {
 
         let percentCap = parseInt(_percentCap);
-        let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
+
         let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
-        console.log('circus')
-
-        if (content == 'To Circus Turma') {
-            if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=3&sh=')) {
-                location.href = circusLink;
-            }
-            let loopBugCheck = document.getElementById('errorText').innerHTML;
-            if (loopBugCheck) {
-                if (loopBugCheck.includes('can only challenge an opponent in the arena every')) {
-                    console.log('bug detected');
-                    location.href = circusLink;
-                    return
-                } else {
-                    console.log('lil bro just fought, reroll enemies');
-                    document.querySelector('input.button1[name="actionButton"]').click();
-                }
-            }
 
 
-            let validEnemyCharacterUrls = await fetchCircusEnemyCharacters();
-            //console.log("validEnemyCharacterUrls: ", validEnemyCharacterUrls)
-            let validPlayerCharacterUrls = await fetchCircusPlayerCharacters();
-            //console.log("validPlayerCharacterUrls: ", validPlayerCharacterUrls)
-
-
-            let playerCharactersStats = []
-            let enemyCharactersStats = []
-
-
-            let enemyStats = [];
-            let promises = [];
-
-            validEnemyCharacterUrls.forEach(urlAndButton => {
-                urlAndButton.forEach(hm => { // hm[0] = links array, hm[1] = buttons array
-                    let statsBuffer = []
-                    let index = 0;
-                    hm[0].forEach(link => {
-                        index++;
-                       // console.log('link: ', link)
-
-                        let randDelay = Math.round(Math.random() * (200 - 50)) + 50;
-                        promises.push(
-                            new Promise((resolve, reject) => {
-                                setTimeout(() => { //timeout
-                                    performRequest(link)
-                                        .then(responseText => {
-                                        let dummyDiv = document.createElement('div');
-                                        dummyDiv.innerHTML = responseText;
-                                        //console.log("text: \n\n\n", responseText);
-                                        let scrappedEnemyCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'circus');
-                                        statsBuffer.push(scrappedEnemyCharacterStats);
-                                        console.log('FETCH: ', index)
-                                        resolve();
-                                    })
-                                        .catch(error => {
-                                        console.error("Error occurred:", error);
-                                        reject();
-                                    });
-                                }, (index * 300) + randDelay);
-                            })
-                        );
-
-
-                    })
-                    enemyCharactersStats.push([statsBuffer, hm[1]])
-                })
-            });
-
-
-            validPlayerCharacterUrls.forEach(link => {
-                //console.log('player: ', link)
-                promises.push(
-                    performRequest(link)
-                    .then(responseText => {
-                        let dummyDiv = document.createElement('div');
-                        dummyDiv.innerHTML = responseText;
-                        let scrappedPlayerCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'circus');
-                        playerCharactersStats.push(scrappedPlayerCharacterStats);
-                    })
-                    .catch(error => {
-                        console.error("Error occurred:", error);
-                    })
-                );
-            })
-
-
-            await Promise.all(promises)
-                .then(() => {
-                //console.log('enemyCharactersStats :', enemyCharactersStats)
-                //console.log('playerCharactersStats :', playerCharactersStats)
-                // Calculate enemy strengths and perform further actions
-
-                //player info
-                let playerMedic = playerCharactersStats[0]//assuming people usually play with 1 medic
-                let highestHealingValue = playerCharactersStats[0].healing
-
-                let playerTank = playerCharactersStats[0]//same here
-                let highestThreatValue = playerCharactersStats[0].threat
-
-                playerCharactersStats.forEach(character => {
-                    if (character.healing > highestHealingValue){
-                        highestHealingValue = character.healing
-                        playerMedic = character
-                    }
-                    if (character.threat > highestThreatValue){
-                        highestThreatValue = character.threat
-                        playerTank = character
-                    }
-                })
-
-                //console.log('playerMedic: ', playerMedic)
-                //console.log('playerTank: ', playerTank)
-
-                let playerAttackers = playerCharactersStats.filter(obj => !isEqual(obj, playerMedic)); //characters that are not medic nor tank
-                playerAttackers = playerAttackers.filter(obj => !isEqual(obj, playerTank));
-                //console.log(playerAttackers)
-
-
-                let strengthArray = []
-                let powerArray = []
-                enemyCharactersStats.forEach(charactersAndButton => { //charactersAndButton[0] = characters array, charactersAndButton[1] = fight button
-                    let enemyMedic = charactersAndButton[0][0]//assuming people usually play with 1 medic
-                    let highestEnemyHealingValue = charactersAndButton[0][0].healing
-                    let enemyTank = charactersAndButton[0][0]//same here
-                    let highestEnemyThreatValue = charactersAndButton[0][0].threat
-
-                    charactersAndButton[0].forEach(character => {
-                        if (character.healing > highestEnemyHealingValue){
-                            highestEnemyHealingValue = character.healing
-                            enemyMedic = character
-                        }
-                        if (character.threat > highestEnemyThreatValue){
-                            highestEnemyThreatValue = character.threat
-                            enemyTank = character
-                        }
-                    })
-                    let enemyAttackers = charactersAndButton[0].filter(obj => !isEqual(obj, enemyMedic)); //characters that are not medic nor tank
-                    enemyAttackers = enemyAttackers.filter(obj => !isEqual(obj, enemyTank));
-                    //console.log('enemyMedic: ',enemyMedic)
-                    //console.log('enemyTank: ',enemyTank)
-                    //console.log('enemy dps: ',enemyAttackers)
-                    //console.log('next enemy')
-
-                    let playerStrength = 0
-                    playerAttackers.forEach(character => {
-                        playerStrength += calculateStrength(character, enemyTank)
-                    })
-                    let attackerStrength = 0
-                    enemyAttackers.forEach(character => {
-                        attackerStrength += calculateStrength(character, playerTank)
-                    })
-                    //if someone wants here is a good place to take into consideration medic healing, i dont want to do that :D
-                    //nvm ill add something i came up with :D :D:D:D:D:D
-                    let healDifference = (playerMedic.healing - enemyMedic.healing) / 10 // idk how much to divide by !!! IMPORTANT TO CHECK IF IT FIRST AND CORRECT
-                    powerArray.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
-
-                    //strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
-
-                })
-
-                let weakerEnemies = []
-
-                powerArray.forEach(powerData => { //[0] = my power, [1] = enemy power, [2] = attack button
-                    let powerAmount = powerData[0] - powerData[1] - powerData[0] * (percentCap / 10)
-                    if((powerAmount > 0)){
-                        weakerEnemies.push([powerData[2], powerAmount])
-                    }
-                })
-                console.log('powerArray: ', powerArray)
-
-                if(weakerEnemies.length == 0){
-                    console.log('no valid enemies to fight, rerolling')
-                    document.querySelector('input.button1[name="actionButton"]').click()
-                    return
-                }
-                let weakestEnemy = weakerEnemies[0]
-                weakerEnemies.forEach(enemy => {
-                    if (enemy[1] > weakestEnemy[1]){
-                        weakestEnemy = enemy
-                    }
-                })
-                console.log('weakerEnemies: ', weakerEnemies)
-                console.log('weakestEnemy: ', weakestEnemy)
-                //localStorage.setItem('_enemyCharactersStatsCircus', JSON.stringify(enemyCharactersStats))
-                //localStorage.setItem('_weakerEnemiesCircus', JSON.stringify(weakerEnemies))
-                //localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
-                weakestEnemy[0].click()
-                return
-
-
-            })
-                .catch(error => {
-                console.error("Error occurred.");
-            });
-
+        if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=3&sh=')) {
+            location.href = circusLink;
         }
+        let loopBugCheck = document.getElementById('errorText').innerHTML;
+        if (loopBugCheck) {
+            if (loopBugCheck.includes('can only challenge an opponent in the arena every')) {
+                console.log('bug detected');
+                location.href = circusLink;
+                return
+            } else {
+                console.log('lil bro just fought, reroll enemies');
+                document.querySelector('input.button1[name="actionButton"]').click();
+            }
+        }
+
+
+        let validEnemyCharacterUrls = await fetchCircusEnemyCharacters();
+        //console.log("validEnemyCharacterUrls: ", validEnemyCharacterUrls)
+        let validPlayerCharacterUrls = await fetchCircusPlayerCharacters();
+        //console.log("validPlayerCharacterUrls: ", validPlayerCharacterUrls)
+
+
+        let playerCharactersStats = []
+        let enemyCharactersStats = []
+
+
+        let enemyStats = [];
+        let promises = [];
+
+        validEnemyCharacterUrls.forEach(urlAndButton => {
+            urlAndButton.forEach(hm => { // hm[0] = links array, hm[1] = buttons array
+                let statsBuffer = []
+                let index = 0;
+                hm[0].forEach(link => {
+                    index++;
+                    // console.log('link: ', link)
+
+                    let randDelay = Math.round(Math.random() * (200 - 50)) + 50;
+                    promises.push(
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => { //timeout
+                                performRequest(link)
+                                    .then(responseText => {
+                                    let dummyDiv = document.createElement('div');
+                                    dummyDiv.innerHTML = responseText;
+                                    //console.log("text: \n\n\n", responseText);
+                                    let scrappedEnemyCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'circus');
+                                    statsBuffer.push(scrappedEnemyCharacterStats);
+                                    console.log('FETCH: ', index)
+                                    resolve();
+                                })
+                                    .catch(error => {
+                                    console.error("Error occurred:", error);
+                                    reject();
+                                });
+                            }, (index * 300) + randDelay);
+                        })
+                    );
+
+
+                })
+                enemyCharactersStats.push([statsBuffer, hm[1]])
+            })
+        });
+
+
+        validPlayerCharacterUrls.forEach(link => {
+            //console.log('player: ', link)
+            promises.push(
+                performRequest(link)
+                .then(responseText => {
+                    let dummyDiv = document.createElement('div');
+                    dummyDiv.innerHTML = responseText;
+                    let scrappedPlayerCharacterStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'circus');
+                    playerCharactersStats.push(scrappedPlayerCharacterStats);
+                })
+                .catch(error => {
+                    console.error("Error occurred:", error);
+                })
+            );
+        })
+
+
+        await Promise.all(promises)
+            .then(() => {
+            //console.log('enemyCharactersStats :', enemyCharactersStats)
+            //console.log('playerCharactersStats :', playerCharactersStats)
+            // Calculate enemy strengths and perform further actions
+
+            //player info
+            let playerMedic = playerCharactersStats[0]//assuming people usually play with 1 medic
+            let highestHealingValue = playerCharactersStats[0].healing
+
+            let playerTank = playerCharactersStats[0]//same here
+            let highestThreatValue = playerCharactersStats[0].threat
+
+            playerCharactersStats.forEach(character => {
+                if (character.healing > highestHealingValue){
+                    highestHealingValue = character.healing
+                    playerMedic = character
+                }
+                if (character.threat > highestThreatValue){
+                    highestThreatValue = character.threat
+                    playerTank = character
+                }
+            })
+
+            //console.log('playerMedic: ', playerMedic)
+            //console.log('playerTank: ', playerTank)
+
+            let playerAttackers = playerCharactersStats.filter(obj => !isEqual(obj, playerMedic)); //characters that are not medic nor tank
+            playerAttackers = playerAttackers.filter(obj => !isEqual(obj, playerTank));
+            //console.log(playerAttackers)
+
+
+            let strengthArray = []
+            let powerArray = []
+            enemyCharactersStats.forEach(charactersAndButton => { //charactersAndButton[0] = characters array, charactersAndButton[1] = fight button
+                let enemyMedic = charactersAndButton[0][0]//assuming people usually play with 1 medic
+                let highestEnemyHealingValue = charactersAndButton[0][0].healing
+                let enemyTank = charactersAndButton[0][0]//same here
+                let highestEnemyThreatValue = charactersAndButton[0][0].threat
+
+                charactersAndButton[0].forEach(character => {
+                    if (character.healing > highestEnemyHealingValue){
+                        highestEnemyHealingValue = character.healing
+                        enemyMedic = character
+                    }
+                    if (character.threat > highestEnemyThreatValue){
+                        highestEnemyThreatValue = character.threat
+                        enemyTank = character
+                    }
+                })
+                let enemyAttackers = charactersAndButton[0].filter(obj => !isEqual(obj, enemyMedic)); //characters that are not medic nor tank
+                enemyAttackers = enemyAttackers.filter(obj => !isEqual(obj, enemyTank));
+                //console.log('enemyMedic: ',enemyMedic)
+                //console.log('enemyTank: ',enemyTank)
+                //console.log('enemy dps: ',enemyAttackers)
+                //console.log('next enemy')
+
+                let playerStrength = 0
+                playerAttackers.forEach(character => {
+                    playerStrength += calculateStrength(character, enemyTank)
+                })
+                let attackerStrength = 0
+                enemyAttackers.forEach(character => {
+                    attackerStrength += calculateStrength(character, playerTank)
+                })
+                //if someone wants here is a good place to take into consideration medic healing, i dont want to do that :D
+                //nvm ill add something i came up with :D :D:D:D:D:D
+                let healDifference = (playerMedic.healing - enemyMedic.healing) / 10 // idk how much to divide by !!! IMPORTANT TO CHECK IF IT FIRST AND CORRECT
+                powerArray.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
+
+                //strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
+
+            })
+
+            let weakerEnemies = []
+
+            powerArray.forEach(powerData => { //[0] = my power, [1] = enemy power, [2] = attack button
+                let powerAmount = powerData[0] - powerData[1] - powerData[0] * (percentCap / 10)
+                if((powerAmount > 0)){
+                    weakerEnemies.push([powerData[2], powerAmount])
+                }
+            })
+            console.log('powerArray: ', powerArray)
+
+            if(weakerEnemies.length == 0){
+                console.log('no valid enemies to fight, rerolling')
+                document.querySelector('input.button1[name="actionButton"]').click()
+                return
+            }
+            let weakestEnemy = weakerEnemies[0]
+            weakerEnemies.forEach(enemy => {
+                if (enemy[1] > weakestEnemy[1]){
+                    weakestEnemy = enemy
+                }
+            })
+            console.log('weakerEnemies: ', weakerEnemies)
+            console.log('weakestEnemy: ', weakestEnemy)
+            //localStorage.setItem('_enemyCharactersStatsCircus', JSON.stringify(enemyCharactersStats))
+            //localStorage.setItem('_weakerEnemiesCircus', JSON.stringify(weakerEnemies))
+            //localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
+            weakestEnemy[0].click()
+            return
+
+
+        })
+            .catch(error => {
+            console.error("Error occurred.");
+        });
+
+    }
+
+    function checkCircusProvinciariumCondition(autocircusprovinciariumok){
+        if (!autocircusprovinciariumok) return 0
+        console.log('circus')
+        let content = document.getElementById('cooldown_bar_text_ct').innerHTML;
+        if (content != 'To Circus Turma') return 0
+        return 1
     }
 
 
@@ -1688,142 +1698,152 @@
 
 
 
-
-    async function checkArenaProvinciarium(_percentCap, arenahp){
-        //var arenahp = parseInt(_arenahp);
-        console.log('arena');
-        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
-        //console.log('current and cap hp: ', currentHpPercentage , ' < ', arenahp, ' = ', currentHpPercentage < arenahp)
-        if (currentHpPercentage < arenahp) return;
+    async function checkArenaProvinciarium(_percentCap){
         let percentCap = parseInt(_percentCap) // percent of power difference fro menemy (1 = 10%, 2 = 20% etc)
-        let content = document.getElementById('cooldown_bar_text_arena').innerHTML;
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
 
-        let contentCircusGuard = document.getElementById('cooldown_bar_text_ct').innerHTML;
+        //let contentCircusGuard = document.getElementById('cooldown_bar_text_ct').innerHTML;
         //autocircusprovinciariumok
-        if (autocircusprovinciariumok && (contentCircusGuard == 'To Circus Turma')){
-            return
+        //if (autocircusprovinciariumok && (contentCircusGuard == 'To Circus Turma')){
+        //    return
+        //}
+
+
+        if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=2&sh=')) {
+            location.href = arenaLink;
+        }
+        let loopBugCheck = document.getElementById('errorText').innerHTML
+        if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
+            console.log('bug detected')
+            location.href = arenaLink;
         }
 
-        if (content == 'Go to the arena'){
-            if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=2&sh=')) {
-                location.href = arenaLink;
-            }
-            let loopBugCheck = document.getElementById('errorText').innerHTML
-            if(loopBugCheck.includes('can only challenge an opponent in the arena every')){
-                console.log('bug detected')
-                location.href = arenaLink;
-            }
 
+        let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
+        let enemyStats = [];
+        let promises = [];
 
-            let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
-            let enemyStats = [];
-            let promises = [];
+        enemyElements.forEach(enemy => {
+            let check = enemy.querySelector('td a[target="_blank"]')
+            let enemyButtonFight = enemy.querySelector('td div.attack'); //.click()
+            if (!check) return // checks for the first element which is column name
 
-            enemyElements.forEach(enemy => {
-                let check = enemy.querySelector('td a[target="_blank"]')
-                let enemyButtonFight = enemy.querySelector('td div.attack'); //.click()
-                if (!check) return // checks for the first element which is column name
-
-                promises.push(
-                    performRequest(check.href + '&doll=1')//fix cuz sometimes fetches wrong data idk ..
-                    .then(responseText => {
-                        let dummyDiv = document.createElement('div');
-                        dummyDiv.innerHTML = responseText;
-                        let scrappedEnemyStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'arena');
-                        enemyStats.push([scrappedEnemyStats, enemyButtonFight]);
-                    })
-                    .catch(error => {
-                        console.error("Error occurred:", error);
-                    })
-                );
-            });
-
-            let playerOverviewLink = '/game/index.php?mod=overview&doll=1&sh='+sessionHash;
-            let userStats = []
             promises.push(
-                performRequest(playerOverviewLink)
+                performRequest(check.href + '&doll=1')//fix cuz sometimes fetches wrong data idk ..
                 .then(responseText => {
                     let dummyDiv = document.createElement('div');
                     dummyDiv.innerHTML = responseText;
-                    let scrappedUserStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'arena');
-                    userStats.push(scrappedUserStats);
+                    let scrappedEnemyStats = scrapStats(dummyDiv.getElementById('charstats'), 'enemy', 'arena');
+                    enemyStats.push([scrappedEnemyStats, enemyButtonFight]);
                 })
                 .catch(error => {
                     console.error("Error occurred:", error);
                 })
             );
+        });
 
-
-
-
-            console.log('promises length: ', promises.length)
-            await Promise.all(promises)
-                .then(() => {
-                //console.log(enemyStats);
-                let powerArray = []
-                //console.log(userStats[0])
-                //console.log('promise');
-
-                enemyStats.forEach(enemy => {
-                    //console.log('enemy :', enemy)//[0] - stats, [1] .click() fight event
-                    //console.log('enemyPromise')
-                    powerArray.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
-                })
-
-
-                let weakerEnemies = []
-
-                powerArray.forEach(enemy => {
-                    let powerAmount = enemy[2] - enemy[3] - enemy[2] * (percentCap / 10)
-                    if((powerAmount > 0)){
-                        weakerEnemies.push([enemy[1], powerAmount])
-                    }
-                })
-                //console.log('enemy strengths: ',powerArray)
-                //console.log('weaker enemies: ', weakerEnemies)
-
-                if(weakerEnemies.length == 0){
-                    console.log('no valid enemies to fight, rerolling')
-                    document.querySelector('input.button1[name="actionButton"]').click()
-                    return
-                }
-                let weakestEnemy = weakerEnemies[0]
-                weakerEnemies.forEach(enemy => {
-                    if (enemy[1] > weakestEnemy[1]){
-                        weakestEnemy = enemy
-                    }
-                })
-                console.log('weakerEnemies: ', weakerEnemies)
-                console.log('weakestEnemy: ', weakestEnemy)
-                //localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
-                //localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
-                //localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
-                weakestEnemy[0].click()
-                return
+        let playerOverviewLink = '/game/index.php?mod=overview&doll=1&sh='+sessionHash;
+        let userStats = []
+        promises.push(
+            performRequest(playerOverviewLink)
+            .then(responseText => {
+                let dummyDiv = document.createElement('div');
+                dummyDiv.innerHTML = responseText;
+                let scrappedUserStats = scrapStats(dummyDiv.getElementById('charstats'), 'user', 'arena');
+                userStats.push(scrappedUserStats);
             })
-                .catch(error => {
+            .catch(error => {
                 console.error("Error occurred:", error);
-            });
-        }
+            })
+        );
 
+
+
+
+        console.log('promises length: ', promises.length)
+        await Promise.all(promises)
+            .then(() => {
+            //console.log(enemyStats);
+            let powerArray = []
+            //console.log(userStats[0])
+            //console.log('promise');
+
+            enemyStats.forEach(enemy => {
+                //console.log('enemy :', enemy)//[0] - stats, [1] .click() fight event
+                //console.log('enemyPromise')
+                powerArray.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
+            })
+
+
+            let weakerEnemies = []
+
+            powerArray.forEach(enemy => {
+                let powerAmount = enemy[2] - enemy[3] - enemy[2] * (percentCap / 10)
+                if((powerAmount > 0)){
+                    weakerEnemies.push([enemy[1], powerAmount])
+                }
+            })
+            //console.log('enemy strengths: ',powerArray)
+            //console.log('weaker enemies: ', weakerEnemies)
+
+            if(weakerEnemies.length == 0){
+                console.log('no valid enemies to fight, rerolling')
+                document.querySelector('input.button1[name="actionButton"]').click()
+                return
+            }
+            let weakestEnemy = weakerEnemies[0]
+            weakerEnemies.forEach(enemy => {
+                if (enemy[1] > weakestEnemy[1]){
+                    weakestEnemy = enemy
+                }
+            })
+            console.log('weakerEnemies: ', weakerEnemies)
+            console.log('weakestEnemy: ', weakestEnemy)
+            //localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
+            //localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
+            //localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
+            weakestEnemy[0].click()
+            return
+        })
+            .catch(error => {
+            console.error("Error occurred:", error);
+        });
+
+    }
+
+    function checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp){
+        //var arenahp = parseInt(_arenahp);
+        if (!autoarenaprovinciariumok) return 0;
+        console.log('arena');
+        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        //console.log('current and cap hp: ', currentHpPercentage , ' < ', arenahp, ' = ', currentHpPercentage < arenahp)
+        if (currentHpPercentage < arenahp) return 0;
+        let content = document.getElementById('cooldown_bar_text_arena').innerHTML;
+        if (content != 'Go to the arena') return 0
+        return 1
     }
 
 
 
     async function checkWork(_autoworktype){
         let autoworktype = parseInt(_autoworktype);
+
+        let workTabLink = document.getElementById('submenu1').children[0].href;
+        location.href = workTabLink;
+        console.log('work index: ', autoworktype)
+        document.querySelectorAll('div#select table.section-like.select_work_table tbody tr[id]')[autoworktype].click();
+        document.getElementById('doWork').click();
+    }
+    function checkWorkCondition(){
+        if (!autoworkok) return 0
         console.log('work')
         let expeditionsLeft = document.getElementById('expeditionpoints_value_point').innerHTML;
         let dungeonsLeft = document.getElementById('dungeonpoints_value_point').innerHTML;
         let isWorking = document.querySelector('div#content.show-item-quality.show-item-level h1');
         if (expeditionsLeft == '0' && dungeonsLeft == '0' && !isWorking){
-            let workTabLink = document.getElementById('submenu1').children[0].href;
-            location.href = workTabLink;
-            console.log('work index: ', autoworktype)
-            document.querySelectorAll('div#select table.section-like.select_work_table tbody tr[id]')[autoworktype].click();
-            document.getElementById('doWork').click();
+            return 1
         }
+        return 0
     }
 
 
@@ -2155,6 +2175,32 @@
     //let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
 
 
+    function pickAction(){
+        if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
+            console.log('picked 1')
+            return 1 //exp
+        }
+        else if (checkDungeonCondition(autodungeonok) == 1){
+            console.log('picked 2')
+            return 2 //dung
+        }
+        else if (checkCircusProvinciariumCondition(autocircusprovinciariumok) == 1){
+            console.log('picked 3')
+            return 3
+        }
+        else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
+            console.log('picked 4')
+            return 4
+        }
+        else if (checkWorkCondition(autoworkok) == 1){
+            console.log('picked 5')
+            return 5
+        }
+        else {
+            return 0
+        }
+    }
+
     async function eventChecker() {
         checkNotification();
         //console.log('_enemyCharactersStatsCircus: ', arr1);
@@ -2164,13 +2210,7 @@
         //console.log('_weakerEnemiesArena: ', arr5);
         //console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
-            if (!location.href.includes('index.php?mod=quests')) {
-                if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
-                if (autodungeonok) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
-                if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
-                if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value);
-                if (autoworkok) await checkWork(autoworktype.value);
-            }
+
 
             if (location.href.includes('index.php?mod=quests')) {
                 if (autoquestok) {
@@ -2180,6 +2220,20 @@
                                 expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
                                 expeditionquestmap.value, expeditionquestenemy.value);
                 }
+            }
+            else{
+                let currentAction = pickAction();
+
+                if (currentAction == 1) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
+                else if (currentAction == 2) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                else if (currentAction == 3) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                else if (currentAction == 4) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
+                else if (currentAction == 5) await checkWork(autoworktype.value);
+                //if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
+                //if (autodungeonok) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                //if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                //if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value);
+                //if (autoworkok) await checkWork(autoworktype.value);
             }
         }
     }
