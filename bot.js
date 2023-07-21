@@ -5,7 +5,6 @@
 // @description  Better than p2w bobs
 // @author       You
 // @include      *s*-*.gladiatus.gameforge.com/game/index.php?*
-// @exclude      *s*-*.gladiatus.gameforge.com/game/index.php?mod=auction*
 // @icon         https://lens-storage.storage.googleapis.com/png/0bee43cb65064cfb9707760f648e737b
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
@@ -40,6 +39,7 @@
     let autoworkok=localStorage.getItem('_autoworkok') === 'true';
 
     let autoquestok=localStorage.getItem('_autoquestok') === 'true';
+    let autoMarketOk = localStorage.getItem('_autoMarketOk') === 'true';
 
 
     let arenaquestok=localStorage.getItem('_arenaquestok') === 'true';
@@ -63,6 +63,7 @@
     let circusSliderOk = localStorage.getItem('_circusSliderOk') === 'true';
     let arenaSliderOk = localStorage.getItem('_arenaSliderOk') === 'true';
     let questSliderOk = localStorage.getItem('_questSliderOk') === 'true';
+    let marketSliderOk = localStorage.getItem('_marketSliderOk') === 'true';
     let workSliderOk = localStorage.getItem('_workSliderOk') === 'true';
 
 
@@ -512,6 +513,128 @@
         //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
     }
 
+
+
+
+
+
+
+
+
+
+
+    // *** WORKING ON MARKETBOTON
+
+
+
+    let autoMarketBotOn=document.createElement('a');
+    autoMarketBotOn.classList.add('menuitem');
+    autoMarketBotOn.style.cursor = "pointer";
+
+    let marketType=document.createElement('select');
+    marketType.id="marketType";
+    marketType.innerHTML='<option value="0" selected>Gladiator</option><option value="1">Mercenary</option>';
+    marketType.value=localStorage.getItem('_marketType') || 0;
+    marketType.setAttribute("style","display:block;margin-left:10px;");
+
+    let marketIntervalLabel = document.createElement('span');
+    marketIntervalLabel.innerHTML='Market interval(min)'
+    let marketInterval=document.createElement('input');
+    marketInterval.id="marketInterval";
+    marketInterval.value= localStorage.getItem('_marketInterval') || '7';
+
+    let marketMinValueLabel = document.createElement('span');
+    marketMinValueLabel.innerHTML='Minimum item value'
+    let marketMinValue=document.createElement('input');
+    marketMinValue.id="marketMinValue";
+    marketMinValue.value= localStorage.getItem('_marketMinValue') || '10000';
+
+    let marketSlider = createMenuItemSlider('marketSlider')
+
+    if (marketSliderOk){
+        marketType.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketIntervalLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketMinValueLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketMinValue.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+    }else{
+        marketType.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        marketIntervalLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        marketMinValueLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketMinValue.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+    }
+
+    if (autoMarketOk==true){
+        autoMarketBotOn.innerHTML="MARKET ON";
+        autoMarketBotOn.style.textShadow = botOptionOn;
+    }else{
+        autoMarketBotOn.innerHTML="MARKET OFF";
+        autoMarketBotOn.style.textShadow = botOptionOff;
+    }
+
+
+
+    autoMarketBotOn.addEventListener('click', function(){ //main quests button
+        if (autoMarketOk==true){
+            autoMarketOk=false;
+            autoMarketBotOn.innerHTML="MARKET OFF";
+            autoMarketBotOn.style.textShadow = botOptionOff;
+        }else{
+            autoMarketOk=true;
+            autoMarketBotOn.innerHTML="MARKET ON";
+            autoMarketBotOn.style.textShadow = botOptionOn;
+        }
+        localStorage.setItem('_autoMarketOk', autoMarketOk);
+    })
+
+    marketMinValue.addEventListener('change', function(){
+        localStorage.setItem('_marketMinValue', marketMinValue.value);
+    })
+
+    marketInterval.addEventListener('change', function(){
+        localStorage.setItem('_marketInterval', marketInterval.value);
+    })
+
+    marketType.addEventListener('change', function(){
+        localStorage.setItem('_marketType', marketType.value);
+    })
+
+    marketSlider.addEventListener('click', function(){
+        if (marketSliderOk==true){
+            marketSliderOk = false;
+            marketType.style.display = 'none'
+            marketMinValueLabel.style.display = 'none'
+            marketMinValue.style.display = 'none'
+            marketIntervalLabel.style.display = 'none'
+            marketInterval.style.display = 'none'
+
+
+            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            marketSliderOk = true;
+            marketType.style.display = 'block'
+            marketMinValueLabel.style.display = 'block'
+            marketMinValue.style.display = 'block'
+            marketIntervalLabel.style.display = 'block'
+            marketInterval.style.display = 'block'
+
+
+            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        }
+        localStorage.setItem('_marketSliderOk', marketSliderOk);
+    })
+
+    // *** WORKING ON MARKETBOTON
+
+
+
+
+
+
+
+
+
     //BOTON EVENTON
     let eventboton=document.createElement('a');
     let selecteventtarget=document.createElement('select');
@@ -614,6 +737,16 @@
     menubot.appendChild(expeditionquestmap);
     menubot.appendChild(expeditionquestenemylabel);
     menubot.appendChild(expeditionquestenemy);
+
+    menubot.appendChild(marketSlider)
+    menubot.appendChild(autoMarketBotOn)
+    menubot.appendChild(marketType)
+    menubot.appendChild(marketMinValueLabel)
+    menubot.appendChild(marketMinValue)
+    menubot.appendChild(marketIntervalLabel)
+    menubot.appendChild(marketInterval)
+
+
     menubot.appendChild(workSlider); //slider
     menubot.appendChild(autoworkboton);
     menubot.appendChild(autoworktype);
@@ -930,22 +1063,6 @@
         console.log(expeditionquestenemy.value)
     })
     questSlider.addEventListener('click', function(){
-        arenaqueston.getElementById('arenaqueston')
-        arenaquesttimedon.getElementById('arenaquesttimedon')
-        arenaquestsuccessionon.getElementById('arenaquestsuccessionon')
-        circusqueston.getElementById('circusqueston')
-        circusquesttimedon.getElementById('circusquesttimedon')
-        circusquestsuccessionon.getElementById('circusquestsuccessionon')
-        combatqueston.getElementById('combatqueston')
-        combatquesttimedon.getElementById('combatquesttimedon')
-        combatquestsuccessionon.getElementById('combatquestsuccessionon')
-        expeditionqueston.getElementById('expeditionqueston')
-        expeditionquesttimedon.getElementById('expeditionquesttimedon')
-        expeditionquestsuccessionon.getElementById('expeditionquestsuccessionon')
-        expeditionquestmaplabel.getElementById('expeditionquestmaplabel')
-        expeditionquestmap.getElementById('expeditionquestmap')
-        expeditionquestenemylabel.getElementById('expeditionquestenemylabel')
-        expeditionquestenemy.getElementById('expeditionquestenemy')
         if (questSliderOk==true){
             questSliderOk = false;
             arenaqueston.style.display = 'none'
@@ -2163,24 +2280,163 @@
 
     }
 
-    function checkMarketAutoBuy(){
-        let interval = 5 // check auction every x minutes
+    //************************************************************************************************************************************************************* AUTOBUY AUCTIONS --- START
+
+    let auctionType = ''
+    if (location.href.includes('ttype=3')) auctionType = '_mercenary'
+    else auctionType = '_gladiator'
+
+
+    function setSearchParameters(){
+        //filter options
+        let itemName = document.querySelector('input[type="text"][name="qry"]')
+        itemName.value = '';
+        let minLvl = document.querySelector('select[name="itemLevel"]');
+        minLvl.value = minLvl.children[0].getAttribute('value');
+        let itemType = document.querySelector('select[name="itemType"]');
+        itemType.value = 0;
+        let itemQuality = document.querySelector('select[name="itemQuality"]');
+        itemQuality.value = -1;
+
+    }
+
+
+    function createRdyUrl(){
+        let url = location.href
+        url = url.replace('zubab=notrdy', 'zubab=rdy')
+        return url
+    }
+
+
+    let STOP_BUYING = false
+
+    const url = location.href;
+
+    const filterButton = document.querySelector('div#main_inner div#content article section form table tbody tr td input[type="submit"]')
+
+
+    function buyItems(){
+
+        if (url.includes('&zubab=notrdy')){//redirected from button
+            setSearchParameters();
+            history.pushState(null, "", createRdyUrl());
+            filterButton.click(); //filter button
+
+        }
+        else if (url.includes('&zubab=rdy') && autoMarketOk && !STOP_BUYING){ //ready to keep refreshing
+            //if (location.href.
+            let remainingAuctionTime = document.querySelector('article span.description_span_right b').innerHTML.toLowerCase(); //short, very short etc
+            //if (remainingAuctionTime != 'very short') {return} //later delete short
+
+            let auctionItemsData = []
+            const auctionElements = document.querySelectorAll('div#main_inner div#content div#auction_table table tbody tr td div.section-header form');
+            const clearedValue = parseInt(marketMinValue.value.replace(/\D/g, ''))
+            auctionElements.forEach(element => {
+                const auctionBidDiv = element.querySelector('div.auction_bid_div')
+                const itemType = parseInt(element.querySelector('div.auction_item_div div div').getAttribute('data-content-type'));
+                // 1 = helmet, 2 = weapon, 4 = shield, 8 = body armor, 48 = ring, 64 = usables
+                // 256 = gloves, 512 = shoes, 1024 = amulets, 4096 = upgrade, 16384 = mercenary
+
+                const percent = auctionBidDiv.querySelector('span.gca-auction-price-value-percent').innerHTML;
+                const price = parseInt(auctionBidDiv.querySelector('input[type="text"]').getAttribute('value'));
+                const button = auctionBidDiv.querySelector('input[type="button"]');
+
+                if(percent == '(100%)' && price > clearedValue){
+                    //console.log('auctionBidDiv: ', auctionBidDiv)
+                    //console.log('price: ', price)
+                    //console.log('item type: ', itemType)
+                    //console.log('button: ', button)
+                    if ((itemType == 64) || (itemType == 4096) || (itemType == 16384)) return
+                    auctionItemsData.push([price, itemType, button])
+                }
+            })
+            var compareHelper = {}
+
+            compareHelper[1] = 2; // helmet
+            compareHelper[2] = 3; // weapon
+            compareHelper[4] = 2; // shield
+            compareHelper[8] = 3; // body armor
+            compareHelper[48] = 1; // ring
+            compareHelper[256] = 2; // gloves
+            compareHelper[512] = 2; // shoes
+            compareHelper[1024] = 1; //amulets
+
+
+            auctionItemsData.sort(function(a, b) {
+                if (compareHelper[a[1]] === compareHelper[b[1]]) {
+                    return (a[0] > b[0]) ? -1 : 1;
+                }
+                else {
+                    return (compareHelper[a[1]] < compareHelper[b[1]]) ? -1 : 1;
+                }
+            })
+
+            console.log(auctionItemsData)
+            console.log(auctionItemsData.length)
+
+            function checkNoMoreGold(){
+                const notificationError = document.querySelector('div.notification-area div.notification-error')
+                if (notificationError){
+                    if((notificationError.innerHTML).includes("have enough gold") || (notificationError.innerHTML).includes("is closing") || (notificationError.innerHTML).includes("ot possible")){
+                        console.log(notificationError.innerHTML);
+                        STOP_BUYING = true;
+                        location.href = 'index.php?mod=overview&sh=' + sessionHash;
+                    }
+                }
+            }
+
+
+            var interval = 1000; // how much time should the delay between two iterations be (in milliseconds)?
+            auctionItemsData.forEach(function (el, index) {
+                const randomDelay = Math.random() * (1000 - 0) + 0;
+                setTimeout(function () {
+                    //console.log(el);
+                    checkNoMoreGold()
+                    if (STOP_BUYING == false && autoMarketOk) {
+                        el[2].click();
+                        console.log('click: ', el);
+                    }
+                }, (index * interval) + randomDelay);
+            });
+
+            let storageName = '_auction'
+            if (location.href.includes('&ttype=3')){
+                storageName += 'MercenaryItemIds'
+            }
+            else {
+                storageName += 'GladiatorItemIds'
+            }
+            console.log(storageName)
+
+        }
+
+    }
+
+    //************************************************** CONDITION
+
+    function checkMarketAutoBuyCondition(autoMarketOk){
+        if (!autoMarketOk) return 0
+        console.log('market')
+        let interval = parseFloat(marketInterval.value.replace(/[^0-9.]/g, '')) // check auction every x minutes
         interval *= 60000
-        console.log('interval', interval)
-        console.log('date now', Date.now())
+        //console.log('interval', interval)
+        //console.log('date now', Date.now())
 
         let currentDate = Date.now()
         let lastMarketDate = localStorage.getItem('_lastMarketCheck') || currentDate
         //console.log(currentDate - lastMarketDate) // jesli jest mniejsze niz 3600 to zrob cos 3600000
-        console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
-        console.log('interval', interval)
+        //console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
+        //console.log('interval', interval)
         if ((currentDate - lastMarketDate) > interval){
             localStorage.setItem('_lastMarketCheck', currentDate)
-            console.log('GO ON MARKET')
+            //console.log('GO ON MARKET')
             return 1
         }
         return 0;
     }
+
+    //************************************************************************************************************************************************************* AUTOBUY AUCTIONS --- END
+
 
     //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
     //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
@@ -2195,7 +2451,7 @@
             console.log('picked 1')
             return 1
         }
-        else if (checkMarketAutoBuy() == 1){
+        else if (checkMarketAutoBuyCondition(autoMarketOk) == 1){
             console.log('picked 2')
             return 2 //exp
         }
@@ -2241,10 +2497,11 @@
                             expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
                             expeditionquestmap.value, expeditionquestenemy.value);
             }
+            else if (location.href.includes('index.php?mod=auction') && location.href.includes('&zubab=')) buyItems();
             else {
                 let currentAction = pickAction();
                 if (currentAction == 1) location.href = 'index.php?mod=quests&sh=' + sessionHash;
-                else if (currentAction == 2) location.href = 'index.php?mod=auction&zubab=notrdym&ttype=3&sh=' + sessionHash;
+                else if (currentAction == 2) location.href = 'index.php?mod=auction&zubab=notrdy' + (parseInt(marketType.value) == 0 ? '&sh=' : '&ttype=3&sh=') + sessionHash;
                 else if (currentAction == 3) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
                 else if (currentAction == 4) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
                 else if (currentAction == 5) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
