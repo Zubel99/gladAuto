@@ -2385,9 +2385,17 @@
                     }
                 }
             }
+            function checkNoMoreAuctions(length, iter){
+                if (iter == length){
+                    STOP_BUYING = true;
+                    location.href = 'index.php?mod=overview&sh=' + sessionHash;
+                }
+            }
 
 
             var interval = 1000; // how much time should the delay between two iterations be (in milliseconds)?
+            let iter = 0;
+            checkNoMoreAuctions(auctionItemsData.length, iter);
             auctionItemsData.forEach(function (el, index) {
                 const randomDelay = Math.random() * (1000 - 0) + 0;
                 setTimeout(function () {
@@ -2397,6 +2405,8 @@
                         el[2].click();
                         console.log('click: ', el);
                     }
+                    iter++;
+                    checkNoMoreAuctions(auctionItemsData.length, iter)
                 }, (index * interval) + randomDelay);
             });
 
