@@ -7,6 +7,7 @@
 // @include      *s*-*.gladiatus.gameforge.com/game/index.php?*
 // @icon         https://lens-storage.storage.googleapis.com/png/0bee43cb65064cfb9707760f648e737b
 // @grant        GM_xmlhttpRequest
+// @connect      https://*.gladiatus.gameforge*
 // ==/UserScript==
 
 (function() {
@@ -2253,13 +2254,13 @@
         console.log('quests')
 
         let pantheonInfo = document.querySelectorAll('a.menuitem[title="Pantheon"] font') // 'New', '1', '2', 'Full' etc
-        let newQuest = false
-        let finishQuest = false
+        let enterQuests = false
         pantheonInfo.forEach(infoNode => {
-            if (infoNode.innerText.includes('New')) newQuest = true
-            else if (infoNode.innerText == '1' || infoNode.innerText == '2' || infoNode.innerText == '3' || infoNode.innerText == '4' || infoNode.innerText == '5') finishQuest = true
+            if (infoNode.innerText.includes('New')) enterQuests = true
+            else if (infoNode.innerText.includes('N/A')) enterQuests = true
+            else if (infoNode.innerText == '1' || infoNode.innerText == '2' || infoNode.innerText == '3' || infoNode.innerText == '4' || infoNode.innerText == '5') enterQuests = true
         })
-        if (newQuest || finishQuest) return 1
+        if (enterQuests) return 1
         return 0
     }
 
@@ -2423,7 +2424,7 @@
         //console.log('date now', Date.now())
 
         let currentDate = Date.now()
-        let lastMarketDate = localStorage.getItem('_lastMarketCheck') || currentDate
+        let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
         //console.log(currentDate - lastMarketDate) // jesli jest mniejsze niz 3600 to zrob cos 3600000
         //console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
         //console.log('interval', interval)
