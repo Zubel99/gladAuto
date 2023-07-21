@@ -1848,7 +1848,7 @@
 
     let questCounter=document.createElement('button');//selectturmatarget
     questCounter.classList.add('awesome-tabs');
-    questCounter.setAttribute("style"," position:absolute; padding:2px; left: -25px; font-size: 14px; min-width: 25px; min-height: 25px;");
+    questCounter.setAttribute("style"," position:absolute; padding:2px; left: -45px; font-size: 14px; min-width: 25px; min-height: 25px;");
     let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
     questNavTab.appendChild(questCounter)
     let qc = parseInt(localStorage.getItem('_questCounter')) || 0
