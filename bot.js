@@ -97,8 +97,8 @@
         let arrowImg = document.createElement('img')
         if (isOnByDefault) arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
         else arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        arrowImg.setAttribute('height', 18);
-        arrowImg.setAttribute('width', 18);
+        arrowImg.setAttribute('height', '1.1%');//18px
+        arrowImg.setAttribute('width', '10%');//18px
         arrowImg.id = id
         arrowImg.setAttribute('style', 'position: absolute; cursor: pointer; filter: brightness(4); padding: 4.5px; left: 36px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));')//position: absolute; cursor: pointer; top: 0px; left:10px; filter: brightness(4); padding: 4.5px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));
         return arrowImg
@@ -1916,12 +1916,7 @@
         console.log('expeditionsuccessionon :',expeditionsuccessionon)
         */
 
-        console.log("QUESTS")
-        //console.log('looking for: ', expeditionenemy, ' in ', expeditionmap)
-        let randomNumber = Math.random() * (100 - 0) + 0; //additional refresh cuz quests dont refresha s often as they should
-        if (randomNumber < 10){ //15% for refresh per loop (loop itself has couple seconds of delay)
-            location.reload();
-        }
+
 
         let rerollQuestsButton = document.querySelector('input[type="button"][value="New quests"]');
         let completedQuests = document.querySelectorAll('div#qcategory_finished div.contentboard_slot.contentboard_slot_active a.quest_slot_button_finish')
@@ -2053,6 +2048,7 @@
         let isQuestCooldown = document.getElementById('quest_header_cooldown')
         if (isQuestCooldown || (activeQuests.length == 5)){
             console.log('cooldown/max quests')
+            location.href = 'index.php?mod=overview&sh=' + sessionHash; //exit when no more quests to take
             return
         }
 
@@ -2150,6 +2146,22 @@
         }
     }
 
+    function checkQuestsCondition(autoquestok){
+        if (!autoquestok) return 0;
+        console.log('quests')
+
+        let pantheonInfo = document.querySelectorAll('a.menuitem[title="Pantheon"] font') // 'New', '1', '2', 'Full' etc
+        let newQuest = false
+        let finishQuest = false
+        pantheonInfo.forEach(infoNode => {
+            if (infoNode.innerText.includes('New')) newQuest = true
+            else if (infoNode.innerText == '1' || infoNode.innerText == '2' || infoNode.innerText == '3' || infoNode.innerText == '4' || infoNode.innerText == '5') finishQuest = true
+        })
+        if (newQuest || finishQuest) return 1
+        return 0
+    }
+
+
     function checkNotification(){//like you lvled up or daily reward
         let notificationCancelButton = document.querySelector('td#buttonrightnotification')
         if(notificationCancelButton){
@@ -2176,25 +2188,29 @@
 
 
     function pickAction(){
-        if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
+        if (checkQuestsCondition(autoquestok) == 1){
             console.log('picked 1')
             return 1 //exp
         }
-        else if (checkDungeonCondition(autodungeonok) == 1){
+        else if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
             console.log('picked 2')
-            return 2 //dung
+            return 2 //exp
+        }
+        else if (checkDungeonCondition(autodungeonok) == 1){
+            console.log('picked 3')
+            return 3 //dung
         }
         else if (checkCircusProvinciariumCondition(autocircusprovinciariumok) == 1){
-            console.log('picked 3')
-            return 3
-        }
-        else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
             console.log('picked 4')
             return 4
         }
-        else if (checkWorkCondition(autoworkok) == 1){
+        else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
             console.log('picked 5')
             return 5
+        }
+        else if (checkWorkCondition(autoworkok) == 1){
+            console.log('picked 6')
+            return 6
         }
         else {
             return 0
@@ -2210,30 +2226,22 @@
         //console.log('_weakerEnemiesArena: ', arr5);
         //console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
-
-
-            if (location.href.includes('index.php?mod=quests')) {
-                if (autoquestok) {
-                    checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value,
-                                circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value,
-                                combatqueston.getAttribute('value'), combatquesttimedon.value, combatquestsuccessionon.value,
-                                expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
-                                expeditionquestmap.value, expeditionquestenemy.value);
-                }
+            if (location.href.includes('index.php?mod=quests')){
+                console.log('quests')
+                checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value,
+                            circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value,
+                            combatqueston.getAttribute('value'), combatquesttimedon.value, combatquestsuccessionon.value,
+                            expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
+                            expeditionquestmap.value, expeditionquestenemy.value);
             }
-            else{
+            else {
                 let currentAction = pickAction();
-
-                if (currentAction == 1) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
-                else if (currentAction == 2) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
-                else if (currentAction == 3) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
-                else if (currentAction == 4) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
-                else if (currentAction == 5) await checkWork(autoworktype.value);
-                //if (autoexpeditionok) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value, expeditionhp.value);
-                //if (autodungeonok) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
-                //if (autocircusprovinciariumok) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
-                //if (autoarenaprovinciariumok) await checkArenaProvinciarium(selectarenaprovinciariummode.value, arenahp.value);
-                //if (autoworkok) await checkWork(autoworktype.value);
+                if (currentAction == 1) location.href = "index.php?mod=quests&sh=" + sessionHash;
+                else if (currentAction == 2) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
+                else if (currentAction == 3) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                else if (currentAction == 4) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                else if (currentAction == 5) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
+                else if (currentAction == 6) await checkWork(autoworktype.value);
             }
         }
     }
