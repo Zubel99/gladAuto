@@ -2489,7 +2489,7 @@
         //console.log('_weakerEnemiesArena: ', arr5);
         //console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
-            if (location.href.includes('index.php?mod=quests')){
+            if (location.href.includes('mod=quests')){
                 console.log('quests')
                 checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value,
                             circusqueston.getAttribute('value'), circusquesttimedon.value, circusquestsuccessionon.value,
@@ -2497,8 +2497,8 @@
                             expeditionqueston.getAttribute('value'), expeditionquesttimedon.value, expeditionquestsuccessionon.value,
                             expeditionquestmap.value, expeditionquestenemy.value);
             }
-            else if (location.href.includes('index.php?mod=auction') && location.href.includes('&zubab=')) buyItems();
-            else {
+            else if (location.href.includes('mod=auction') && location.href.includes('&zubab=')) buyItems();
+            else if (!location.href.includes('mod=auction') && !location.href.includes('mod=market')){//regular auction and market excluded from bot to let user freele bid :)
                 let currentAction = pickAction();
                 if (currentAction == 1) location.href = 'index.php?mod=quests&sh=' + sessionHash;
                 else if (currentAction == 2) location.href = 'index.php?mod=auction&zubab=notrdy' + (parseInt(marketType.value) == 0 ? '&sh=' : '&ttype=3&sh=') + sessionHash;
