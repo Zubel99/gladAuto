@@ -91,14 +91,16 @@
             return false;
         }}
 
+
+    let targetWidth = document.querySelector('a.menuitem[target="_self"]').clientWidth*0.1;
+    let targetHeight = document.querySelector('a.menuitem[target="_self"]').clientHeight*0.65;
     function createMenuItemSlider(id){
         let isOnByDefault = localStorage.getItem('_' + id + 'Ok') === 'true';
-
         let arrowImg = document.createElement('img')
         if (isOnByDefault) arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
         else arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        arrowImg.setAttribute('height', '1.1%');//18px
-        arrowImg.setAttribute('width', '10%');//18px
+        arrowImg.setAttribute('width', targetWidth);
+        arrowImg.setAttribute('height', targetHeight);//18px
         arrowImg.id = id
         arrowImg.setAttribute('style', 'position: absolute; cursor: pointer; filter: brightness(4); padding: 4.5px; left: 36px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));')//position: absolute; cursor: pointer; top: 0px; left:10px; filter: brightness(4); padding: 4.5px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));
         return arrowImg
@@ -2048,7 +2050,9 @@
         let isQuestCooldown = document.getElementById('quest_header_cooldown')
         if (isQuestCooldown || (activeQuests.length == 5)){
             console.log('cooldown/max quests')
-            location.href = 'index.php?mod=overview&sh=' + sessionHash; //exit when no more quests to take
+            if (completedQuests.length == 0 && failedQuests.length == 0){
+                location.href = 'index.php?mod=overview&sh=' + sessionHash; //exit when no more quests to take
+            }
             return
         }
 
