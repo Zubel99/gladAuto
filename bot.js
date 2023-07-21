@@ -1900,25 +1900,6 @@
         let expeditiontimedon = stringToBool(_expeditiontimedon)
         let expeditionsuccessionon = stringToBool(_expeditionsuccessionon)
 
-        /*
-        console.log('arenaon :',arenaon)
-        console.log('arenatimedon :',arenatimedon)
-        console.log('arenasuccessionon :',arenasuccessionon)
-
-        console.log('circuson :',circuson)
-        console.log('circustimedon :',circustimedon)
-        console.log('circussuccessionon :',circussuccessionon)
-
-        console.log('combaton :',combaton)
-        console.log('combattimedon :',combattimedon)
-        console.log('combatsuccessionon :',combatsuccessionon)
-
-        console.log('expeditionon :',expeditionon)
-        console.log('expeditiontimedon :',expeditiontimedon)
-        console.log('expeditionsuccessionon :',expeditionsuccessionon)
-        */
-
-
 
         let rerollQuestsButton = document.querySelector('input[type="button"][value="New quests"]');
         let completedQuests = document.querySelectorAll('div#qcategory_finished div.contentboard_slot.contentboard_slot_active a.quest_slot_button_finish')
@@ -2182,6 +2163,24 @@
 
     }
 
+    function checkMarketAutoBuy(){
+        let interval = 5 // check auction every x minutes
+        interval *= 60000
+        console.log('interval', interval)
+        console.log('date now', Date.now())
+
+        let currentDate = Date.now()
+        let lastMarketDate = localStorage.getItem('_lastMarketCheck') || currentDate
+        //console.log(currentDate - lastMarketDate) // jesli jest mniejsze niz 3600 to zrob cos 3600000
+        console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
+        console.log('interval', interval)
+        if ((currentDate - lastMarketDate) > interval){
+            localStorage.setItem('_lastMarketCheck', currentDate)
+            console.log('GO ON MARKET')
+            return 1
+        }
+        return 0;
+    }
 
     //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
     //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
@@ -2194,27 +2193,31 @@
     function pickAction(){
         if (checkQuestsCondition(autoquestok) == 1){
             console.log('picked 1')
-            return 1 //exp
+            return 1
         }
-        else if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
+        else if (checkMarketAutoBuy() == 1){
             console.log('picked 2')
             return 2 //exp
         }
-        else if (checkDungeonCondition(autodungeonok) == 1){
+        else if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
             console.log('picked 3')
-            return 3 //dung
+            return 3 //exp
+        }
+        else if (checkDungeonCondition(autodungeonok) == 1){
+            console.log('picked 4')
+            return 4 //dung
         }
         else if (checkCircusProvinciariumCondition(autocircusprovinciariumok) == 1){
-            console.log('picked 4')
-            return 4
-        }
-        else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
             console.log('picked 5')
             return 5
         }
-        else if (checkWorkCondition(autoworkok) == 1){
+        else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
             console.log('picked 6')
             return 6
+        }
+        else if (checkWorkCondition(autoworkok) == 1){
+            console.log('picked 7')
+            return 7
         }
         else {
             return 0
@@ -2240,12 +2243,13 @@
             }
             else {
                 let currentAction = pickAction();
-                if (currentAction == 1) location.href = "index.php?mod=quests&sh=" + sessionHash;
-                else if (currentAction == 2) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
-                else if (currentAction == 3) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
-                else if (currentAction == 4) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
-                else if (currentAction == 5) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
-                else if (currentAction == 6) await checkWork(autoworktype.value);
+                if (currentAction == 1) location.href = 'index.php?mod=quests&sh=' + sessionHash;
+                else if (currentAction == 2) location.href = 'index.php?mod=auction&zubab=notrdym&ttype=3&sh=' + sessionHash;
+                else if (currentAction == 3) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
+                else if (currentAction == 4) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                else if (currentAction == 5) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                else if (currentAction == 6) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
+                else if (currentAction == 7) await checkWork(autoworktype.value);
             }
         }
     }
