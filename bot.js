@@ -7,7 +7,6 @@
 // @include      *s*-*.gladiatus.gameforge.com/game/index.php?*
 // @icon         https://lens-storage.storage.googleapis.com/png/0bee43cb65064cfb9707760f648e737b
 // @grant        GM_xmlhttpRequest
-// @connect      https://*.gladiatus.gameforge*
 // ==/UserScript==
 
 (function() {
@@ -1214,7 +1213,7 @@
     }
 
 
-    async function checkExpedition(selectexpeditionmap, selectexpeditiontarget){
+    function checkExpedition(selectexpeditionmap, selectexpeditiontarget){
 
         //alert(content);
 
@@ -1236,89 +1235,83 @@
 
 
     function checkDungeon(_selectdungeonmap, _advanced, _skipboss, _fulldungclear){
-        return new Promise(resolve => {
-            let selectdungeonmap = parseInt(_selectdungeonmap)
-            let advanced = _advanced === 'true'
-            let skipboss = _skipboss === 'true'
-            let fulldungclear = _fulldungclear === 'true'
-            
-
-            //let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
-            //if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
-            //    resolve();
-            //    //return
-            //}
-
-            location.href = dungeonLocations[selectdungeonmap];
+        let selectdungeonmap = parseInt(_selectdungeonmap)
+        let advanced = _advanced === 'true'
+        let skipboss = _skipboss === 'true'
+        let fulldungclear = _fulldungclear === 'true'
 
 
-            if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
-                if (advanced){
-                    document.querySelector('input.button1[value="Advanced"]').click();
-                }
-                else{
-                    document.querySelector('input.button1[value="Normal"]').click();
-                }
-            }
+        //let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+        //if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
+        //    resolve();
+        //    //return
+        //}
 
-            let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
-            let furthestEnemyIndex = 0;
-            let furthestEnemy = '';
-            let closestEnemyIndex = 0;
-            let closestEnemy = '';
-            let firstLoop = true;
-            for (var i = 0; i < enemiesImgs.length; i++) {
-                let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                if (firstLoop){
-                    firstLoop = false;
-                    closestEnemyIndex = enemyMapIndex;
-                    furthestEnemyIndex = enemyMapIndex;
-                    closestEnemy = enemiesImgs[i];
-                    furthestEnemy = enemiesImgs[i];
-                }
-                if (enemyMapIndex > furthestEnemyIndex){
-                    furthestEnemyIndex = enemyMapIndex;
-                    furthestEnemy = enemiesImgs[i]
-                }
-                if (enemyMapIndex < closestEnemyIndex){
-                    closestEnemyIndex = enemyMapIndex;
-                    closestEnemy = enemiesImgs[i]
-                }
-            }
-            let compareObject = {}
-            let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
-            enemiesDivs.forEach(enemy => {
-                let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
-                compareObject={
-                    ...compareObject,
-                    [enemyMapIndex]: enemy.innerHTML,
-                }
-            })
-            console.log('compareObject: ', compareObject)
-            let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
-            if (fulldungclear){
-                if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
-                    console.log('CLICK1')
-                    cancelBtn.click()
-                }
-                else{
-                    closestEnemy.click();
-                }
+        location.href = dungeonLocations[selectdungeonmap];
+
+
+        if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
+            if (advanced){
+                document.querySelector('input.button1[value="Advanced"]').click();
             }
             else{
-                if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
-                    console.log('CLICK2')
-                    cancelBtn.click()
-                }
-                else{
-                    furthestEnemy.click();
-                }
+                document.querySelector('input.button1[value="Normal"]').click();
             }
-            setTimeout(function(){
-                resolve();
-            }, 1000)
+        }
 
-        });
+        let enemiesImgs = document.querySelectorAll('div#content div[style="margin:1px"] img[onClick]');
+        let furthestEnemyIndex = 0;
+        let furthestEnemy = '';
+        let closestEnemyIndex = 0;
+        let closestEnemy = '';
+        let firstLoop = true;
+        for (var i = 0; i < enemiesImgs.length; i++) {
+            let enemyMapIndex = parseInt(enemiesImgs[i].getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+            if (firstLoop){
+                firstLoop = false;
+                closestEnemyIndex = enemyMapIndex;
+                furthestEnemyIndex = enemyMapIndex;
+                closestEnemy = enemiesImgs[i];
+                furthestEnemy = enemiesImgs[i];
+            }
+            if (enemyMapIndex > furthestEnemyIndex){
+                furthestEnemyIndex = enemyMapIndex;
+                furthestEnemy = enemiesImgs[i]
+            }
+            if (enemyMapIndex < closestEnemyIndex){
+                closestEnemyIndex = enemyMapIndex;
+                closestEnemy = enemiesImgs[i]
+            }
+        }
+        let compareObject = {}
+        let enemiesDivs = document.querySelectorAll('div#content div[style="margin:1px"] div[onClick]');
+        enemiesDivs.forEach(enemy => {
+            let enemyMapIndex = parseInt(enemy.getAttribute('onClick').substring(12,15).replace(/\D/g, ""));
+            compareObject={
+                ...compareObject,
+                [enemyMapIndex]: enemy.innerHTML,
+            }
+        })
+        console.log('compareObject: ', compareObject)
+        let cancelBtn = document.querySelector('input.button1[value="Cancel dungeon"]')
+        if (fulldungclear){
+            if (skipboss && compareObject[closestEnemyIndex] == 'Boss'){
+                console.log('CLICK1')
+                cancelBtn.click()
+            }
+            else{
+                closestEnemy.click();
+            }
+        }
+        else{
+            if (skipboss && compareObject[furthestEnemyIndex] == 'Boss'){
+                console.log('CLICK2')
+                cancelBtn.click()
+            }
+            else{
+                furthestEnemy.click();
+            }
+        }
     }
 
     function checkDungeonCondition(autodungeonok){
@@ -1558,7 +1551,7 @@
         let arrIndex = 0
         let playerCharacters = []
 
-        let overViewLink = 'index.php?mod=overview&sh=' + sessionHash;
+        let overViewLink = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
         let playerPromise = performRequest(overViewLink).then(responseText => {
             let dummyDiv = document.createElement('div');
             dummyDiv.innerHTML = responseText;
@@ -1862,7 +1855,7 @@
             );
         });
 
-        let playerOverviewLink = '/game/index.php?mod=overview&doll=1&sh='+sessionHash;
+        let playerOverviewLink = 'index.php?mod=overview&doll=1&sh='+sessionHash;
         let userStats = []
         promises.push(
             performRequest(playerOverviewLink)
@@ -1965,25 +1958,6 @@
         }
         return 0
     }
-
-
-
-    function checkHealth(){ //not using atm
-        let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
-        let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
-        let currentHealthInPercentage = currentHealth / maxHealth;
-        console.log('health: ', currentHealthInPercentage);
-        if (currentHealthInPercentage < 0.90){ //health percentage, for example 0.4 = 40%
-            let overviewLink = document.querySelector('div#mainmenu a.menuitem[title="Overview"]').href
-            // zamienic pozniej na
-            // location.href = overviewLink
-
-            if (document.querySelectorAll("div[data-content-type='64']").length){
-                console.log('dziala 1');
-            }
-        }
-    }
-
 
 
     let questCounter=document.createElement('button');//selectturmatarget
@@ -2150,7 +2124,7 @@
         if (isQuestCooldown || (activeQuests.length == 5)){
             console.log('cooldown/max quests')
             if (completedQuests.length == 0 && failedQuests.length == 0){
-                location.href = 'index.php?mod=overview&sh=' + sessionHash; //exit when no more quests to take
+                location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash; //exit when no more quests to take
             }
             return
         }
@@ -2381,14 +2355,14 @@
                     if((notificationError.innerHTML).includes("have enough gold") || (notificationError.innerHTML).includes("is closing") || (notificationError.innerHTML).includes("ot possible")){
                         console.log(notificationError.innerHTML);
                         STOP_BUYING = true;
-                        location.href = 'index.php?mod=overview&sh=' + sessionHash;
+                        location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
                     }
                 }
             }
             function checkNoMoreAuctions(length, iter){
                 if (iter == length){
                     STOP_BUYING = true;
-                    location.href = 'index.php?mod=overview&sh=' + sessionHash;
+                    location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
                 }
             }
 
@@ -2424,7 +2398,7 @@
     }
 
     //************************************************** CONDITION
-
+    let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
     function checkMarketAutoBuyCondition(autoMarketOk){
         if (!autoMarketOk) return 0
         console.log('market')
@@ -2434,7 +2408,7 @@
         //console.log('date now', Date.now())
 
         let currentDate = Date.now()
-        let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
+        //let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
         //console.log(currentDate - lastMarketDate) // jesli jest mniejsze niz 3600 to zrob cos 3600000
         //console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
         //console.log('interval', interval)
@@ -2448,6 +2422,115 @@
 
     //************************************************************************************************************************************************************* AUTOBUY AUCTIONS --- END
 
+    function stringContainsAnyItemFromArray(str, arr) {
+        return arr.some(item => str.includes(item));
+    }
+    function simulateDoubleClick(element) {
+        const event = new MouseEvent('dblclick', {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        element.dispatchEvent(event);
+    }
+
+    function checkAutoHeal(){
+        if (!location.href.includes('index.php?mod=overview&doll=1&sh=')) location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
+        document.querySelectorAll('div#inventory_nav a')[3].click()
+        //let currentHealthPercentage = parseInt(document.getElementById('char_leben').innerHTML)// important to compare this whe healing up instead of other
+        let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
+        let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
+        let missingHealth = maxHealth - currentHealth
+        console.log('missingHealth:', missingHealth)
+
+
+        let allowedFoods = ['Apple', 'Bananas', 'Cheese', 'Bread rolls', 'Bread', 'Fish', 'Meat haunch', 'Steak', 'Chicken', 'Health potion', 'Healing potion', 'Fish sandwich', 'Banana sandwich', 'Steak sandwich',
+                            'Cheese sandwich', 'Banana roll', 'Cheese roll', 'Steak roll', 'Fish roll', 'Fruit bowl', 'Cake', 'Feast']
+        let consumables = document.querySelectorAll('div#inv div[data-content-type="64"]')
+        let filteredFood = []
+        consumables.forEach(item => {
+            let tooltip = item.getAttribute('data-tooltip');
+            let leftAnchor = tooltip.indexOf('"Using: ')
+            let rightAnchor = tooltip.indexOf(' of life"')
+            if (leftAnchor == -1 || rightAnchor == -1) return
+            let foodName = tooltip.substring(3, tooltip.indexOf(','))
+            if (!stringContainsAnyItemFromArray(foodName, allowedFoods)) return // name
+            let healthAmount = parseInt(tooltip.substring(leftAnchor+14, rightAnchor))
+            filteredFood.push([healthAmount, item])
+
+        })
+        filteredFood = filteredFood.sort((a, b) => a[0] - b[0])
+        console.log(filteredFood)
+        let bestFood;
+        if (filteredFood.length == 0){
+            console.log('no food found')
+            localStorage.setItem('_lastAutoHealTimeout', Date.now())
+            return
+        }
+        if (filteredFood[0][0] < missingHealth){
+            bestFood = filteredFood[0]
+        }
+        /*
+        for (let i = 0; i < filteredFood.length; i++){
+            if (filteredFood[i][0] < missingHealth){
+                bestFood = filteredFood[i];
+                break;
+            }
+        }
+        */
+        if (bestFood){
+            console.log('best food found: ', bestFood)
+            simulateDoubleClick(bestFood[1])
+            //return
+            setTimeout(function(){
+                location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
+            }, 1500)
+
+            //checkAutoHeal()
+        }
+        else{
+            console.log('best food NOT found')
+            console.log('applying 30% leniency cap')
+
+            let afterLeniencyCap;
+            if (filteredFood[0][0] < missingHealth * 1.3){
+                afterLeniencyCap = filteredFood[0]
+            }
+            if (afterLeniencyCap){
+                console.log('food after leniancy found: ', afterLeniencyCap)
+                simulateDoubleClick(afterLeniencyCap[1])
+                //return
+                setTimeout(function(){
+                    location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
+                }, 1500)
+                //checkAutoHeal()
+            }
+            else{
+                console.log('food after leniancy NOT found')
+                //cant find any usefull food, apply timeout
+                localStorage.setItem('_lastAutoHealTimeout', Date.now())
+            }
+        }
+
+    }
+    let lastAutoHealTimeout = localStorage.getItem('_lastAutoHealTimeout') || 0
+    function checkAutoHealCondition(autoHealOk){
+        if (!autoHealOk) return 0
+        console.log('autoheal')
+        let interval = 1 //check every 10 mins for new food items in invertory
+        interval *= 60000
+        //if ((Date.now() - lastAutoHealTimeout) < interval) return 0
+
+        let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
+        let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
+        let currentHealthInPercentage = (currentHealth / maxHealth) * 100;
+        //console.log('health: ', currentHealthInPercentage);
+
+        let USER_DEFINED_HEAL_PERCENTAGE = 75
+        if (currentHealthInPercentage > USER_DEFINED_HEAL_PERCENTAGE) return 0
+        return 1
+    }
+
 
     //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
     //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
@@ -2459,40 +2542,37 @@
 
     function pickAction(){
         if (checkQuestsCondition(autoquestok) == 1){
-            console.log('picked 1')
-            return 1
+            return 10
         }
         else if (checkMarketAutoBuyCondition(autoMarketOk) == 1){
-            console.log('picked 2')
-            return 2 //exp
+            return 20 //exp
+        }
+        else if (checkAutoHealCondition(true) == 1){//autoHealOk
+            return 21
         }
         else if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
-            console.log('picked 3')
-            return 3 //exp
+            return 30 //exp
         }
         else if (checkDungeonCondition(autodungeonok) == 1){
-            console.log('picked 4')
-            return 4 //dung
+            return 40 //dung
         }
         else if (checkCircusProvinciariumCondition(autocircusprovinciariumok) == 1){
-            console.log('picked 5')
-            return 5
+            return 50
         }
         else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
-            console.log('picked 6')
-            return 6
+            return 60
         }
         else if (checkWorkCondition(autoworkok) == 1){
-            console.log('picked 7')
-            return 7
+            return 70
         }
         else {
             return 0
         }
     }
 
-    async function eventChecker() {
-        checkNotification();
+    function eventChecker() {
+
+        //checkAutoHeal();
         //console.log('_enemyCharactersStatsCircus: ', arr1);
         //console.log('_weakerEnemiesCircus: ', arr2);
         //console.log('_weakestEnemyCircus: ', arr3);
@@ -2500,6 +2580,7 @@
         //console.log('_weakerEnemiesArena: ', arr5);
         //console.log('_weakestEnemyArena: ', arr6);
         if (boton) {
+            checkNotification();
             if (location.href.includes('mod=quests')){
                 console.log('quests')
                 checkQuests(arenaqueston.getAttribute('value'), arenaquesttimedon.value, arenaquestsuccessionon.value,
@@ -2511,13 +2592,14 @@
             else if (location.href.includes('mod=auction') && location.href.includes('&zubab=')) buyItems();
             else if (!location.href.includes('mod=auction') && !location.href.includes('mod=market')){//regular auction and market excluded from bot to let user freele bid :)
                 let currentAction = pickAction();
-                if (currentAction == 1) location.href = 'index.php?mod=quests&sh=' + sessionHash;
-                else if (currentAction == 2) location.href = 'index.php?mod=auction&zubab=notrdy' + (parseInt(marketType.value) == 0 ? '&sh=' : '&ttype=3&sh=') + sessionHash;
-                else if (currentAction == 3) await checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
-                else if (currentAction == 4) await checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
-                else if (currentAction == 5) await checkCircusProvinciarium(selectcircusprovinciariummode.value);
-                else if (currentAction == 6) await checkArenaProvinciarium(selectarenaprovinciariummode.value);
-                else if (currentAction == 7) await checkWork(autoworktype.value);
+                if (currentAction == 10) location.href = 'index.php?mod=quests&sh=' + sessionHash;
+                else if (currentAction == 20) location.href = 'index.php?mod=auction&zubab=notrdy' + (parseInt(marketType.value) == 0 ? '&sh=' : '&ttype=3&sh=') + sessionHash;
+                else if (currentAction == 21) checkAutoHeal();
+                else if (currentAction == 30) checkExpedition(selectexpeditionmap.value, selectexpeditiontarget.value);
+                else if (currentAction == 40) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
+                else if (currentAction == 50) checkCircusProvinciarium(selectcircusprovinciariummode.value);
+                else if (currentAction == 60) checkArenaProvinciarium(selectarenaprovinciariummode.value);
+                else if (currentAction == 70) checkWork(autoworktype.value);
             }
         }
     }
@@ -2544,7 +2626,7 @@
                 resetLink = 'index.php?mod=quests&sh=' + sessionHash;
             }
             else {
-                resetLink = 'index.php?mod=overview&sh=' + sessionHash;
+                resetLink = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
             }
             location.href = resetLink;
         }
