@@ -1,6 +1,6 @@
 # GladiatusBot
 
-Install tampermonkey (or greasemonkey etc...) to fire javascript file into and have fun
+Install tampermonkey (or greasemonkey etc...) to fire javascript file into and have fun - youll have to add gladiatus (or *) to your tampermonkey script user domain whitelist
 
 gladiatus UI must be in ENGLISH for bot to work!
 
