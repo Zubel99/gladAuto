@@ -120,7 +120,7 @@
     menubot.setAttribute("style","display:block; ");//position: relative;
 
 
-    // BOTON EXPEDICION
+    // ********************************************************************************************** BotOn EXPEDITION
     let expeditionboton=document.createElement('a');
     let selectexpeditionmap=document.createElement('select');
     let selectexpeditiontarget=document.createElement('select');
@@ -174,7 +174,57 @@
     selectexpeditionmap.value=localStorage.getItem('_selectedexpeditionmap') || 0;
     selectexpeditiontarget.value=localStorage.getItem('_selectedexpeditiontarget') || 0;
 
-    //BOTON DUNGEON
+    //   EXPEDITION LOGIC
+
+    expeditionboton.addEventListener("click",function(){
+        if (autoexpeditionok==true){
+            autoexpeditionok=false;
+            expeditionboton.innerHTML="EXPEDITION OFF";
+            expeditionboton.style.textShadow = botOptionOff
+        }else{
+            autoexpeditionok=true;
+            expeditionboton.innerHTML="EXPEDITION ON";
+            expeditionboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoexpeditionok', autoexpeditionok)
+    });
+    expeditionhp.addEventListener("change",function(){
+        let expdatalabel=document.querySelector('#expdatalabel');
+        expdatalabel.innerHTML="Not attack hp < "+expeditionhp.value+"%";
+        localStorage.setItem('_expeditionhp', expeditionhp.value);
+    });
+    selectexpeditionmap.addEventListener("change", function(){
+        localStorage.setItem('_selectedexpeditionmap', selectexpeditionmap.value);
+    })
+    selectexpeditiontarget.addEventListener("change", function(){
+        localStorage.setItem('_selectedexpeditiontarget', selectexpeditiontarget.value);
+    })
+    expeditionSlider.addEventListener('click', function(){
+        let selectedexpeditionmap=document.querySelector('#expeditionmap');
+        let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
+        let expdatalabel=document.querySelector('#expdatalabel');
+        let expeditionhp=document.querySelector('#expeditionhp');
+        if (expeditionSliderOk==true){
+            expeditionSliderOk = false;
+            selectedexpeditionmap.style.display="none";
+            selectedexpeditiontarget.style.display="none";
+            expdatalabel.style.display="none";
+            expeditionhp.style.display="none";
+            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            expeditionSliderOk = true;
+            selectedexpeditionmap.style.display="block";
+            selectedexpeditiontarget.style.display="block";
+            expdatalabel.style.display="block";
+            expeditionhp.style.display="block";
+            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_expeditionSliderOk', expeditionSliderOk);
+    })
+
+
+    // ********************************************************************************************** BotOn DUNGEON
     let dungeonboton=document.createElement('a');
     let selectdungeonmap=document.createElement('select');
     let advanced=document.createElement('select');
@@ -224,9 +274,59 @@
         }
     }
     selectdungeonmap.value=localStorage.getItem('_selecteddungeonmap') || 0;
-    //dungeonboton.href="#";
 
-    //BOTON CIRCUS PROVINCIARIUM
+    //   DUNGEON LOGIC
+
+    dungeonboton.addEventListener("click",function(){
+        if (autodungeonok==true){
+            autodungeonok=false;
+            dungeonboton.innerHTML="DUNGEON OFF";
+            dungeonboton.style.textShadow = botOptionOff
+        }else{
+            autodungeonok=true;
+            dungeonboton.innerHTML="DUNGEON ON";
+            dungeonboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autodungeonok', autodungeonok)
+    });
+    selectdungeonmap.addEventListener("change", function(){
+        localStorage.setItem('_selecteddungeonmap', selectdungeonmap.value);
+    })
+    advanced.addEventListener("change", function(){
+        localStorage.setItem('_advanced', advanced.value);
+    })
+    skipboss.addEventListener("change", function(){
+        localStorage.setItem('_skipboss', skipboss.value);
+    })
+    fulldungclear.addEventListener("change", function(){
+        localStorage.setItem('_fulldungclear', fulldungclear.value);
+    })
+    dungeonSlider.addEventListener('click', function(){
+        let selecteddungeonmap=document.querySelector('#dungeonmap');
+        let advanced=document.querySelector('#advanced');
+        let skipboss=document.querySelector('#skipboss');
+        let fulldungclear=document.querySelector('#fulldungclear');
+        if (dungeonSliderOk==true){
+            dungeonSliderOk = false;
+            advanced.style.display="none";
+            selecteddungeonmap.style.display="none";
+            skipboss.style.display="none";
+            fulldungclear.style.display="none";
+            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            dungeonSliderOk = true;
+            advanced.style.display="block";
+            selecteddungeonmap.style.display="block";
+            skipboss.style.display="block";
+            fulldungclear.style.display="block";
+            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_dungeonSliderOk', dungeonSliderOk);
+    })
+
+
+    // ********************************************************************************************** BotOn CIRCUS PROV
     let circusprovinciariumboton=document.createElement('a');//turmaboton
     let selectcircusprovinciariummode=document.createElement('select');//selectturmatarget
     circusprovinciariumboton.classList.add('menuitem');
@@ -250,7 +350,41 @@
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
     selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 1;
 
-    // BOTON ARENA PROVINCIARIUM
+    // CIRCUS LOGIC
+
+    circusprovinciariumboton.addEventListener('click', function(){
+        if (autocircusprovinciariumok==true){
+            autocircusprovinciariumok=false;
+            circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
+            circusprovinciariumboton.style.textShadow = botOptionOff
+        }else{
+            autocircusprovinciariumok=true;
+            circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
+            circusprovinciariumboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autocircusprovinciariumok', autocircusprovinciariumok);
+    })
+    selectcircusprovinciariummode.addEventListener('change', function(){
+        localStorage.setItem('_selectcircusprovinciariummode', selectcircusprovinciariummode.value);
+    })
+    circusSlider.addEventListener('click', function(){
+        let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
+        if (circusSliderOk==true){
+            circusSliderOk = false;
+            selectcircusprovinciariummode.style.display="none";
+            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            circusSliderOk = true;
+            selectcircusprovinciariummode.style.display="block";
+            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_circusSliderOk', circusSliderOk);
+    })
+
+
+
+    // ********************************************************************************************** BotOn ARENA PROV
     let arenaprovinciariumboton=document.createElement('a');//turmaboton
     let selectarenaprovinciariummode=document.createElement('select');//selectturmatarget
     arenaprovinciariumboton.classList.add('menuitem');
@@ -289,7 +423,51 @@
     selectarenaprovinciariummode.id="selectarenaprovinciariummode";
     selectarenaprovinciariummode.value=localStorage.getItem('_selectarenaprovinciariummode') || 1;
 
-    // WORKON
+    // ARENA LOGIC
+
+    arenaprovinciariumboton.addEventListener('click', function(){
+        if (autoarenaprovinciariumok==true){
+            autoarenaprovinciariumok=false;
+            arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
+            arenaprovinciariumboton.style.textShadow = botOptionOff
+        }else{
+            autoarenaprovinciariumok=true;
+            arenaprovinciariumboton.innerHTML="ARENA PROV ON";
+            arenaprovinciariumboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoarenaprovinciariumok', autoarenaprovinciariumok);
+    })
+    selectarenaprovinciariummode.addEventListener('change', function(){
+        localStorage.setItem('_selectarenaprovinciariummode', selectarenaprovinciariummode.value);
+    })
+    arenahp.addEventListener("change",function(){
+        let arenadatalabel=document.querySelector('#arenadatalabel');
+        arenadatalabel.innerHTML="Not attack hp < "+arenahp.value+"%";
+        localStorage.setItem('_arenahp', arenahp.value);
+    });
+    arenaSlider.addEventListener('click', function(){
+        let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
+        let arenadatalabel=document.querySelector('#arenadatalabel');
+        let arenahp=document.querySelector('#arenahp');
+        if (arenaSliderOk==true){
+            arenaSliderOk = false;
+            selectarenaprovinciariummode.style.display="none";
+            arenadatalabel.style.display="none";
+            arenahp.style.display="none";
+            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            arenaSliderOk = true;
+            selectarenaprovinciariummode.style.display="block";
+            arenadatalabel.style.display="block";
+            arenahp.style.display="block";
+            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_arenaSliderOk', arenaSliderOk);
+    })
+
+
+    // ********************************************************************************************** BotOn WORK
     let autoworkboton=document.createElement('a');
     autoworkboton.classList.add('menuitem');
     autoworkboton.style.cursor = "pointer";
@@ -297,10 +475,7 @@
     autoworktype.id="autoworktype";
     autoworktype.innerHTML='<option value="0">Senator -3♦</div></option><option value="1">Jeweller -3♦</div></option><option value="2" selected>Stable boy</option><option value="3">Farmer</option><option value="4">Butcher</option><option value="5">Fisherman</option><option value="6">Baker</option><option value="7">Blacksmith</option><option value="8">Master blacksmith -3♦</option>';
     autoworktype.value= localStorage.getItem('_worktype') || 2
-    //let autoworktime=document.createElement('select');
-    //autoworktime.id="autoworktime";
-    //autoworktime.innerHTML='<option value="1">1 HOUR</option><option value="2">2 HOURS</option><option value="3">3 HOURS</option><option value="4">4 HOURS</option><option value="5">5 HOURS</option><option value="6">6 HOURS</option><option value="7">7 HOURS</option><option value="8" selected>8 HOURS</option>';
-    //autoworkboton.href="#";
+
     let workSlider = createMenuItemSlider('workSlider')
     if (workSliderOk){
         autoworktype.setAttribute("style","display:block;margin-left:10px;");
@@ -315,7 +490,39 @@
         autoworkboton.style.textShadow = botOptionOff;
     }
 
-    // QUESTS ON
+    // WORK LOGIC
+    autoworkboton.addEventListener('click', function(){
+        if (autoworkok==true){
+            autoworkok=false;
+            autoworkboton.innerHTML="WORK OFF";
+            autoworkboton.style.textShadow = botOptionOff
+        }else{
+            autoworkok=true;
+            autoworkboton.innerHTML="WORK ON";
+            autoworkboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoworkok', autoworkok);
+    })
+    autoworktype.addEventListener('change', function(){
+        localStorage.setItem('_worktype', autoworktype.value);
+    })
+    workSlider.addEventListener('click', function(){
+        let autoworktype=document.querySelector('#autoworktype');
+
+        if (workSliderOk==true){
+            workSliderOk = false;
+            autoworktype.style.display="none";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            workSliderOk = true;
+            autoworktype.style.display="block";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_workSliderOk', workSliderOk);
+    })
+
+    // ********************************************************************************************** BotOn QUESTS
     let autoquestboton=document.createElement('a');
     autoquestboton.classList.add('menuitem');
     autoquestboton.style.cursor = "pointer";
@@ -508,566 +715,10 @@
             expeditionqueston.innerHTML = 'EXPEDITION OFF'
             expeditionqueston.style.textShadow = smallButtonBotOptionOff;
         }
-
-        //expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow;white-space: nowrap;");
-        //peditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
-        //expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
     }
-
-    let autoMarketBotOn=document.createElement('a');
-    autoMarketBotOn.classList.add('menuitem');
-    autoMarketBotOn.style.cursor = "pointer";
-
-    let marketType=document.createElement('select');
-    marketType.id="marketType";
-    marketType.innerHTML='<option value="0" selected>Gladiator</option><option value="1">Mercenary</option>';
-    marketType.value=localStorage.getItem('_marketType') || 0;
-    marketType.setAttribute("style","display:block;margin-left:10px;");
-
-    let marketIntervalLabel = document.createElement('span');
-    marketIntervalLabel.innerHTML='Market interval(min)'
-    let marketInterval=document.createElement('input');
-    marketInterval.id="marketInterval";
-    marketInterval.value= localStorage.getItem('_marketInterval') || 7;
-
-    let marketMinValueLabel = document.createElement('span');
-    marketMinValueLabel.innerHTML='Minimum item value'
-    let marketMinValue=document.createElement('input');
-    marketMinValue.id="marketMinValue";
-    marketMinValue.value= localStorage.getItem('_marketMinValue') || 10000;
-
-    let marketSlider = createMenuItemSlider('marketSlider')
-
-    if (marketSliderOk){
-        marketType.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-        marketIntervalLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-        marketMinValueLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketMinValue.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-    }else{
-        marketType.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
-        marketIntervalLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
-        marketMinValueLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketMinValue.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
-    }
-
-    if (autoMarketOk==true){
-        autoMarketBotOn.innerHTML="MARKET ON";
-        autoMarketBotOn.style.textShadow = botOptionOn;
-    }else{
-        autoMarketBotOn.innerHTML="MARKET OFF";
-        autoMarketBotOn.style.textShadow = botOptionOff;
-    }
-
-
-
-    autoMarketBotOn.addEventListener('click', function(){ //main quests button
-        if (autoMarketOk==true){
-            autoMarketOk=false;
-            autoMarketBotOn.innerHTML="MARKET OFF";
-            autoMarketBotOn.style.textShadow = botOptionOff;
-        }else{
-            autoMarketOk=true;
-            autoMarketBotOn.innerHTML="MARKET ON";
-            autoMarketBotOn.style.textShadow = botOptionOn;
-        }
-        localStorage.setItem('_autoMarketOk', autoMarketOk);
-    })
-
-    marketMinValue.addEventListener('change', function(){
-        localStorage.setItem('_marketMinValue', marketMinValue.value);
-    })
-
-    marketInterval.addEventListener('change', function(){
-        localStorage.setItem('_marketInterval', marketInterval.value);
-    })
-
-    marketType.addEventListener('change', function(){
-        localStorage.setItem('_marketType', marketType.value);
-    })
-
-    marketSlider.addEventListener('click', function(){
-        if (marketSliderOk==true){
-            marketSliderOk = false;
-            marketType.style.display = 'none'
-            marketMinValueLabel.style.display = 'none'
-            marketMinValue.style.display = 'none'
-            marketIntervalLabel.style.display = 'none'
-            marketInterval.style.display = 'none'
-
-
-            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            marketSliderOk = true;
-            marketType.style.display = 'block'
-            marketMinValueLabel.style.display = 'block'
-            marketMinValue.style.display = 'block'
-            marketIntervalLabel.style.display = 'block'
-            marketInterval.style.display = 'block'
-
-
-            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-        }
-        localStorage.setItem('_marketSliderOk', marketSliderOk);
-    })
-
-
-
-    // AUTOHEAL
-
-    let autoHealBotOn=document.createElement('a');
-    autoHealBotOn.classList.add('menuitem');
-    autoHealBotOn.style.cursor = "pointer";
-
-    let autoHealBelowLabel=document.createElement('span');
-    autoHealBelowLabel.innerHTML="Heal below < " + (localStorage.getItem('_autoHealBelowHpPerc') || 50) +"%";
-    autoHealBelowLabel.id="autoHealBelowLabel";
-    let autoHealBelowData=document.createElement('datalist');
-    autoHealBelowData.id="autoHealBelowData";
-    autoHealBelowData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
-    let autoHealBelowHpPerc=document.createElement('input');
-    autoHealBelowHpPerc.setAttribute("type","range");
-    autoHealBelowHpPerc.value=localStorage.getItem('_autoHealBelowHpPerc') || 50;
-    autoHealBelowHpPerc.setAttribute("list","autoHealBelowData");
-    autoHealBelowHpPerc.id="autoHealBelowHpPerc";
-
-    let autoHealFoodValueLeniencyLabel=document.createElement('span');
-    autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < " + (localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30) +"%";
-    autoHealFoodValueLeniencyLabel.id="autoHealFoodValueLeniencyLabel";
-    let autoHealFoodValueLeniencyData=document.createElement('datalist');
-    autoHealFoodValueLeniencyData.id="autoHealFoodValueLeniencyData";
-    autoHealFoodValueLeniencyData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
-    let autoHealFoodValueLeniencyPerc=document.createElement('input');
-    autoHealFoodValueLeniencyPerc.setAttribute("type","range");
-    autoHealFoodValueLeniencyPerc.value=localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30;
-    autoHealFoodValueLeniencyPerc.setAttribute("list","autoHealFoodValueLeniencyData");
-    autoHealFoodValueLeniencyPerc.id="autoHealFoodValueLeniencyPerc";
-
-    let autoHealFoodTabLabel=document.createElement('span');
-    autoHealFoodTabLabel.innerHTML="Food tab";
-    autoHealFoodTabLabel.id="autoHealFoodTabLabel";
-    let autoHealFoodTab=document.createElement('select');
-    autoHealFoodTab.innerHTML='<option value="0" selected>I</option><option value="1">II</option><option value="2">III</option><option value="3" selected>IV</option><option value="4" selected>V</option><option value="5" selected>VI</option><option value="6" selected>VII</option><option value="7" selected>VIII</option>';
-    autoHealFoodTab.id="autoHealFoodTab";
-    autoHealFoodTab.value=localStorage.getItem('_autoHealFoodTab') || 0;
-
-    let autoHealTimeoutLabel = document.createElement('span');
-    autoHealTimeoutLabel.innerHTML='No food timeout(min)'
-    let autoHealTimeout=document.createElement('input');
-    autoHealTimeout.id="autoHealTimeout";
-    autoHealTimeout.value= localStorage.getItem('_autoHealTimeout') || 10;
-
-    let autoHealSlider = createMenuItemSlider('autoHealSlider')
-
-    if (autoHealSliderOk){
-        autoHealBelowLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealBelowHpPerc.setAttribute("style","display:block;margin-left:10px;");
-        autoHealFoodValueLeniencyLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealFoodValueLeniencyPerc.setAttribute("style","display:block;margin-left:10px;");
-        autoHealFoodTabLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealFoodTab.setAttribute("style","display:block;margin-left:10px;");
-        autoHealTimeoutLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealTimeout.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
-    }else{
-        autoHealBelowLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealBelowHpPerc.setAttribute("style","display:none;margin-left:10px;");
-        autoHealFoodValueLeniencyLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealFoodValueLeniencyPerc.setAttribute("style","display:none;margin-left:10px;");
-        autoHealFoodTabLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealFoodTab.setAttribute("style","display:none;margin-left:10px;");
-        autoHealTimeoutLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealTimeout.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
-    }
-
-    if (autoHealOk==true){
-        autoHealBotOn.innerHTML="AUTOHEAL ON";
-        autoHealBotOn.style.textShadow = botOptionOn;
-    }else{
-        autoHealBotOn.innerHTML="AUTOHEAL OFF";
-        autoHealBotOn.style.textShadow = botOptionOff;
-    }
-
-    autoHealBotOn.addEventListener('click', function(){ //main quests button
-        if (autoHealOk==true){
-            autoHealOk=false;
-            autoHealBotOn.innerHTML="AUTOHEAL OFF";
-            autoHealBotOn.style.textShadow = botOptionOff;
-        }else{
-            autoHealOk=true;
-            autoHealBotOn.innerHTML="AUTOHEAL ON";
-            autoHealBotOn.style.textShadow = botOptionOn;
-        }
-        console.log('autoHealOk', autoHealOk)
-        localStorage.setItem('_autoHealOk', autoHealOk);
-    })
-    autoHealSlider.addEventListener('click', function(){
-        if (autoHealSliderOk==true){
-            autoHealSliderOk = false;
-            autoHealBelowLabel.style.display = 'none'
-            autoHealBelowHpPerc.style.display = 'none'
-            autoHealFoodValueLeniencyLabel.style.display = 'none'
-            autoHealFoodValueLeniencyPerc.style.display = 'none'
-            autoHealTimeoutLabel.style.display = 'none'
-            autoHealTimeout.style.display = 'none'
-
-            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            autoHealSliderOk = true;
-            autoHealBelowLabel.style.display = 'block'
-            autoHealBelowHpPerc.style.display = 'block'
-            autoHealFoodValueLeniencyLabel.style.display = 'block'
-            autoHealFoodValueLeniencyPerc.style.display = 'block'
-            autoHealTimeoutLabel.style.display = 'block'
-            autoHealTimeout.style.display = 'block'
-
-            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-        }
-        console.log('autoHealSlider', autoHealSliderOk)
-        localStorage.setItem('_autoHealSlider', autoHealSliderOk);
-    })
-    autoHealBelowHpPerc.addEventListener("change",function(){
-        autoHealBelowLabel.innerHTML="Heal below < "+autoHealBelowHpPerc.value+"%";
-        localStorage.setItem('_autoHealBelowHpPerc', autoHealBelowHpPerc.value);
-        console.log('autoHealBelowHpPerc.value',autoHealBelowHpPerc.value)
-    });
-    autoHealFoodValueLeniencyPerc.addEventListener("change",function(){
-        autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < "+autoHealFoodValueLeniencyPerc.value+"%";
-        localStorage.setItem('_autoHealFoodValueLeniencyPerc', autoHealFoodValueLeniencyPerc.value);
-        console.log('autoHealFoodValueLeniencyPerc.value',autoHealFoodValueLeniencyPerc.value)
-    });
-    autoHealFoodTab.addEventListener('change', function(){
-        localStorage.setItem('_autoHealFoodTab', autoHealFoodTab.value);
-        console.log('autoHealFoodTab.value', autoHealFoodTab.value)
-    })
-    autoHealTimeout.addEventListener('change', function(){
-        localStorage.setItem('_autoHealTimeout', autoHealTimeout.value)
-        console.log('autoHealTimeout.value', autoHealTimeout.value)
-    })
-
-    // AUTOHEAL END
-
-
-
-    //BOTON EVENTON
-    let eventboton=document.createElement('a');
-    let selecteventtarget=document.createElement('select');
-    eventboton.classList.add('menuitem');
-    eventboton.style.cursor = "pointer";
-    //eventboton.href="#";
-    let eventhp=document.createElement('input');
-    eventhp.setAttribute("type","range");
-    eventhp.setAttribute("list","eventdatalist");
-    eventhp.id="eventhp";
-    let eventdatalist=document.createElement('datalist');
-    eventdatalist.id="eventdatalist";
-    eventdatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
-    let eventdatalabel=document.createElement('span');
-    eventdatalabel.innerHTML="Not attack hp < 50%";
-    eventdatalabel.id="eventdatalabel";
-    if (autoeventok){
-        eventboton.innerHTML="AUTO EVENT ON";
-        selecteventtarget.setAttribute("style","display:none;margin-left:10px;");
-        eventhp.setAttribute("style","display:none;margin-left:10px;");
-        eventdatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
-    }else{
-        eventboton.innerHTML="AUTO EVENT OFF";
-        selecteventtarget.setAttribute("style","display:block;margin-left:10px;");
-        eventhp.setAttribute("style","display:block;margin-left:10px;");
-        eventdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
-    }
-    selecteventtarget.innerHTML = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>';
-    selecteventtarget.id="eventtarget";
-
-    let menubotboton=document.createElement('a');
-    menubotboton.classList.add('menuitem');
-    menubotboton.classList.add('active');
-    menubotboton.style.cursor = "pointer";
-    //menubotboton.classList.add('glow');
-    //menubotboton.classList.add('eyecatcher');
-    if (boton){
-        menubotboton.innerHTML="BOT ON";
-        menubotboton.style.textShadow = botOptionOn;
-    }else{
-        menubotboton.innerHTML="BOT OFF";
-        menubotboton.style.textShadow = botOptionOff;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var element = document.getElementById('dungeonSlider');
-
-        if (element) {
-            var currentTop = parseFloat(element.style.top);
-            var newTop = currentTop - 10;
-            element.style.top = newTop + 'px';
-        }
-        console.log('loaded')
-    });
-
-
-
-    menubotboton.id="botboton";
-    //menubotboton.href="#";
-    //APPENDCHILLD
-    menubot.appendChild(expeditionSlider) //slider
-    menubot.appendChild(expeditionboton);
-    menubot.appendChild(selectexpeditionmap);
-    menubot.appendChild(selectexpeditiontarget);
-    menubot.appendChild(expdatalabel);
-    menubot.appendChild(expeditionhp);
-    menubot.appendChild(expdatalist);
-    menubot.appendChild(dungeonSlider); //slider
-    menubot.appendChild(dungeonboton);
-    menubot.appendChild(selectdungeonmap);
-    menubot.appendChild(advanced);
-    menubot.appendChild(skipboss);
-    menubot.appendChild(fulldungclear);
-    menubot.appendChild(circusSlider); //slider
-    menubot.appendChild(circusprovinciariumboton)
-    menubot.appendChild(selectcircusprovinciariummode)
-    menubot.appendChild(arenaSlider); //slider
-    menubot.appendChild(arenaprovinciariumboton)
-    menubot.appendChild(selectarenaprovinciariummode)
-    menubot.appendChild(arenadatalabel);
-    menubot.appendChild(arenahp);
-    menubot.appendChild(arenadatalist);
-    menubot.appendChild(questSlider); //slider
-    menubot.appendChild(autoquestboton);
-
-    menubot.appendChild(arenaqueston)
-    menubot.appendChild(arenaquesttimedon)
-    menubot.appendChild(arenaquestsuccessionon)
-    menubot.appendChild(circusqueston)
-    menubot.appendChild(circusquesttimedon)
-    menubot.appendChild(circusquestsuccessionon)
-    menubot.appendChild(combatqueston)
-    menubot.appendChild(combatquesttimedon)
-    menubot.appendChild(combatquestsuccessionon)
-    menubot.appendChild(expeditionqueston)
-    menubot.appendChild(expeditionquesttimedon)
-    menubot.appendChild(expeditionquestsuccessionon)
-
-    menubot.appendChild(expeditionquestmaplabel);
-    menubot.appendChild(expeditionquestmap);
-    menubot.appendChild(expeditionquestenemylabel);
-    menubot.appendChild(expeditionquestenemy);
-
-    menubot.appendChild(marketSlider);
-    menubot.appendChild(autoMarketBotOn);
-    menubot.appendChild(marketType);
-    menubot.appendChild(marketMinValueLabel);
-    menubot.appendChild(marketMinValue);
-    menubot.appendChild(marketIntervalLabel);
-    menubot.appendChild(marketInterval);
-
-    menubot.appendChild(autoHealSlider);
-    menubot.appendChild(autoHealBotOn);
-    menubot.appendChild(autoHealBelowLabel);
-    menubot.appendChild(autoHealBelowHpPerc);
-    menubot.appendChild(autoHealBelowData);
-    menubot.appendChild(autoHealFoodValueLeniencyLabel);
-    menubot.appendChild(autoHealFoodValueLeniencyPerc);
-    menubot.appendChild(autoHealFoodValueLeniencyData);
-    menubot.appendChild(autoHealFoodTabLabel);
-    menubot.appendChild(autoHealFoodTab);
-    menubot.appendChild(autoHealTimeoutLabel);
-    menubot.appendChild(autoHealTimeout);
-
-    menubot.appendChild(workSlider); //slider
-    menubot.appendChild(autoworkboton);
-    menubot.appendChild(autoworktype);
-    //menubot.appendChild(autoworktime);
-    if (existevent()){
-        menubot.appendChild(eventboton);
-        menubot.appendChild(selecteventtarget);
-        menubot.appendChild(eventdatalabel);
-        menubot.appendChild(eventhp);
-        menubot.appendChild(eventdatalist);
-    }
-    menubot.appendChild(menubotfooter);
-    menujuego.appendChild(menubotboton);
-    menujuego.appendChild(menubot);
-    menubotboton=document.querySelector('#botboton');
-    //--- autoworktype.addEventListener("change",function(){
-    //---     createworkselect(autoworktype.value);
-    //--- });
-
-    //EVENTS
-    //   EXPEDITION LOGIC
-
-    expeditionboton.addEventListener("click",function(){
-        if (autoexpeditionok==true){
-            autoexpeditionok=false;
-            expeditionboton.innerHTML="EXPEDITION OFF";
-            expeditionboton.style.textShadow = botOptionOff
-        }else{
-            autoexpeditionok=true;
-            expeditionboton.innerHTML="EXPEDITION ON";
-            expeditionboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autoexpeditionok', autoexpeditionok)
-    });
-    expeditionhp.addEventListener("change",function(){
-        let expdatalabel=document.querySelector('#expdatalabel');
-        expdatalabel.innerHTML="Not attack hp < "+expeditionhp.value+"%";
-        localStorage.setItem('_expeditionhp', expeditionhp.value);
-    });
-    selectexpeditionmap.addEventListener("change", function(){
-        localStorage.setItem('_selectedexpeditionmap', selectexpeditionmap.value);
-    })
-    selectexpeditiontarget.addEventListener("change", function(){
-        localStorage.setItem('_selectedexpeditiontarget', selectexpeditiontarget.value);
-    })
-    expeditionSlider.addEventListener('click', function(){
-        let selectedexpeditionmap=document.querySelector('#expeditionmap');
-        let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
-        let expdatalabel=document.querySelector('#expdatalabel');
-        let expeditionhp=document.querySelector('#expeditionhp');
-        if (expeditionSliderOk==true){
-            expeditionSliderOk = false;
-            selectedexpeditionmap.style.display="none";
-            selectedexpeditiontarget.style.display="none";
-            expdatalabel.style.display="none";
-            expeditionhp.style.display="none";
-            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            expeditionSliderOk = true;
-            selectedexpeditionmap.style.display="block";
-            selectedexpeditiontarget.style.display="block";
-            expdatalabel.style.display="block";
-            expeditionhp.style.display="block";
-            expeditionSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-
-        }
-        localStorage.setItem('_expeditionSliderOk', expeditionSliderOk);
-    })
-
-    //   DUNGEON LOGIC
-
-    dungeonboton.addEventListener("click",function(){
-        if (autodungeonok==true){
-            autodungeonok=false;
-            dungeonboton.innerHTML="DUNGEON OFF";
-            dungeonboton.style.textShadow = botOptionOff
-        }else{
-            autodungeonok=true;
-            dungeonboton.innerHTML="DUNGEON ON";
-            dungeonboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autodungeonok', autodungeonok)
-    });
-    selectdungeonmap.addEventListener("change", function(){
-        localStorage.setItem('_selecteddungeonmap', selectdungeonmap.value);
-    })
-    advanced.addEventListener("change", function(){
-        localStorage.setItem('_advanced', advanced.value);
-    })
-    skipboss.addEventListener("change", function(){
-        localStorage.setItem('_skipboss', skipboss.value);
-    })
-    fulldungclear.addEventListener("change", function(){
-        localStorage.setItem('_fulldungclear', fulldungclear.value);
-    })
-    dungeonSlider.addEventListener('click', function(){
-        let selecteddungeonmap=document.querySelector('#dungeonmap');
-        let advanced=document.querySelector('#advanced');
-        let skipboss=document.querySelector('#skipboss');
-        let fulldungclear=document.querySelector('#fulldungclear');
-        if (dungeonSliderOk==true){
-            dungeonSliderOk = false;
-            advanced.style.display="none";
-            selecteddungeonmap.style.display="none";
-            skipboss.style.display="none";
-            fulldungclear.style.display="none";
-            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            dungeonSliderOk = true;
-            advanced.style.display="block";
-            selecteddungeonmap.style.display="block";
-            skipboss.style.display="block";
-            fulldungclear.style.display="block";
-            dungeonSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-
-        }
-        localStorage.setItem('_dungeonSliderOk', dungeonSliderOk);
-    })
-
-
-    // CIRCUS LOGIC
-    circusprovinciariumboton.addEventListener('click', function(){
-        if (autocircusprovinciariumok==true){
-            autocircusprovinciariumok=false;
-            circusprovinciariumboton.innerHTML="CIRCUS PROV OFF";
-            circusprovinciariumboton.style.textShadow = botOptionOff
-        }else{
-            autocircusprovinciariumok=true;
-            circusprovinciariumboton.innerHTML="CIRCUS PROV ON";
-            circusprovinciariumboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autocircusprovinciariumok', autocircusprovinciariumok);
-    })
-    selectcircusprovinciariummode.addEventListener('change', function(){
-        localStorage.setItem('_selectcircusprovinciariummode', selectcircusprovinciariummode.value);
-    })
-    circusSlider.addEventListener('click', function(){
-        let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
-        if (circusSliderOk==true){
-            circusSliderOk = false;
-            selectcircusprovinciariummode.style.display="none";
-            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            circusSliderOk = true;
-            selectcircusprovinciariummode.style.display="block";
-            circusSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-
-        }
-        localStorage.setItem('_circusSliderOk', circusSliderOk);
-    })
-
-    // ARENA LOGIC
-    arenaprovinciariumboton.addEventListener('click', function(){
-        if (autoarenaprovinciariumok==true){
-            autoarenaprovinciariumok=false;
-            arenaprovinciariumboton.innerHTML="ARENA PROV OFF";
-            arenaprovinciariumboton.style.textShadow = botOptionOff
-        }else{
-            autoarenaprovinciariumok=true;
-            arenaprovinciariumboton.innerHTML="ARENA PROV ON";
-            arenaprovinciariumboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autoarenaprovinciariumok', autoarenaprovinciariumok);
-    })
-    selectarenaprovinciariummode.addEventListener('change', function(){
-        localStorage.setItem('_selectarenaprovinciariummode', selectarenaprovinciariummode.value);
-    })
-    arenahp.addEventListener("change",function(){
-        let arenadatalabel=document.querySelector('#arenadatalabel');
-        arenadatalabel.innerHTML="Not attack hp < "+arenahp.value+"%";
-        localStorage.setItem('_arenahp', arenahp.value);
-    });
-    arenaSlider.addEventListener('click', function(){
-        let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
-        let arenadatalabel=document.querySelector('#arenadatalabel');
-        let arenahp=document.querySelector('#arenahp');
-        if (arenaSliderOk==true){
-            arenaSliderOk = false;
-            selectarenaprovinciariummode.style.display="none";
-            arenadatalabel.style.display="none";
-            arenahp.style.display="none";
-            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            arenaSliderOk = true;
-            selectarenaprovinciariummode.style.display="block";
-            arenadatalabel.style.display="block";
-            arenahp.style.display="block";
-            arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-
-        }
-        localStorage.setItem('_arenaSliderOk', arenaSliderOk);
-    })
 
     //QUEST LOGIC
+
     autoquestboton.addEventListener('click', function(){ //main quests button
         let expeditionquestmap=document.querySelector('#expeditionquestmap');
         let expeditionquestenemy=document.querySelector('#expeditionquestenemy');
@@ -1233,89 +884,345 @@
     })
 
 
-    // WORK LOGIC
-    autoworkboton.addEventListener('click', function(){
-        if (autoworkok==true){
-            autoworkok=false;
-            autoworkboton.innerHTML="WORK OFF";
-            autoworkboton.style.textShadow = botOptionOff
-        }else{
-            autoworkok=true;
-            autoworkboton.innerHTML="WORK ON";
-            autoworkboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autoworkok', autoworkok);
-    })
-    autoworktype.addEventListener('change', function(){
-        localStorage.setItem('_worktype', autoworktype.value);
-    })
-    workSlider.addEventListener('click', function(){
-        let autoworktype=document.querySelector('#autoworktype');
 
-        if (workSliderOk==true){
-            workSliderOk = false;
-            autoworktype.style.display="none";
-            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            workSliderOk = true;
-            autoworktype.style.display="block";
-            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+    // ********************************************************************************************** BotOn MARKET
 
-        }
-        localStorage.setItem('_workSliderOk', workSliderOk);
-    })
+    let autoMarketBotOn=document.createElement('a');
+    autoMarketBotOn.classList.add('menuitem');
+    autoMarketBotOn.style.cursor = "pointer";
 
+    let marketType=document.createElement('select');
+    marketType.id="marketType";
+    marketType.innerHTML='<option value="0" selected>Gladiator</option><option value="1">Mercenary</option>';
+    marketType.value=localStorage.getItem('_marketType') || 0;
+    marketType.setAttribute("style","display:block;margin-left:10px;");
 
+    let marketIntervalLabel = document.createElement('span');
+    marketIntervalLabel.innerHTML='Market interval(min)'
+    let marketInterval=document.createElement('input');
+    marketInterval.id="marketInterval";
+    marketInterval.value= localStorage.getItem('_marketInterval') || 7;
 
+    let marketMinValueLabel = document.createElement('span');
+    marketMinValueLabel.innerHTML='Minimum item value'
+    let marketMinValue=document.createElement('input');
+    marketMinValue.id="marketMinValue";
+    marketMinValue.value= localStorage.getItem('_marketMinValue') || 10000;
 
+    let marketSlider = createMenuItemSlider('marketSlider')
 
-
-    // EVENT IDK LEAVE FOR NOW
-    if (existevent()){
-        eventhp.addEventListener("change",function(){
-            let eventdatalabel=document.querySelector('#eventdatalabel');
-            eventdatalabel.innerHTML="Not attack hp < "+eventhp.value+"%";
-        });
-        eventboton.addEventListener("click",function(){
-            let selectedeventtarget=document.querySelector('#eventtarget');
-            if (autoeventok){
-                autoeventok=false;
-                eventboton.innerHTML="AUTO EVENT OFF";
-                eventboton.style.textShadow = botOptionOff
-                selectedeventtarget.style.display="block";
-                eventdatalabel.style.display="block";
-                eventhp.style.display="block";
-            }else{
-                autoeventok=true;
-                eventboton.innerHTML="AUTO EVENT ON";
-                eventboton.style.textShadow = botOptionOn
-                //lectedeventtarget.style.display="none";
-                //entdatalabel.style.display="none";
-                //enthp.style.display="none";
-                selectedeventtarget.style.display="block";
-                eventdatalabel.style.display="block";
-                eventhp.style.display="block";
-            }
-            //setCookie("autoevent", autoeventok, 10080);
-        });
+    if (marketSliderOk){
+        marketType.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketIntervalLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketMinValueLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketMinValue.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+    }else{
+        marketType.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        marketIntervalLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        marketMinValueLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        marketMinValue.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
     }
-    menubotboton.addEventListener("click",function(){
-        let menubot = document.querySelector('#bot');
-        if (boton==true){
-            menubot.style.display="block";
-            menubotboton.innerHTML="BOT OFF";
-            menubotboton.style.textShadow = botOptionOff;
-            boton=false;
+
+    if (autoMarketOk==true){
+        autoMarketBotOn.innerHTML="MARKET ON";
+        autoMarketBotOn.style.textShadow = botOptionOn;
+    }else{
+        autoMarketBotOn.innerHTML="MARKET OFF";
+        autoMarketBotOn.style.textShadow = botOptionOff;
+    }
+
+
+
+    autoMarketBotOn.addEventListener('click', function(){ //main quests button
+        if (autoMarketOk==true){
+            autoMarketOk=false;
+            autoMarketBotOn.innerHTML="MARKET OFF";
+            autoMarketBotOn.style.textShadow = botOptionOff;
         }else{
-            //menubot.style.display="none";
-            menubot.style.display="block";
-            menubotboton.innerHTML="BOT ON";
-            menubotboton.style.textShadow = botOptionOn;
-            boton=true;
+            autoMarketOk=true;
+            autoMarketBotOn.innerHTML="MARKET ON";
+            autoMarketBotOn.style.textShadow = botOptionOn;
         }
-        console.log('boton: ', boton)
-        localStorage.setItem('_boton', boton)
+        localStorage.setItem('_autoMarketOk', autoMarketOk);
+    })
+
+    marketMinValue.addEventListener('change', function(){
+        localStorage.setItem('_marketMinValue', marketMinValue.value);
+    })
+
+    marketInterval.addEventListener('change', function(){
+        localStorage.setItem('_marketInterval', marketInterval.value);
+    })
+
+    marketType.addEventListener('change', function(){
+        localStorage.setItem('_marketType', marketType.value);
+    })
+
+    marketSlider.addEventListener('click', function(){
+        if (marketSliderOk==true){
+            marketSliderOk = false;
+            marketType.style.display = 'none'
+            marketMinValueLabel.style.display = 'none'
+            marketMinValue.style.display = 'none'
+            marketIntervalLabel.style.display = 'none'
+            marketInterval.style.display = 'none'
+
+
+            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            marketSliderOk = true;
+            marketType.style.display = 'block'
+            marketMinValueLabel.style.display = 'block'
+            marketMinValue.style.display = 'block'
+            marketIntervalLabel.style.display = 'block'
+            marketInterval.style.display = 'block'
+
+
+            marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        }
+        localStorage.setItem('_marketSliderOk', marketSliderOk);
+    })
+
+
+
+    // ********************************************************************************************** BotOn AUTOHEAL
+
+    let autoHealBotOn=document.createElement('a');
+    autoHealBotOn.classList.add('menuitem');
+    autoHealBotOn.style.cursor = "pointer";
+
+    let autoHealBelowLabel=document.createElement('span');
+    autoHealBelowLabel.innerHTML="Heal below < " + (localStorage.getItem('_autoHealBelowHpPerc') || 50) +"%";
+    autoHealBelowLabel.id="autoHealBelowLabel";
+    let autoHealBelowData=document.createElement('datalist');
+    autoHealBelowData.id="autoHealBelowData";
+    autoHealBelowData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let autoHealBelowHpPerc=document.createElement('input');
+    autoHealBelowHpPerc.setAttribute("type","range");
+    autoHealBelowHpPerc.value=localStorage.getItem('_autoHealBelowHpPerc') || 50;
+    autoHealBelowHpPerc.setAttribute("list","autoHealBelowData");
+    autoHealBelowHpPerc.id="autoHealBelowHpPerc";
+
+    let autoHealFoodValueLeniencyLabel=document.createElement('span');
+    autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < " + (localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30) +"%";
+    autoHealFoodValueLeniencyLabel.id="autoHealFoodValueLeniencyLabel";
+    let autoHealFoodValueLeniencyData=document.createElement('datalist');
+    autoHealFoodValueLeniencyData.id="autoHealFoodValueLeniencyData";
+    autoHealFoodValueLeniencyData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let autoHealFoodValueLeniencyPerc=document.createElement('input');
+    autoHealFoodValueLeniencyPerc.setAttribute("type","range");
+    autoHealFoodValueLeniencyPerc.value=localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30;
+    autoHealFoodValueLeniencyPerc.setAttribute("list","autoHealFoodValueLeniencyData");
+    autoHealFoodValueLeniencyPerc.id="autoHealFoodValueLeniencyPerc";
+
+    let autoHealFoodTabLabel=document.createElement('span');
+    autoHealFoodTabLabel.innerHTML="Food tab";
+    autoHealFoodTabLabel.id="autoHealFoodTabLabel";
+    let autoHealFoodTab=document.createElement('select');
+    autoHealFoodTab.innerHTML='<option value="0" selected>I</option><option value="1">II</option><option value="2">III</option><option value="3" selected>IV</option><option value="4" selected>V</option><option value="5" selected>VI</option><option value="6" selected>VII</option><option value="7" selected>VIII</option>';
+    autoHealFoodTab.id="autoHealFoodTab";
+    autoHealFoodTab.value=localStorage.getItem('_autoHealFoodTab') || 0;
+
+    let autoHealTimeoutLabel = document.createElement('span');
+    autoHealTimeoutLabel.innerHTML='No food timeout(min)'
+    let autoHealTimeout=document.createElement('input');
+    autoHealTimeout.id="autoHealTimeout";
+    autoHealTimeout.value= localStorage.getItem('_autoHealTimeout') || 10;
+
+    let autoHealSlider = createMenuItemSlider('autoHealSlider')
+
+    if (autoHealSliderOk){
+        autoHealBelowLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealBelowHpPerc.setAttribute("style","display:block;margin-left:10px;");
+        autoHealFoodValueLeniencyLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodValueLeniencyPerc.setAttribute("style","display:block;margin-left:10px;");
+        autoHealFoodTabLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodTab.setAttribute("style","display:block;margin-left:10px;");
+        autoHealTimeoutLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealTimeout.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+    }else{
+        autoHealBelowLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealBelowHpPerc.setAttribute("style","display:none;margin-left:10px;");
+        autoHealFoodValueLeniencyLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodValueLeniencyPerc.setAttribute("style","display:none;margin-left:10px;");
+        autoHealFoodTabLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodTab.setAttribute("style","display:none;margin-left:10px;");
+        autoHealTimeoutLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealTimeout.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+    }
+
+    if (autoHealOk==true){
+        autoHealBotOn.innerHTML="AUTOHEAL ON";
+        autoHealBotOn.style.textShadow = botOptionOn;
+    }else{
+        autoHealBotOn.innerHTML="AUTOHEAL OFF";
+        autoHealBotOn.style.textShadow = botOptionOff;
+    }
+
+    autoHealBotOn.addEventListener('click', function(){ //main quests button
+        if (autoHealOk==true){
+            autoHealOk=false;
+            autoHealBotOn.innerHTML="AUTOHEAL OFF";
+            autoHealBotOn.style.textShadow = botOptionOff;
+        }else{
+            autoHealOk=true;
+            autoHealBotOn.innerHTML="AUTOHEAL ON";
+            autoHealBotOn.style.textShadow = botOptionOn;
+        }
+        console.log('autoHealOk', autoHealOk)
+        localStorage.setItem('_autoHealOk', autoHealOk);
+    })
+    autoHealSlider.addEventListener('click', function(){
+        if (autoHealSliderOk==true){
+            autoHealSliderOk = false;
+            autoHealBelowLabel.style.display = 'none'
+            autoHealBelowHpPerc.style.display = 'none'
+            autoHealFoodValueLeniencyLabel.style.display = 'none'
+            autoHealFoodValueLeniencyPerc.style.display = 'none'
+            autoHealTimeoutLabel.style.display = 'none'
+            autoHealTimeout.style.display = 'none'
+
+            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            autoHealSliderOk = true;
+            autoHealBelowLabel.style.display = 'block'
+            autoHealBelowHpPerc.style.display = 'block'
+            autoHealFoodValueLeniencyLabel.style.display = 'block'
+            autoHealFoodValueLeniencyPerc.style.display = 'block'
+            autoHealTimeoutLabel.style.display = 'block'
+            autoHealTimeout.style.display = 'block'
+
+            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        }
+        console.log('autoHealSlider', autoHealSliderOk)
+        localStorage.setItem('_autoHealSlider', autoHealSliderOk);
+    })
+    autoHealBelowHpPerc.addEventListener("change",function(){
+        autoHealBelowLabel.innerHTML="Heal below < "+autoHealBelowHpPerc.value+"%";
+        localStorage.setItem('_autoHealBelowHpPerc', autoHealBelowHpPerc.value);
+        console.log('autoHealBelowHpPerc.value',autoHealBelowHpPerc.value)
     });
+    autoHealFoodValueLeniencyPerc.addEventListener("change",function(){
+        autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < "+autoHealFoodValueLeniencyPerc.value+"%";
+        localStorage.setItem('_autoHealFoodValueLeniencyPerc', autoHealFoodValueLeniencyPerc.value);
+        console.log('autoHealFoodValueLeniencyPerc.value',autoHealFoodValueLeniencyPerc.value)
+    });
+    autoHealFoodTab.addEventListener('change', function(){
+        localStorage.setItem('_autoHealFoodTab', autoHealFoodTab.value);
+        console.log('autoHealFoodTab.value', autoHealFoodTab.value)
+    })
+    autoHealTimeout.addEventListener('change', function(){
+        localStorage.setItem('_autoHealTimeout', autoHealTimeout.value)
+        console.log('autoHealTimeout.value', autoHealTimeout.value)
+    })
+
+    // *******************************************************************************************************************************
+
+
+
+    let menubotboton=document.createElement('a');
+    menubotboton.classList.add('menuitem');
+    menubotboton.classList.add('active');
+    menubotboton.style.cursor = "pointer";
+
+    if (boton){
+        menubotboton.innerHTML="BOT ON";
+        menubotboton.style.textShadow = botOptionOn;
+    }else{
+        menubotboton.innerHTML="BOT OFF";
+        menubotboton.style.textShadow = botOptionOff;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var element = document.getElementById('dungeonSlider');
+
+        if (element) {
+            var currentTop = parseFloat(element.style.top);
+            var newTop = currentTop - 10;
+            element.style.top = newTop + 'px';
+        }
+        console.log('loaded')
+    });
+
+
+
+    menubotboton.id="botboton";
+    //menubotboton.href="#";
+    //APPENDCHILLD
+    menubot.appendChild(expeditionSlider) //slider
+    menubot.appendChild(expeditionboton);
+    menubot.appendChild(selectexpeditionmap);
+    menubot.appendChild(selectexpeditiontarget);
+    menubot.appendChild(expdatalabel);
+    menubot.appendChild(expeditionhp);
+    menubot.appendChild(expdatalist);
+    menubot.appendChild(dungeonSlider); //slider
+    menubot.appendChild(dungeonboton);
+    menubot.appendChild(selectdungeonmap);
+    menubot.appendChild(advanced);
+    menubot.appendChild(skipboss);
+    menubot.appendChild(fulldungclear);
+    menubot.appendChild(circusSlider); //slider
+    menubot.appendChild(circusprovinciariumboton)
+    menubot.appendChild(selectcircusprovinciariummode)
+    menubot.appendChild(arenaSlider); //slider
+    menubot.appendChild(arenaprovinciariumboton)
+    menubot.appendChild(selectarenaprovinciariummode)
+    menubot.appendChild(arenadatalabel);
+    menubot.appendChild(arenahp);
+    menubot.appendChild(arenadatalist);
+    menubot.appendChild(questSlider); //slider
+    menubot.appendChild(autoquestboton);
+
+    menubot.appendChild(arenaqueston)
+    menubot.appendChild(arenaquesttimedon)
+    menubot.appendChild(arenaquestsuccessionon)
+    menubot.appendChild(circusqueston)
+    menubot.appendChild(circusquesttimedon)
+    menubot.appendChild(circusquestsuccessionon)
+    menubot.appendChild(combatqueston)
+    menubot.appendChild(combatquesttimedon)
+    menubot.appendChild(combatquestsuccessionon)
+    menubot.appendChild(expeditionqueston)
+    menubot.appendChild(expeditionquesttimedon)
+    menubot.appendChild(expeditionquestsuccessionon)
+
+    menubot.appendChild(expeditionquestmaplabel);
+    menubot.appendChild(expeditionquestmap);
+    menubot.appendChild(expeditionquestenemylabel);
+    menubot.appendChild(expeditionquestenemy);
+
+    menubot.appendChild(marketSlider);
+    menubot.appendChild(autoMarketBotOn);
+    menubot.appendChild(marketType);
+    menubot.appendChild(marketMinValueLabel);
+    menubot.appendChild(marketMinValue);
+    menubot.appendChild(marketIntervalLabel);
+    menubot.appendChild(marketInterval);
+
+    menubot.appendChild(autoHealSlider);
+    menubot.appendChild(autoHealBotOn);
+    menubot.appendChild(autoHealBelowLabel);
+    menubot.appendChild(autoHealBelowHpPerc);
+    menubot.appendChild(autoHealBelowData);
+    menubot.appendChild(autoHealFoodValueLeniencyLabel);
+    menubot.appendChild(autoHealFoodValueLeniencyPerc);
+    menubot.appendChild(autoHealFoodValueLeniencyData);
+    menubot.appendChild(autoHealFoodTabLabel);
+    menubot.appendChild(autoHealFoodTab);
+    menubot.appendChild(autoHealTimeoutLabel);
+    menubot.appendChild(autoHealTimeout);
+
+    menubot.appendChild(workSlider); //slider
+    menubot.appendChild(autoworkboton);
+    menubot.appendChild(autoworktype);
+    //menubot.appendChild(autoworktime);
+    menubot.appendChild(menubotfooter);
+    menujuego.appendChild(menubotboton);
+    menujuego.appendChild(menubot);
+    menubotboton=document.querySelector('#botboton');
 
 
 
@@ -1339,11 +1246,7 @@
 
     }
 
-
     function checkExpedition(selectexpeditionmap, selectexpeditiontarget){
-
-        //alert(content);
-
         location.href = expeditionLocations[selectexpeditionmap];
         document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
     }
@@ -1366,13 +1269,6 @@
         let advanced = _advanced === 'true'
         let skipboss = _skipboss === 'true'
         let fulldungclear = _fulldungclear === 'true'
-
-
-        //let contentExpeditionGuard = document.getElementById('cooldown_bar_text_expedition').innerHTML;
-        //if(contentExpeditionGuard == 'Go to expedition' && autoexpeditionok){
-        //    resolve();
-        //    //return
-        //}
 
         location.href = dungeonLocations[selectdungeonmap];
 
@@ -1481,8 +1377,6 @@
             }
         }
 
-
-
         let level = statsDiv.querySelector('div#char_level_tt span#char_level').innerHTML
         let currentHealth = statsDiv.querySelector('div#char_leben_tt span#char_leben').innerHTML
         let strength = statsDiv.querySelector('div#char_f0_tt span#char_f0').innerHTML
@@ -1549,9 +1443,7 @@
         }
         //console.log(returnStats)
         return returnStats
-
     }
-
 
     function performRequest(url) {
         return new Promise((resolve, reject) => {
@@ -1567,7 +1459,6 @@
             });
         });
     }
-
 
     function calculateStrength(player, enemy){ //player perspective
         let blockMultiplier = 0.5 //idk how much does block block, assuming 50%
@@ -1587,8 +1478,6 @@
         totalPower *= hitChance / 100
         totalPower += totalPower*(doubleHitChance / 100)
 
-
-
         //console.log('player :', player)
         //console.log('enemy  :', enemy)
         //console.log(totalPower)
@@ -1596,15 +1485,13 @@
         //console.log('avgDmgReduction :', avgDmgReduction)
         //console.log('hitChance :', hitChance)
         //console.log('doubleHitChance :', doubleHitChance)
-
         //console.log('doubleHitChance :', doubleHitChance)
-
         return totalPower
     }
+
     function filterStringToNumbers(text){
         return parseInt(text.replace(/\D+/g, ''))
     }
-
 
     function isEqual(obj1, obj2) {
         // Compare the properties of the objects
@@ -1617,7 +1504,6 @@
         }
         return true;
     }
-
 
     async function fetchCircusEnemyCharacters(){
 
@@ -1671,7 +1557,6 @@
     }
 
     async function fetchCircusPlayerCharacters(){
-
         let enemyElements = document.querySelectorAll('section#own3 table tbody tr');
         let promises = [];
         let validCharacterUrls = [];
@@ -1714,13 +1599,11 @@
         })
     }
 
-
     async function checkCircusProvinciarium(_percentCap) {
 
         let percentCap = parseInt(_percentCap);
 
         let circusLink = 'index.php?mod=arena&submod=serverArena&aType=3&sh=' + sessionHash;
-
 
         if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=3&sh=')) {
             location.href = circusLink;
@@ -1737,16 +1620,13 @@
             }
         }
 
-
         let validEnemyCharacterUrls = await fetchCircusEnemyCharacters();
         //console.log("validEnemyCharacterUrls: ", validEnemyCharacterUrls)
         let validPlayerCharacterUrls = await fetchCircusPlayerCharacters();
         //console.log("validPlayerCharacterUrls: ", validPlayerCharacterUrls)
 
-
         let playerCharactersStats = []
         let enemyCharactersStats = []
-
 
         let enemyStats = [];
         let promises = [];
@@ -1780,13 +1660,10 @@
                             }, (index * 300) + randDelay);
                         })
                     );
-
-
                 })
                 enemyCharactersStats.push([statsBuffer, hm[1]])
             })
         });
-
 
         validPlayerCharacterUrls.forEach(link => {
             //console.log('player: ', link)
@@ -1803,7 +1680,6 @@
                 })
             );
         })
-
 
         await Promise.all(promises)
             .then(() => {
@@ -1835,7 +1711,6 @@
             let playerAttackers = playerCharactersStats.filter(obj => !isEqual(obj, playerMedic)); //characters that are not medic nor tank
             playerAttackers = playerAttackers.filter(obj => !isEqual(obj, playerTank));
             //console.log(playerAttackers)
-
 
             let strengthArray = []
             let powerArray = []
@@ -1876,11 +1751,9 @@
                 powerArray.push([playerStrength + healDifference, attackerStrength - healDifference, charactersAndButton[1]])
 
                 //strengthArray.push([playerStrength, attackerStrength, charactersAndButton[1]])
-
             })
 
             let weakerEnemies = []
-
             powerArray.forEach(powerData => { //[0] = my power, [1] = enemy power, [2] = attack button
                 let powerAmount = powerData[0] - powerData[1] - powerData[0] * (percentCap / 10)
                 if((powerAmount > 0)){
@@ -1907,13 +1780,10 @@
             //localStorage.setItem('_weakestEnemyCircus', JSON.stringify(weakestEnemy))
             weakestEnemy[0].click()
             return
-
-
         })
             .catch(error => {
             console.error("Error occurred.");
         });
-
     }
 
     function checkCircusProvinciariumCondition(autocircusprovinciariumok){
@@ -1924,30 +1794,9 @@
         return 1
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     async function checkArenaProvinciarium(_percentCap){
         let percentCap = parseInt(_percentCap) // percent of power difference fro menemy (1 = 10%, 2 = 20% etc)
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
-
-        //let contentCircusGuard = document.getElementById('cooldown_bar_text_ct').innerHTML;
-        //autocircusprovinciariumok
-        //if (autocircusprovinciariumok && (contentCircusGuard == 'To Circus Turma')){
-        //    return
-        //}
-
 
         if (!location.href.includes('index.php?mod=arena&submod=serverArena&aType=2&sh=')) {
             location.href = arenaLink;
@@ -1957,7 +1806,6 @@
             console.log('bug detected')
             location.href = arenaLink;
         }
-
 
         let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
         let enemyStats = [];
@@ -1997,9 +1845,6 @@
             })
         );
 
-
-
-
         console.log('promises length: ', promises.length)
         await Promise.all(promises)
             .then(() => {
@@ -2013,7 +1858,6 @@
                 //console.log('enemyPromise')
                 powerArray.push( [enemy[0], enemy[1], calculateStrength( userStats[0], enemy[0] ), calculateStrength( enemy[0], userStats[0] )])//idx 2&3 = myStr&enemyStr
             })
-
 
             let weakerEnemies = []
 
@@ -2048,7 +1892,6 @@
             .catch(error => {
             console.error("Error occurred:", error);
         });
-
     }
 
     function checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp){
@@ -2063,8 +1906,6 @@
         return 1
     }
 
-
-
     async function checkWork(_autoworktype){
         let autoworktype = parseInt(_autoworktype);
 
@@ -2074,6 +1915,7 @@
         document.querySelectorAll('div#select table.section-like.select_work_table tbody tr[id]')[autoworktype].click();
         document.getElementById('doWork').click();
     }
+
     function checkWorkCondition(){
         if (!autoworkok) return 0
         console.log('work')
@@ -2086,6 +1928,11 @@
         return 0
     }
 
+    function stringToBool(string){
+        if (string==='true' || string==='1') return true
+        else return false
+    }
+
 
     let questCounter=document.createElement('button');//selectturmatarget
     questCounter.classList.add('awesome-tabs');
@@ -2094,11 +1941,6 @@
     questNavTab.appendChild(questCounter)
     let qc = parseInt(localStorage.getItem('_questCounter')) || 0
     questCounter.innerHTML = qc;
-
-    function stringToBool(string){
-        if (string==='true' || string==='1') return true
-        else return false
-    }
 
     function checkQuests(_arenaon, _arenatimedon, _arenasuccessionon, _circuson, _circustimedon, _circussuccessionon, _combaton, _combattimedon,
                           _combatsuccessionon, _expeditionon, _expeditiontimedon, _expeditionsuccessionon, expeditionmap, expeditionenemy){
@@ -2143,7 +1985,6 @@
             console.log('failedQuests: ', quest)
             quest.click()
         })
-
 
         if (circuson){
             circusQuests.forEach(quest => {
@@ -2238,7 +2079,6 @@
             })
         }
 
-
         let activeQuests = document.querySelectorAll('div.contentboard_start div div.contentboard_slot_active');
         console.log('valid quests to take: ',validQuests )
         if (validQuests == 0){ //done like a retard but idc :D:D:D:D:D
@@ -2255,7 +2095,6 @@
             }
             return
         }
-
 
         if (circuson){
             circusQuests.forEach(quest => {
@@ -2318,8 +2157,6 @@
                 }
             })
         }
-
-
         if (expeditionon){
             expeditionQuests.forEach(quest => {
                 if (quest.querySelector('.quest_slot_time') && !expeditiontimedon){ //if quest is timed and user specifies he doesnt want it
@@ -2365,7 +2202,6 @@
         return 0
     }
 
-
     function checkNotification(){//like you lvled up or daily reward
         let notificationCancelButton = document.querySelector('td#buttonrightnotification')
         if(notificationCancelButton){
@@ -2382,13 +2218,6 @@
 
     }
 
-    //************************************************************************************************************************************************************* AUTOBUY AUCTIONS --- START
-
-    let auctionType = ''
-    if (location.href.includes('ttype=3')) auctionType = '_mercenary'
-    else auctionType = '_gladiator'
-
-
     function setSearchParameters(){
         //filter options
         let itemName = document.querySelector('input[type="text"][name="qry"]')
@@ -2399,9 +2228,7 @@
         itemType.value = 0;
         let itemQuality = document.querySelector('select[name="itemQuality"]');
         itemQuality.value = -1;
-
     }
-
 
     function createRdyUrl(){
         let url = location.href
@@ -2409,15 +2236,10 @@
         return url
     }
 
-
-    let STOP_BUYING = false
-
-    const url = location.href;
-
-    const filterButton = document.querySelector('div#main_inner div#content article section form table tbody tr td input[type="submit"]')
-
-
     function buyItems(){
+        let STOP_BUYING = false
+        const url = location.href;
+        const filterButton = document.querySelector('div#main_inner div#content article section form table tbody tr td input[type="submit"]')
 
         if (url.includes('&zubab=notrdy')){//redirected from button
             setSearchParameters();
@@ -2493,7 +2315,6 @@
                 }
             }
 
-
             var interval = 1000; // how much time should the delay between two iterations be (in milliseconds)?
             let iter = 0;
             checkNoMoreAuctions(auctionItemsData.length, iter);
@@ -2519,26 +2340,18 @@
                 storageName += 'GladiatorItemIds'
             }
             console.log(storageName)
-
         }
-
     }
 
-    //************************************************** CONDITION
     let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
+
     function checkMarketAutoBuyCondition(autoMarketOk){
         if (!autoMarketOk) return 0
         console.log('market')
         let interval = parseFloat(marketInterval.value.replace(/[^0-9.]/g, '')) // check auction every x minutes
         interval *= 60000
-        //console.log('interval', interval)
-        //console.log('date now', Date.now())
 
         let currentDate = Date.now()
-        //let lastMarketDate = localStorage.getItem('_lastMarketCheck') || 0
-        //console.log(currentDate - lastMarketDate) // jesli jest mniejsze niz 3600 to zrob cos 3600000
-        //console.log('(currentDate - lastMarketDate)', (currentDate - lastMarketDate))
-        //console.log('interval', interval)
         if ((currentDate - lastMarketDate) > interval){
             localStorage.setItem('_lastMarketCheck', currentDate)
             //console.log('GO ON MARKET')
@@ -2547,17 +2360,15 @@
         return 0;
     }
 
-    //************************************************************************************************************************************************************* AUTOBUY AUCTIONS --- END
-
     function stringContainsAnyItemFromArray(str, arr) {
         return arr.some(item => str.includes(item));
     }
+
     function simulateDoubleClick(element) {
         const event = new MouseEvent('dblclick', {
             bubbles: true,
             cancelable: true,
         });
-
         element.dispatchEvent(event);
     }
 
@@ -2604,7 +2415,6 @@
             setTimeout(function(){
                 location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
             }, 1500)
-
             //checkAutoHeal()
         }
         else{
@@ -2634,7 +2444,9 @@
         }
 
     }
+
     let lastAutoHealTimeout = localStorage.getItem('_lastAutoHealTimeout') || 0
+
     function checkAutoHealCondition(autoHealOk){
         if (!autoHealOk) return 0
         console.log('autoheal')
@@ -2651,14 +2463,12 @@
         return 1
     }
 
-
     //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
     //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
     //let arr3 = JSON.parse(localStorage.getItem('_weakestEnemyCircus'))
     //let arr4 = JSON.parse(localStorage.getItem('_enemyStatsArena'))
     //let arr5 = JSON.parse(localStorage.getItem('_weakerEnemiesArena'))
     //let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
-
 
     function pickAction(){
         if (checkQuestsCondition(autoquestok) == 1){
@@ -2691,7 +2501,6 @@
     }
 
     function eventChecker() {
-
         //checkAutoHeal();
         //console.log('_enemyCharactersStatsCircus: ', arr1);
         //console.log('_weakerEnemiesCircus: ', arr2);
@@ -2710,7 +2519,7 @@
                             expeditionquestmap.value, expeditionquestenemy.value);
             }
             else if (location.href.includes('mod=auction') && location.href.includes('&zubab=')) buyItems();
-            else if (!location.href.includes('mod=auction') && !location.href.includes('mod=market')){//regular auction and market excluded from bot to let user freele bid :)
+            else if (!location.href.includes('mod=auction') && !location.href.includes('mod=market')){//regular auction and market excluded from bot to let user bid freely :)))
                 let currentAction = pickAction();
                 if (currentAction == 10) location.href = 'index.php?mod=quests&sh=' + sessionHash;
                 else if (currentAction == 20) location.href = 'index.php?mod=auction&zubab=notrdy' + (parseInt(marketType.value) == 0 ? '&sh=' : '&ttype=3&sh=') + sessionHash;
@@ -2723,7 +2532,6 @@
             }
         }
     }
-
 
     async function loop() {
         let rand = Math.round(Math.random() * (6500 - 2100)) + 2100;
@@ -2751,7 +2559,6 @@
             location.href = resetLink;
         }
     }, 1000)
-
 
 
     changePageInfo()
