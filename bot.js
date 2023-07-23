@@ -95,15 +95,15 @@
         }}
 
 
-    let targetWidth = document.querySelector('a.menuitem[target="_self"]').clientWidth*0.1;
-    let targetHeight = document.querySelector('a.menuitem[target="_self"]').clientHeight*0.65;
+    //let targetWidth = document.querySelector('a.menuitem[target="_self"]').clientWidth*0.1;
+    //let targetHeight = document.querySelector('a.menuitem[target="_self"]').clientHeight*0.65;
     function createMenuItemSlider(id){
         let isOnByDefault = localStorage.getItem('_' + id + 'Ok') === 'true';
         let arrowImg = document.createElement('img')
         if (isOnByDefault) arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
         else arrowImg.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        arrowImg.setAttribute('width', targetWidth);
-        arrowImg.setAttribute('height', targetHeight);//18px
+        arrowImg.setAttribute('width', '18px');
+        arrowImg.setAttribute('height', '18px');//18px
         arrowImg.id = id
         arrowImg.setAttribute('style', 'position: absolute; cursor: pointer; filter: brightness(4); padding: 4.5px; left: 36px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));')//position: absolute; cursor: pointer; top: 0px; left:10px; filter: brightness(4); padding: 4.5px; background-image: linear-gradient(to right, rgba(0,0,0,1), 80%, rgba(255,0,0,0));
         return arrowImg
@@ -125,7 +125,8 @@
     let selectexpeditionmap=document.createElement('select');
     let selectexpeditiontarget=document.createElement('select');
     expeditionboton.classList.add('menuitem');
-    expeditionboton.style.cursor = "pointer";
+    expeditionboton.style = "cursor: pointer; margin-bottom: 5px";
+
     //expeditionboton.href="#";
     let expeditionhp=document.createElement('input');
     expeditionhp.setAttribute("type","range");
@@ -142,12 +143,12 @@
     if (expeditionSliderOk){
         selectexpeditionmap.setAttribute("style","display:block;margin-left:10px;");
         selectexpeditiontarget.setAttribute("style","display:block;margin-left:10px;");
-        expeditionhp.setAttribute("style","display:block;margin-left:10px;");
+        expeditionhp.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
         expdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
         selectexpeditionmap.setAttribute("style","display:none;margin-left:10px;");
         selectexpeditiontarget.setAttribute("style","display:none;margin-left:10px;");
-        expeditionhp.setAttribute("style","display:none;margin-left:10px;");
+        expeditionhp.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
         expdatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
     }
     if (autoexpeditionok==true){
@@ -199,7 +200,7 @@
     selectexpeditiontarget.addEventListener("change", function(){
         localStorage.setItem('_selectedexpeditiontarget', selectexpeditiontarget.value);
     })
-    expeditionSlider.addEventListener('click', function(){
+    function handleExpeditionSlider(){
         let selectedexpeditionmap=document.querySelector('#expeditionmap');
         let selectedexpeditiontarget=document.querySelector('#expeditiontarget');
         let expdatalabel=document.querySelector('#expdatalabel');
@@ -221,7 +222,9 @@
 
         }
         localStorage.setItem('_expeditionSliderOk', expeditionSliderOk);
-    })
+    }
+    expeditionSlider.addEventListener('click', handleExpeditionSlider)
+    expeditionSlider.addEventListener('touchend', handleExpeditionSlider) //for mobile
 
 
     // ********************************************************************************************** BotOn DUNGEON
@@ -240,18 +243,18 @@
     fulldungclear.innerHTML='<option value="false">Quickest boss</option><option value="true">Full clear</option>';
     fulldungclear.value=localStorage.getItem('_fulldungclear') || false;
     dungeonboton.classList.add('menuitem');
-    dungeonboton.style.cursor = "pointer";
+    dungeonboton.style = "cursor: pointer; margin-bottom: 5px";
     let dungeonSlider = createMenuItemSlider('dungeonSlider')
     if (dungeonSliderOk){
         selectdungeonmap.setAttribute("style","display:block;margin-left:10px;");
         advanced.setAttribute("style","display:block;margin-left:10px;");
         skipboss.setAttribute("style","display:block;margin-left:10px;");
-        fulldungclear.setAttribute("style","display:block;margin-left:10px;");
+        fulldungclear.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
     }else{
         selectdungeonmap.setAttribute("style","display:none;margin-left:10px;");
         advanced.setAttribute("style","display:none;margin-left:10px;");
         skipboss.setAttribute("style","display:none;margin-left:10px;");
-        fulldungclear.setAttribute("style","display:none;margin-left:10px;");
+        fulldungclear.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
     }
 
     if (autodungeonok==true){
@@ -325,20 +328,20 @@
         localStorage.setItem('_dungeonSliderOk', dungeonSliderOk);
     }
     dungeonSlider.addEventListener('click', handleDungeonSlider)
-    dungeonSlider.addEventListener('touchend', handleDungeonSlider)
+    dungeonSlider.addEventListener('touchend', handleDungeonSlider) //for mobile
 
 
     // ********************************************************************************************** BotOn CIRCUS PROV
     let circusprovinciariumboton=document.createElement('a');//turmaboton
     let selectcircusprovinciariummode=document.createElement('select');//selectturmatarget
     circusprovinciariumboton.classList.add('menuitem');
-    circusprovinciariumboton.style.cursor = "pointer";
+    circusprovinciariumboton.style = "cursor: pointer; margin-bottom: 5px";
     //circusprovinciariumboton.href="#";
     let circusSlider = createMenuItemSlider('circusSlider')
     if (circusSliderOk){
-        selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
+        selectcircusprovinciariummode.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
     }else{
-        selectcircusprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
+        selectcircusprovinciariummode.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
     }
 
     if (autocircusprovinciariumok==true){
@@ -369,7 +372,7 @@
     selectcircusprovinciariummode.addEventListener('change', function(){
         localStorage.setItem('_selectcircusprovinciariummode', selectcircusprovinciariummode.value);
     })
-    circusSlider.addEventListener('click', function(){
+    function handleCircusSlider(){
         let selectcircusprovinciariummode=document.querySelector('#selectcircusprovinciariummode');
         if (circusSliderOk==true){
             circusSliderOk = false;
@@ -382,7 +385,9 @@
 
         }
         localStorage.setItem('_circusSliderOk', circusSliderOk);
-    })
+    }
+    circusSlider.addEventListener('click', handleCircusSlider)
+    circusSlider.addEventListener('touchend', handleCircusSlider) //for mobile
 
 
 
@@ -390,7 +395,7 @@
     let arenaprovinciariumboton=document.createElement('a');//turmaboton
     let selectarenaprovinciariummode=document.createElement('select');//selectturmatarget
     arenaprovinciariumboton.classList.add('menuitem');
-    arenaprovinciariumboton.style.cursor = "pointer";
+    arenaprovinciariumboton.style = "cursor: pointer; margin-bottom: 5px";
     //arenaprovinciariumboton.href="#";
     let arenahp=document.createElement('input');
     arenahp.setAttribute("type","range");
@@ -407,11 +412,11 @@
     let arenaSlider = createMenuItemSlider('arenaSlider')
     if (arenaSliderOk){
         selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
-        arenahp.setAttribute("style","display:block;margin-left:10px;");
+        arenahp.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
         arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
     }else{
         selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
-        arenahp.setAttribute("style","display:none;margin-left:10px;");
+        arenahp.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
         arenadatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
     }
     if (autoarenaprovinciariumok==true){
@@ -447,7 +452,7 @@
         arenadatalabel.innerHTML="Not attack hp < "+arenahp.value+"%";
         localStorage.setItem('_arenahp', arenahp.value);
     });
-    arenaSlider.addEventListener('click', function(){
+    function handleArenaSlider(){
         let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
         let arenadatalabel=document.querySelector('#arenadatalabel');
         let arenahp=document.querySelector('#arenahp');
@@ -466,68 +471,15 @@
 
         }
         localStorage.setItem('_arenaSliderOk', arenaSliderOk);
-    })
-
-
-    // ********************************************************************************************** BotOn WORK
-    let autoworkboton=document.createElement('a');
-    autoworkboton.classList.add('menuitem');
-    autoworkboton.style.cursor = "pointer";
-    let autoworktype=document.createElement('select');
-    autoworktype.id="autoworktype";
-    autoworktype.innerHTML='<option value="0">Senator -3♦</div></option><option value="1">Jeweller -3♦</div></option><option value="2" selected>Stable boy</option><option value="3">Farmer</option><option value="4">Butcher</option><option value="5">Fisherman</option><option value="6">Baker</option><option value="7">Blacksmith</option><option value="8">Master blacksmith -3♦</option>';
-    autoworktype.value= localStorage.getItem('_worktype') || 2
-
-    let workSlider = createMenuItemSlider('workSlider')
-    if (workSliderOk){
-        autoworktype.setAttribute("style","display:block;margin-left:10px;");
-    }else{
-        autoworktype.setAttribute("style","display:none;margin-left:10px;");
     }
-    if (autoworkok==true){
-        autoworkboton.innerHTML="WORK ON";
-        autoworkboton.style.textShadow = botOptionOn;
-    }else{
-        autoworkboton.innerHTML="WORK OFF";
-        autoworkboton.style.textShadow = botOptionOff;
-    }
+    arenaSlider.addEventListener('click', handleArenaSlider)
+    arenaSlider.addEventListener('touchend', handleArenaSlider) //for mobile
 
-    // WORK LOGIC
-    autoworkboton.addEventListener('click', function(){
-        if (autoworkok==true){
-            autoworkok=false;
-            autoworkboton.innerHTML="WORK OFF";
-            autoworkboton.style.textShadow = botOptionOff
-        }else{
-            autoworkok=true;
-            autoworkboton.innerHTML="WORK ON";
-            autoworkboton.style.textShadow = botOptionOn
-        }
-        localStorage.setItem('_autoworkok', autoworkok);
-    })
-    autoworktype.addEventListener('change', function(){
-        localStorage.setItem('_worktype', autoworktype.value);
-    })
-    workSlider.addEventListener('click', function(){
-        let autoworktype=document.querySelector('#autoworktype');
-
-        if (workSliderOk==true){
-            workSliderOk = false;
-            autoworktype.style.display="none";
-            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
-        }else{
-            workSliderOk = true;
-            autoworktype.style.display="block";
-            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
-
-        }
-        localStorage.setItem('_workSliderOk', workSliderOk);
-    })
 
     // ********************************************************************************************** BotOn QUESTS
     let autoquestboton=document.createElement('a');
     autoquestboton.classList.add('menuitem');
-    autoquestboton.style.cursor = "pointer";
+    autoquestboton.style = "cursor: pointer; margin-bottom: 5px";
 
     let arenaqueston=document.createElement('a'); //arena
     arenaqueston.id="arenaqueston";
@@ -623,7 +575,7 @@
         expeditionquestmaplabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         expeditionquestmap.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
         expeditionquestenemylabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 130px; margin-bottom: 12px");
     }else{
         arenaqueston.setAttribute("style","display:none; cursor:pointer; width: 120px; margin-left:auto; margin-right: auto; border: 1px solid #FAA540; text-align: center; border-radius: 10px; margin-top: 10px; margin-bottom: 2px");
         arenaquesttimedon.setAttribute("style","display:none;margin-left:10px;");
@@ -644,7 +596,7 @@
         expeditionquestmaplabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         expeditionquestmap.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
         expeditionquestenemylabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        expeditionquestenemy.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        expeditionquestenemy.setAttribute("style","display:none;margin-left:10px;max-width: 130px; margin-bottom: 12px");
     }
 
     if (autoquestok==true){//global for quests
@@ -842,7 +794,7 @@
         localStorage.setItem('_expeditionquestenemy', expeditionquestenemy.value);
         console.log(expeditionquestenemy.value)
     })
-    questSlider.addEventListener('click', function(){
+    function handleQuestSlider(){
         if (questSliderOk==true){
             questSliderOk = false;
             arenaqueston.style.display = 'none'
@@ -883,7 +835,9 @@
             questSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
         }
         localStorage.setItem('_questSliderOk', questSliderOk);
-    })
+    }
+    questSlider.addEventListener('click', handleQuestSlider)
+    questSlider.addEventListener('touchend', handleQuestSlider) //for mobile
 
 
 
@@ -891,7 +845,7 @@
 
     let autoMarketBotOn=document.createElement('a');
     autoMarketBotOn.classList.add('menuitem');
-    autoMarketBotOn.style.cursor = "pointer";
+    autoMarketBotOn.style = "cursor: pointer; margin-bottom: 5px";
 
     let marketType=document.createElement('select');
     marketType.id="marketType";
@@ -899,30 +853,30 @@
     marketType.value=localStorage.getItem('_marketType') || 0;
     marketType.setAttribute("style","display:block;margin-left:10px;");
 
-    let marketIntervalLabel = document.createElement('span');
-    marketIntervalLabel.innerHTML='Market interval(min)'
-    let marketInterval=document.createElement('input');
-    marketInterval.id="marketInterval";
-    marketInterval.value= localStorage.getItem('_marketInterval') || 7;
-
     let marketMinValueLabel = document.createElement('span');
     marketMinValueLabel.innerHTML='Minimum item value'
     let marketMinValue=document.createElement('input');
     marketMinValue.id="marketMinValue";
     marketMinValue.value= localStorage.getItem('_marketMinValue') || 10000;
 
+    let marketIntervalLabel = document.createElement('span');
+    marketIntervalLabel.innerHTML='Market interval(min)'
+    let marketInterval=document.createElement('input');
+    marketInterval.id="marketInterval";
+    marketInterval.value= localStorage.getItem('_marketInterval') || 7;
+
     let marketSlider = createMenuItemSlider('marketSlider')
 
     if (marketSliderOk){
-        marketType.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketType.setAttribute("style","display:block;margin-left:10px;max-width: 130px;");
         marketIntervalLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        marketInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px; margin-bottom: 12px");
         marketMinValueLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         marketMinValue.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
     }else{
         marketType.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
         marketIntervalLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        marketInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        marketInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px; margin-bottom: 12px");
         marketMinValueLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         marketMinValue.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
     }
@@ -962,7 +916,7 @@
         localStorage.setItem('_marketType', marketType.value);
     })
 
-    marketSlider.addEventListener('click', function(){
+    function handleMarketSlider(){
         if (marketSliderOk==true){
             marketSliderOk = false;
             marketType.style.display = 'none'
@@ -985,7 +939,9 @@
             marketSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
         }
         localStorage.setItem('_marketSliderOk', marketSliderOk);
-    })
+    }
+    marketSlider.addEventListener('click', handleMarketSlider)
+    marketSlider.addEventListener('touchend', handleMarketSlider) //for mobile
 
 
 
@@ -993,7 +949,7 @@
 
     let autoHealBotOn=document.createElement('a');
     autoHealBotOn.classList.add('menuitem');
-    autoHealBotOn.style.cursor = "pointer";
+    autoHealBotOn.style = "cursor: pointer; margin-bottom: 5px";
 
     let autoHealBelowLabel=document.createElement('span');
     autoHealBelowLabel.innerHTML="Heal below < " + (localStorage.getItem('_autoHealBelowHpPerc') || 50) +"%";
@@ -1043,7 +999,7 @@
         autoHealFoodTabLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         autoHealFoodTab.setAttribute("style","display:block;margin-left:10px;");
         autoHealTimeoutLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealTimeout.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+        autoHealTimeout.setAttribute("style","display:block;margin-left:10px;max-width: 130px; margin-bottom: 12px");
     }else{
         autoHealBelowLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         autoHealBelowHpPerc.setAttribute("style","display:none;margin-left:10px;");
@@ -1052,7 +1008,7 @@
         autoHealFoodTabLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
         autoHealFoodTab.setAttribute("style","display:none;margin-left:10px;");
         autoHealTimeoutLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
-        autoHealTimeout.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+        autoHealTimeout.setAttribute("style","display:none;margin-left:10px;max-width: 130px; margin-bottom: 12px");
     }
 
     if (autoHealOk==true){
@@ -1076,13 +1032,15 @@
         console.log('autoHealOk', autoHealOk)
         localStorage.setItem('_autoHealOk', autoHealOk);
     })
-    autoHealSlider.addEventListener('click', function(){
+    function handleAutoHealSlider(){
         if (autoHealSliderOk==true){
             autoHealSliderOk = false;
             autoHealBelowLabel.style.display = 'none'
             autoHealBelowHpPerc.style.display = 'none'
             autoHealFoodValueLeniencyLabel.style.display = 'none'
             autoHealFoodValueLeniencyPerc.style.display = 'none'
+            autoHealFoodTabLabel.style.display = 'none'
+            autoHealFoodTab.style.display = 'none'
             autoHealTimeoutLabel.style.display = 'none'
             autoHealTimeout.style.display = 'none'
 
@@ -1093,6 +1051,8 @@
             autoHealBelowHpPerc.style.display = 'block'
             autoHealFoodValueLeniencyLabel.style.display = 'block'
             autoHealFoodValueLeniencyPerc.style.display = 'block'
+            autoHealFoodTabLabel.style.display = 'block'
+            autoHealFoodTab.style.display = 'block'
             autoHealTimeoutLabel.style.display = 'block'
             autoHealTimeout.style.display = 'block'
 
@@ -1100,7 +1060,10 @@
         }
         console.log('autoHealSlider', autoHealSliderOk)
         localStorage.setItem('_autoHealSlider', autoHealSliderOk);
-    })
+    }
+    autoHealSlider.addEventListener('click', handleAutoHealSlider)
+    autoHealSlider.addEventListener('touchend', handleAutoHealSlider) //for mobile
+
     autoHealBelowHpPerc.addEventListener("change",function(){
         autoHealBelowLabel.innerHTML="Heal below < "+autoHealBelowHpPerc.value+"%";
         localStorage.setItem('_autoHealBelowHpPerc', autoHealBelowHpPerc.value);
@@ -1120,14 +1083,73 @@
         console.log('autoHealTimeout.value', autoHealTimeout.value)
     })
 
-    // ********************************************************************************************** MENU BOT ON
 
+    // ********************************************************************************************** BotOn WORK
+
+    let autoworkboton=document.createElement('a');
+    autoworkboton.classList.add('menuitem');
+    autoworkboton.style = "cursor: pointer; margin-bottom: 5px";
+    let autoworktype=document.createElement('select');
+    autoworktype.id="autoworktype";
+    autoworktype.innerHTML='<option value="0">Senator -3♦</div></option><option value="1">Jeweller -3♦</div></option><option value="2" selected>Stable boy</option><option value="3">Farmer</option><option value="4">Butcher</option><option value="5">Fisherman</option><option value="6">Baker</option><option value="7">Blacksmith</option><option value="8">Master blacksmith -3♦</option>';
+    autoworktype.value= localStorage.getItem('_worktype') || 2
+
+    let workSlider = createMenuItemSlider('workSlider')
+    if (workSliderOk){
+        autoworktype.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
+    }else{
+        autoworktype.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
+    }
+    if (autoworkok==true){
+        autoworkboton.innerHTML="WORK ON";
+        autoworkboton.style.textShadow = botOptionOn;
+    }else{
+        autoworkboton.innerHTML="WORK OFF";
+        autoworkboton.style.textShadow = botOptionOff;
+    }
+
+    // WORK LOGIC
+    autoworkboton.addEventListener('click', function(){
+        if (autoworkok==true){
+            autoworkok=false;
+            autoworkboton.innerHTML="WORK OFF";
+            autoworkboton.style.textShadow = botOptionOff
+        }else{
+            autoworkok=true;
+            autoworkboton.innerHTML="WORK ON";
+            autoworkboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoworkok', autoworkok);
+    })
+    autoworktype.addEventListener('change', function(){
+        localStorage.setItem('_worktype', autoworktype.value);
+    })
+    function handleWorkSlider(){
+        let autoworktype=document.querySelector('#autoworktype');
+
+        if (workSliderOk==true){
+            workSliderOk = false;
+            autoworktype.style.display="none";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            workSliderOk = true;
+            autoworktype.style.display="block";
+            workSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+
+        }
+        localStorage.setItem('_workSliderOk', workSliderOk);
+    }
+    workSlider.addEventListener('click', handleWorkSlider)
+    workSlider.addEventListener('touchend', handleWorkSlider) //for mobile
+
+
+    // ********************************************************************************************** MENU BOT ON
 
 
     let menubotboton=document.createElement('a');
     menubotboton.classList.add('menuitem');
     menubotboton.classList.add('active');
-    menubotboton.style.cursor = "pointer";
+    menubotboton.style = "cursor: pointer";
 
     if (boton){
         menubotboton.innerHTML="BOT ON";
@@ -1953,14 +1975,16 @@
         else return false
     }
 
-
-    let questCounter=document.createElement('button');//selectturmatarget
-    questCounter.classList.add('awesome-tabs');
-    questCounter.setAttribute("style"," position:absolute; padding:2px; left: -45px; font-size: 14px; min-width: 25px; min-height: 25px;");
-    let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
-    questNavTab.appendChild(questCounter)
     let qc = parseInt(localStorage.getItem('_questCounter')) || 0
-    questCounter.innerHTML = qc;
+    if (location.href.includes('index.php?mod=quests')){
+        let questCounter=document.createElement('button');//selectturmatarget
+        questCounter.classList.add('awesome-tabs');
+        questCounter.setAttribute("style"," position:absolute; padding:2px; left: -45px; font-size: 14px; min-width: 25px; min-height: 25px;");
+        let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
+        questNavTab.appendChild(questCounter)
+        questCounter.innerHTML = qc;
+    }
+
 
     function checkQuests(_arenaon, _arenatimedon, _arenasuccessionon, _circuson, _circustimedon, _circussuccessionon, _combaton, _combattimedon,
                           _combatsuccessionon, _expeditionon, _expeditiontimedon, _expeditionsuccessionon, expeditionmap, expeditionenemy){
