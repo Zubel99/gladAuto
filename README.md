@@ -2,9 +2,7 @@
 
 Install tampermonkey (or greasemonkey etc...) to fire javascript file into and have fun
 
-autobuy is now useless since its beed merged to bot.js
-
-if sounds arent working on auctions allow sound in site settings (button on the left from url)
+gladiatus UI must be in ENGLISH for bot to work!
 
 For full functionality(quests and autoheal) i strongly suggest installing Gladiatus crazy addon (works even on android although youll have to add it to firefox acc collection and then install it on firefox nightly using developer mode) and turn these settings on:
 - Double click items to consume them
