@@ -301,7 +301,7 @@
     fulldungclear.addEventListener("change", function(){
         localStorage.setItem('_fulldungclear', fulldungclear.value);
     })
-    dungeonSlider.addEventListener('click', function(){
+    function handleDungeonSlider(){
         let selecteddungeonmap=document.querySelector('#dungeonmap');
         let advanced=document.querySelector('#advanced');
         let skipboss=document.querySelector('#skipboss');
@@ -323,7 +323,9 @@
 
         }
         localStorage.setItem('_dungeonSliderOk', dungeonSliderOk);
-    })
+    }
+    dungeonSlider.addEventListener('click', handleDungeonSlider)
+    dungeonSlider.addEventListener('touchend', handleDungeonSlider)
 
 
     // ********************************************************************************************** BotOn CIRCUS PROV
@@ -1118,7 +1120,7 @@
         console.log('autoHealTimeout.value', autoHealTimeout.value)
     })
 
-    // *******************************************************************************************************************************
+    // ********************************************************************************************** MENU BOT ON
 
 
 
@@ -1134,6 +1136,24 @@
         menubotboton.innerHTML="BOT OFF";
         menubotboton.style.textShadow = botOptionOff;
     }
+
+    menubotboton.addEventListener("click",function(){
+        let menubot = document.querySelector('#bot');
+        if (boton==true){
+            menubot.style.display="block";
+            menubotboton.innerHTML="BOT OFF";
+            menubotboton.style.textShadow = botOptionOff;
+            boton=false;
+        }else{
+            //menubot.style.display="none";
+            menubot.style.display="block";
+            menubotboton.innerHTML="BOT ON";
+            menubotboton.style.textShadow = botOptionOn;
+            boton=true;
+        }
+        console.log('boton: ', boton)
+        localStorage.setItem('_boton', boton)
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
         var element = document.getElementById('dungeonSlider');
@@ -2477,7 +2497,7 @@
         else if (checkMarketAutoBuyCondition(autoMarketOk) == 1){
             return 20 //exp
         }
-        else if (checkAutoHealCondition(true) == 1){//autoHealOk
+        else if (checkAutoHealCondition(autoHealOk) == 1){//autoHealOk
             return 21
         }
         else if (checkExpeditionCondition(autoexpeditionok, expeditionhp.value) == 1){ // if exp is true
