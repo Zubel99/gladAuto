@@ -6,7 +6,8 @@ autobuy is now useless since its beed merged to bot.js
 
 if sounds arent working on auctions allow sound in site settings (button on the left from url)
 
-For full functionality i strongly suggest installing Gladiatus crazy addon (works even on android although youll have to add it to firefox acc collection and then install it on firefox nightly using developer mode)
+For full functionality(quests and autoheal) i strongly suggest installing Gladiatus crazy addon (works even on android although youll have to add it to firefox acc collection and then install it on firefox nightly using developer mode) and turn these settings on:
+- Double click items to consume them
 
 Install Auto Refresh Plus in case network error occurs, after installing go to settings -> predefined -> predefined text and paste each one 
 DNS_PROBE_POSSIBLE
