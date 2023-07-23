@@ -40,6 +40,7 @@
 
     let autoquestok=localStorage.getItem('_autoquestok') === 'true';
     let autoMarketOk = localStorage.getItem('_autoMarketOk') === 'true';
+    let autoHealOk = localStorage.getItem('_autoHealOk') === 'true'
 
 
     let arenaquestok=localStorage.getItem('_arenaquestok') === 'true';
@@ -64,6 +65,7 @@
     let arenaSliderOk = localStorage.getItem('_arenaSliderOk') === 'true';
     let questSliderOk = localStorage.getItem('_questSliderOk') === 'true';
     let marketSliderOk = localStorage.getItem('_marketSliderOk') === 'true';
+    let autoHealSliderOk = localStorage.getItem('_autoHealSlider') === 'true'
     let workSliderOk = localStorage.getItem('_workSliderOk') === 'true';
 
 
@@ -134,7 +136,7 @@
     expdatalist.id="expdatalist";
     expdatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
     let expdatalabel=document.createElement('span');
-    expdatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_expeditionhp') || 50) +"%";
+    expdatalabel.innerHTML="Not attack hp < " + (localStorage.getItem('_expeditionhp') || 50) +"%";
     expdatalabel.id="expdatalabel";
     let expeditionSlider = createMenuItemSlider('expeditionSlider')
     if (expeditionSliderOk){
@@ -246,7 +248,7 @@
     }
     selectcircusprovinciariummode.innerHTML='<option value="1" selected>10%+ weaker</option><option value="2">20%+ weaker</option><option value="3">30%+ weaker</option>';//if need more options just add <option value="4">40%+ weaker</option> etc...
     selectcircusprovinciariummode.id="selectcircusprovinciariummode";
-    selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 0;
+    selectcircusprovinciariummode.value=localStorage.getItem('_selectcircusprovinciariummode') || 1;
 
     // BOTON ARENA PROVINCIARIUM
     let arenaprovinciariumboton=document.createElement('a');//turmaboton
@@ -263,7 +265,7 @@
     arenadatalist.id="arenadatalist";
     arenadatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
     let arenadatalabel=document.createElement('span');
-    arenadatalabel.innerHTML="NOT ATTACK HP < " + (localStorage.getItem('_arenahp') || 50) +"%";
+    arenadatalabel.innerHTML="Not attack hp < " + (localStorage.getItem('_arenahp') || 50) +"%";
     arenadatalabel.id="arenadatalabel";
 
     let arenaSlider = createMenuItemSlider('arenaSlider')
@@ -513,20 +515,6 @@
         //expeditionquestenemy.setAttribute("style","display:block;margin-left:10px;max-width: 100px");
     }
 
-
-
-
-
-
-
-
-
-
-
-    // *** WORKING ON MARKETBOTON
-
-
-
     let autoMarketBotOn=document.createElement('a');
     autoMarketBotOn.classList.add('menuitem');
     autoMarketBotOn.style.cursor = "pointer";
@@ -541,13 +529,13 @@
     marketIntervalLabel.innerHTML='Market interval(min)'
     let marketInterval=document.createElement('input');
     marketInterval.id="marketInterval";
-    marketInterval.value= localStorage.getItem('_marketInterval') || '7';
+    marketInterval.value= localStorage.getItem('_marketInterval') || 7;
 
     let marketMinValueLabel = document.createElement('span');
     marketMinValueLabel.innerHTML='Minimum item value'
     let marketMinValue=document.createElement('input');
     marketMinValue.id="marketMinValue";
-    marketMinValue.value= localStorage.getItem('_marketMinValue') || '10000';
+    marketMinValue.value= localStorage.getItem('_marketMinValue') || 10000;
 
     let marketSlider = createMenuItemSlider('marketSlider')
 
@@ -625,13 +613,140 @@
         localStorage.setItem('_marketSliderOk', marketSliderOk);
     })
 
-    // *** WORKING ON MARKETBOTON
 
 
+    // AUTOHEAL
 
+    let autoHealBotOn=document.createElement('a');
+    autoHealBotOn.classList.add('menuitem');
+    autoHealBotOn.style.cursor = "pointer";
 
+    let autoHealBelowLabel=document.createElement('span');
+    autoHealBelowLabel.innerHTML="Heal below < " + (localStorage.getItem('_autoHealBelowHpPerc') || 50) +"%";
+    autoHealBelowLabel.id="autoHealBelowLabel";
+    let autoHealBelowData=document.createElement('datalist');
+    autoHealBelowData.id="autoHealBelowData";
+    autoHealBelowData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let autoHealBelowHpPerc=document.createElement('input');
+    autoHealBelowHpPerc.setAttribute("type","range");
+    autoHealBelowHpPerc.value=localStorage.getItem('_autoHealBelowHpPerc') || 50;
+    autoHealBelowHpPerc.setAttribute("list","autoHealBelowData");
+    autoHealBelowHpPerc.id="autoHealBelowHpPerc";
 
+    let autoHealFoodValueLeniencyLabel=document.createElement('span');
+    autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < " + (localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30) +"%";
+    autoHealFoodValueLeniencyLabel.id="autoHealFoodValueLeniencyLabel";
+    let autoHealFoodValueLeniencyData=document.createElement('datalist');
+    autoHealFoodValueLeniencyData.id="autoHealFoodValueLeniencyData";
+    autoHealFoodValueLeniencyData.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let autoHealFoodValueLeniencyPerc=document.createElement('input');
+    autoHealFoodValueLeniencyPerc.setAttribute("type","range");
+    autoHealFoodValueLeniencyPerc.value=localStorage.getItem('_autoHealFoodValueLeniencyPerc') || 30;
+    autoHealFoodValueLeniencyPerc.setAttribute("list","autoHealFoodValueLeniencyData");
+    autoHealFoodValueLeniencyPerc.id="autoHealFoodValueLeniencyPerc";
 
+    let autoHealFoodTabLabel=document.createElement('span');
+    autoHealFoodTabLabel.innerHTML="Food tab";
+    autoHealFoodTabLabel.id="autoHealFoodTabLabel";
+    let autoHealFoodTab=document.createElement('select');
+    autoHealFoodTab.innerHTML='<option value="0" selected>I</option><option value="1">II</option><option value="2">III</option><option value="3" selected>IV</option><option value="4" selected>V</option><option value="5" selected>VI</option><option value="6" selected>VII</option><option value="7" selected>VIII</option>';
+    autoHealFoodTab.id="autoHealFoodTab";
+    autoHealFoodTab.value=localStorage.getItem('_autoHealFoodTab') || 0;
+
+    let autoHealTimeoutLabel = document.createElement('span');
+    autoHealTimeoutLabel.innerHTML='No food timeout(min)'
+    let autoHealTimeout=document.createElement('input');
+    autoHealTimeout.id="autoHealTimeout";
+    autoHealTimeout.value= localStorage.getItem('_autoHealTimeout') || 10;
+
+    let autoHealSlider = createMenuItemSlider('autoHealSlider')
+
+    if (autoHealSliderOk){
+        autoHealBelowLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealBelowHpPerc.setAttribute("style","display:block;margin-left:10px;");
+        autoHealFoodValueLeniencyLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodValueLeniencyPerc.setAttribute("style","display:block;margin-left:10px;");
+        autoHealFoodTabLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodTab.setAttribute("style","display:block;margin-left:10px;");
+        autoHealTimeoutLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealTimeout.setAttribute("style","display:block;margin-left:10px;max-width: 130px");
+    }else{
+        autoHealBelowLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealBelowHpPerc.setAttribute("style","display:none;margin-left:10px;");
+        autoHealFoodValueLeniencyLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodValueLeniencyPerc.setAttribute("style","display:none;margin-left:10px;");
+        autoHealFoodTabLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealFoodTab.setAttribute("style","display:none;margin-left:10px;");
+        autoHealTimeoutLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        autoHealTimeout.setAttribute("style","display:none;margin-left:10px;max-width: 130px");
+    }
+
+    if (autoHealOk==true){
+        autoHealBotOn.innerHTML="AUTOHEAL ON";
+        autoHealBotOn.style.textShadow = botOptionOn;
+    }else{
+        autoHealBotOn.innerHTML="AUTOHEAL OFF";
+        autoHealBotOn.style.textShadow = botOptionOff;
+    }
+
+    autoHealBotOn.addEventListener('click', function(){ //main quests button
+        if (autoHealOk==true){
+            autoHealOk=false;
+            autoHealBotOn.innerHTML="AUTOHEAL OFF";
+            autoHealBotOn.style.textShadow = botOptionOff;
+        }else{
+            autoHealOk=true;
+            autoHealBotOn.innerHTML="AUTOHEAL ON";
+            autoHealBotOn.style.textShadow = botOptionOn;
+        }
+        console.log('autoHealOk', autoHealOk)
+        localStorage.setItem('_autoHealOk', autoHealOk);
+    })
+    autoHealSlider.addEventListener('click', function(){
+        if (autoHealSliderOk==true){
+            autoHealSliderOk = false;
+            autoHealBelowLabel.style.display = 'none'
+            autoHealBelowHpPerc.style.display = 'none'
+            autoHealFoodValueLeniencyLabel.style.display = 'none'
+            autoHealFoodValueLeniencyPerc.style.display = 'none'
+            autoHealTimeoutLabel.style.display = 'none'
+            autoHealTimeout.style.display = 'none'
+
+            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+        }else{
+            autoHealSliderOk = true;
+            autoHealBelowLabel.style.display = 'block'
+            autoHealBelowHpPerc.style.display = 'block'
+            autoHealFoodValueLeniencyLabel.style.display = 'block'
+            autoHealFoodValueLeniencyPerc.style.display = 'block'
+            autoHealTimeoutLabel.style.display = 'block'
+            autoHealTimeout.style.display = 'block'
+
+            autoHealSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+        }
+        console.log('autoHealSlider', autoHealSliderOk)
+        localStorage.setItem('_autoHealSlider', autoHealSliderOk);
+    })
+    autoHealBelowHpPerc.addEventListener("change",function(){
+        autoHealBelowLabel.innerHTML="Heal below < "+autoHealBelowHpPerc.value+"%";
+        localStorage.setItem('_autoHealBelowHpPerc', autoHealBelowHpPerc.value);
+        console.log('autoHealBelowHpPerc.value',autoHealBelowHpPerc.value)
+    });
+    autoHealFoodValueLeniencyPerc.addEventListener("change",function(){
+        autoHealFoodValueLeniencyLabel.innerHTML="Food healing surplus < "+autoHealFoodValueLeniencyPerc.value+"%";
+        localStorage.setItem('_autoHealFoodValueLeniencyPerc', autoHealFoodValueLeniencyPerc.value);
+        console.log('autoHealFoodValueLeniencyPerc.value',autoHealFoodValueLeniencyPerc.value)
+    });
+    autoHealFoodTab.addEventListener('change', function(){
+        localStorage.setItem('_autoHealFoodTab', autoHealFoodTab.value);
+        console.log('autoHealFoodTab.value', autoHealFoodTab.value)
+    })
+    autoHealTimeout.addEventListener('change', function(){
+        localStorage.setItem('_autoHealTimeout', autoHealTimeout.value)
+        console.log('autoHealTimeout.value', autoHealTimeout.value)
+    })
+
+    // AUTOHEAL END
 
 
 
@@ -649,7 +764,7 @@
     eventdatalist.id="eventdatalist";
     eventdatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
     let eventdatalabel=document.createElement('span');
-    eventdatalabel.innerHTML="NOT ATTACK HP < 50%";
+    eventdatalabel.innerHTML="Not attack hp < 50%";
     eventdatalabel.id="eventdatalabel";
     if (autoeventok){
         eventboton.innerHTML="AUTO EVENT ON";
@@ -738,14 +853,26 @@
     menubot.appendChild(expeditionquestenemylabel);
     menubot.appendChild(expeditionquestenemy);
 
-    menubot.appendChild(marketSlider)
-    menubot.appendChild(autoMarketBotOn)
-    menubot.appendChild(marketType)
-    menubot.appendChild(marketMinValueLabel)
-    menubot.appendChild(marketMinValue)
-    menubot.appendChild(marketIntervalLabel)
-    menubot.appendChild(marketInterval)
+    menubot.appendChild(marketSlider);
+    menubot.appendChild(autoMarketBotOn);
+    menubot.appendChild(marketType);
+    menubot.appendChild(marketMinValueLabel);
+    menubot.appendChild(marketMinValue);
+    menubot.appendChild(marketIntervalLabel);
+    menubot.appendChild(marketInterval);
 
+    menubot.appendChild(autoHealSlider);
+    menubot.appendChild(autoHealBotOn);
+    menubot.appendChild(autoHealBelowLabel);
+    menubot.appendChild(autoHealBelowHpPerc);
+    menubot.appendChild(autoHealBelowData);
+    menubot.appendChild(autoHealFoodValueLeniencyLabel);
+    menubot.appendChild(autoHealFoodValueLeniencyPerc);
+    menubot.appendChild(autoHealFoodValueLeniencyData);
+    menubot.appendChild(autoHealFoodTabLabel);
+    menubot.appendChild(autoHealFoodTab);
+    menubot.appendChild(autoHealTimeoutLabel);
+    menubot.appendChild(autoHealTimeout);
 
     menubot.appendChild(workSlider); //slider
     menubot.appendChild(autoworkboton);
@@ -783,7 +910,7 @@
     });
     expeditionhp.addEventListener("change",function(){
         let expdatalabel=document.querySelector('#expdatalabel');
-        expdatalabel.innerHTML="NOT ATTACK HP < "+expeditionhp.value+"%";
+        expdatalabel.innerHTML="Not attack hp < "+expeditionhp.value+"%";
         localStorage.setItem('_expeditionhp', expeditionhp.value);
     });
     selectexpeditionmap.addEventListener("change", function(){
@@ -916,7 +1043,7 @@
     })
     arenahp.addEventListener("change",function(){
         let arenadatalabel=document.querySelector('#arenadatalabel');
-        arenadatalabel.innerHTML="NOT ATTACK HP < "+arenahp.value+"%";
+        arenadatalabel.innerHTML="Not attack hp < "+arenahp.value+"%";
         localStorage.setItem('_arenahp', arenahp.value);
     });
     arenaSlider.addEventListener('click', function(){
@@ -1147,7 +1274,7 @@
     if (existevent()){
         eventhp.addEventListener("change",function(){
             let eventdatalabel=document.querySelector('#eventdatalabel');
-            eventdatalabel.innerHTML="NOT ATTACK HP < "+eventhp.value+"%";
+            eventdatalabel.innerHTML="Not attack hp < "+eventhp.value+"%";
         });
         eventboton.addEventListener("click",function(){
             let selectedeventtarget=document.querySelector('#eventtarget');
@@ -2436,7 +2563,7 @@
 
     function checkAutoHeal(){
         if (!location.href.includes('index.php?mod=overview&doll=1&sh=')) location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
-        document.querySelectorAll('div#inventory_nav a')[3].click()
+        document.querySelectorAll('div#inventory_nav a')[parseInt(autoHealFoodTab.value)].click()
         //let currentHealthPercentage = parseInt(document.getElementById('char_leben').innerHTML)// important to compare this whe healing up instead of other
         let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
         let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
@@ -2470,14 +2597,6 @@
         if (filteredFood[0][0] < missingHealth){
             bestFood = filteredFood[0]
         }
-        /*
-        for (let i = 0; i < filteredFood.length; i++){
-            if (filteredFood[i][0] < missingHealth){
-                bestFood = filteredFood[i];
-                break;
-            }
-        }
-        */
         if (bestFood){
             console.log('best food found: ', bestFood)
             simulateDoubleClick(bestFood[1])
@@ -2493,7 +2612,8 @@
             console.log('applying 30% leniency cap')
 
             let afterLeniencyCap;
-            if (filteredFood[0][0] < missingHealth * 1.3){
+            let healingValueLeniency = (parseInt(autoHealFoodValueLeniencyPerc.value))/100
+            if (filteredFood[0][0] < missingHealth * (1 + healingValueLeniency)){
                 afterLeniencyCap = filteredFood[0]
             }
             if (afterLeniencyCap){
@@ -2509,6 +2629,7 @@
                 console.log('food after leniancy NOT found')
                 //cant find any usefull food, apply timeout
                 localStorage.setItem('_lastAutoHealTimeout', Date.now())
+                location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
             }
         }
 
@@ -2517,17 +2638,16 @@
     function checkAutoHealCondition(autoHealOk){
         if (!autoHealOk) return 0
         console.log('autoheal')
-        let interval = 1 //check every 10 mins for new food items in invertory
+        let interval = parseFloat(autoHealTimeout.value.replace(/[^0-9.]/g, ''))// check every x minutes for new food
         interval *= 60000
-        //if ((Date.now() - lastAutoHealTimeout) < interval) return 0
+        if ((Date.now() - lastAutoHealTimeout) < interval) return 0
 
         let currentHealth = document.getElementById('header_values_hp_bar').getAttribute('data-value');
         let maxHealth = document.getElementById('header_values_hp_bar').getAttribute('data-max-value');
         let currentHealthInPercentage = (currentHealth / maxHealth) * 100;
         //console.log('health: ', currentHealthInPercentage);
 
-        let USER_DEFINED_HEAL_PERCENTAGE = 75
-        if (currentHealthInPercentage > USER_DEFINED_HEAL_PERCENTAGE) return 0
+        if (currentHealthInPercentage >= parseInt(autoHealBelowHpPerc.value)) return 0
         return 1
     }
 
