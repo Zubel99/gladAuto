@@ -1849,6 +1849,12 @@
             location.href = arenaLink;
         }
 
+        let dishonorableNotification = document.querySelector('div#blackoutDialogbod[class="cancel_confirm"] input[type="submit"][value="Cancel"]')
+        if (dishonorableNotification){
+            dishonorableNotification.click()
+            document.querySelector('input.button1[name="actionButton"]').click()
+        }
+
         let enemyElements = document.querySelectorAll('section#own2 table tbody tr');
         let enemyStats = [];
         let promises = [];
