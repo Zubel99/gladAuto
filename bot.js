@@ -1849,9 +1849,9 @@
             location.href = arenaLink;
         }
 
-        let dishonorableNotification = document.querySelector('div#blackoutDialogbod[class="cancel_confirm"] input[type="submit"][value="Cancel"]')
-        if (dishonorableNotification){
-            dishonorableNotification.click()
+        let dishonorableNotification = document.querySelector('div#blackoutDialogbod[class="cancel_confirm"]')
+        if (dishonorableNotification.getAttribute('display') == 'block'){
+            dishonorableNotification.querySelector('input[type="submit"][value="Cancel"]').click()
             document.querySelector('input.button1[name="actionButton"]').click()
         }
 
@@ -2355,6 +2355,9 @@
                         console.log(notificationError.innerHTML);
                         STOP_BUYING = true;
                         location.href = 'index.php?mod=overview&doll=1&sh=' + sessionHash;
+                    }
+                    else if((notificationError.innerHTML).includes("too low")){
+                        filterButton.click()
                     }
                 }
             }
