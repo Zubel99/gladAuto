@@ -1836,6 +1836,17 @@
         return 1
     }
 
+
+    let dfc = parseInt(localStorage.getItem('_dfCounter')) || 0
+    let dfCounter=document.createElement('button');//selectturmatarget
+    if (location.href.includes('index.php?mod=arena') && location.href.includes('&aType=2')){
+        dfCounter.classList.add('awesome-tabs');
+        dfCounter.setAttribute("style"," position:absolute; padding:2px; left: -45px; font-size: 14px; min-width: 25px; min-height: 25px;");
+        let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
+        questNavTab.appendChild(dfCounter)
+        dfCounter.innerHTML = dfc;
+    }
+
     async function checkArenaProvinciarium(_percentCap){
         let percentCap = parseInt(_percentCap) // percent of power difference fro menemy (1 = 10%, 2 = 20% etc)
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
@@ -1851,6 +1862,11 @@
 
         let dishonorableNotification = document.querySelector('div#blackoutDialogbod[class="cancel_confirm"]')
         if (dishonorableNotification.getAttribute('display') == 'block'){
+
+            dfc += 1;
+            localStorage.setItem('_dfCounter', dfc)
+            dfCounter.innerHTML = dfc;
+
             dishonorableNotification.querySelector('input[type="submit"][value="Cancel"]').click()
             document.querySelector('input.button1[name="actionButton"]').click()
         }
@@ -1982,8 +1998,9 @@
     }
 
     let qc = parseInt(localStorage.getItem('_questCounter')) || 0
+    let questCounter=document.createElement('button');
     if (location.href.includes('index.php?mod=quests')){
-        let questCounter=document.createElement('button');//selectturmatarget
+        //selectturmatarget
         questCounter.classList.add('awesome-tabs');
         questCounter.setAttribute("style"," position:absolute; padding:2px; left: -45px; font-size: 14px; min-width: 25px; min-height: 25px;");
         let questNavTab = document.querySelector('ul#mainnav li table tbody tr td');
