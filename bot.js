@@ -15,6 +15,9 @@
     let hashIndex = urlWithHash.indexOf('&sh=');
     let sessionHash = urlWithHash.substring(hashIndex+4)
     console.log('current hash: ', sessionHash)
+    let serverNumber = (window.location.href.substring(0,16)).replace(/\D/g, '')
+    console.log('serverNumber: ', serverNumber)
+    let currentDate = Date.now()
 
 
     let expeditionLocations = [];
@@ -402,6 +405,15 @@
     arenahp.value=localStorage.getItem('_arenahp') || 50;
     arenahp.setAttribute("list","arenadatalist");
     arenahp.id="arenahp";
+
+    let arenaMaxEnemyAttacksLabel = document.createElement('span');
+    arenaMaxEnemyAttacksLabel.innerHTML='Max enemy attacks in 24h'
+
+    let arenaMaxEnemyAttacks=document.createElement('select');
+    arenaMaxEnemyAttacks.innerHTML = '<option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option><option value="4">5</option>';
+    arenaMaxEnemyAttacks.id="arenaMaxEnemyAttacks";
+    arenaMaxEnemyAttacks.value=localStorage.getItem('_arenaMaxEnemyAttacks') || 4;
+
     let arenadatalist=document.createElement('datalist');
     arenadatalist.id="arenadatalist";
     arenadatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
@@ -414,10 +426,14 @@
         selectarenaprovinciariummode.setAttribute("style","display:block;margin-left:10px;");
         arenahp.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
         arenadatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
+        arenaMaxEnemyAttacksLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        arenaMaxEnemyAttacks.setAttribute("style","display:block;margin-left:10px;");
     }else{
         selectarenaprovinciariummode.setAttribute("style","display:none;margin-left:10px;");
         arenahp.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
         arenadatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
+        arenaMaxEnemyAttacksLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        arenaMaxEnemyAttacks.setAttribute("style","display:none;margin-left:10px;");
     }
     if (autoarenaprovinciariumok==true){
         arenaprovinciariumboton.innerHTML="ARENA PROV ON";
@@ -452,6 +468,9 @@
         arenadatalabel.innerHTML="Not attack hp < "+arenahp.value+"%";
         localStorage.setItem('_arenahp', arenahp.value);
     });
+    arenaMaxEnemyAttacks.addEventListener("change", function(){
+        localStorage.setItem('_arenaMaxEnemyAttacks', arenaMaxEnemyAttacks.value);
+    })
     function handleArenaSlider(){
         let selectarenaprovinciariummode=document.querySelector('#selectarenaprovinciariummode');
         let arenadatalabel=document.querySelector('#arenadatalabel');
@@ -1212,6 +1231,8 @@
     menubot.appendChild(arenaSlider); //slider
     menubot.appendChild(arenaprovinciariumboton)
     menubot.appendChild(selectarenaprovinciariummode)
+    menubot.appendChild(arenaMaxEnemyAttacksLabel)
+    menubot.appendChild(arenaMaxEnemyAttacks)
     menubot.appendChild(arenadatalabel);
     menubot.appendChild(arenahp);
     menubot.appendChild(arenadatalist);
@@ -1847,6 +1868,27 @@
         dfCounter.innerHTML = dfc;
     }
 
+
+    function appendItemToObjectOfObjects(obj, key, newItem) {
+        if (!obj.hasOwnProperty(key)) {
+            obj[key] = {}; // Create the object if it doesn't exist
+        }
+        Object.assign(obj[key], newItem);
+    }
+    function removeItemFromObjectOfObjects(obj, key) {
+        if (obj.hasOwnProperty(key)) {
+            delete obj[key];
+        }
+    }
+    function sortWeakestEnemiesDesc(a, b) {
+        if (a[1] === b[1]) {
+            return 0;
+        }
+        else {
+            return (a[1] > b[1]) ? -1 : 1;
+        }
+    }
+
     async function checkArenaProvinciarium(_percentCap){
         let percentCap = parseInt(_percentCap) // percent of power difference fro menemy (1 = 10%, 2 = 20% etc)
         let arenaLink = 'index.php?mod=arena&submod=serverArena&aType=2&sh=' + sessionHash;
@@ -1862,7 +1904,6 @@
 
         let dishonorableNotification = document.querySelector('div#blackoutDialogbod[class="cancel_confirm"]')
         if (dishonorableNotification.getAttribute('display') == 'block'){
-
             dfc += 1;
             localStorage.setItem('_dfCounter', dfc)
             dfCounter.innerHTML = dfc;
@@ -1939,18 +1980,110 @@
                 document.querySelector('input.button1[name="actionButton"]').click()
                 return
             }
-            let weakestEnemy = weakerEnemies[0]
-            weakerEnemies.forEach(enemy => {
+            //let weakestEnemy = weakerEnemies[0]
+            /*weakerEnemies.forEach(enemy => {
                 if (enemy[1] > weakestEnemy[1]){
                     weakestEnemy = enemy
                 }
             })
+            */
+            weakerEnemies.sort(sortWeakestEnemiesDesc)
+            //let weakestEnemy = weakerEnemies[0]
+
             console.log('weakerEnemies: ', weakerEnemies)
-            console.log('weakestEnemy: ', weakestEnemy)
+            //console.log('weakestEnemy: ', weakestEnemy)
             //localStorage.setItem('_enemyStatsArena', JSON.stringify(enemyStats))
             //localStorage.setItem('_weakerEnemiesArena', JSON.stringify(weakerEnemies))
             //localStorage.setItem('_weakestEnemyArena', JSON.stringify(weakestEnemy))
-            weakestEnemy[0].click()
+            //console.log('Weakest button:', weakestEnemy[0])
+            //weakestEnemy[0].click();
+
+            //for nicknames
+            let enemyRows = document.querySelectorAll('section#own2 tbody tr');
+            //console.log('enemyRows', enemyRows)
+            let enemyRowData = []
+            enemyRows.forEach(enemy => {
+                if (!enemy.querySelector('td div[class="attack"]')) return
+                let enemyNickname = enemy.querySelector('a[target="_blank"]').innerText
+                //console.log('enemyNickname', enemyNickname)
+                let attackButton = enemy.querySelector('td div[class="attack"]')
+                //console.log('attackButton',attackButton)
+
+                enemyRowData.push([enemyNickname, attackButton])
+            })
+            let savedPlayers = JSON.parse(localStorage.getItem('_' + serverNumber + '_arenaProvSavedPlayers')) || {}
+            console.log('enemyRowData',enemyRowData)
+            console.log('savedPlayers: ', savedPlayers)
+            let shouldPlayerFight = false;
+            let currentDate = Date.now()
+            let MAX_NUMBER_OF_FIGHTS = parseInt(arenaMaxEnemyAttacks.value) + 1
+            console.log('MAX_NUMBER_OF_FIGHTS', MAX_NUMBER_OF_FIGHTS)
+
+            for (let i = 0; i < weakerEnemies.length; i++){
+                let targetPlayerNickname
+                enemyRowData.forEach(enemy => {
+                    if (enemy[1] == weakerEnemies[i][0]) targetPlayerNickname = enemy[0]
+                })
+
+                console.log('checking: ', weakerEnemies[i])
+                console.log('nickname: ', targetPlayerNickname)
+
+                shouldPlayerFight = false;
+
+                if (targetPlayerNickname){
+                    if (savedPlayers[targetPlayerNickname]){
+                        console.log('istnieje')
+
+                        let interval = 1440 // 24h to reset bashing
+                        interval *= 60000
+                        if ((currentDate - savedPlayers[targetPlayerNickname][1]) > interval){ // more than 24h passed
+                            //removeItemFromObjectOfObjects(savedPlayers, targetPlayerNickname) //remove item if its there for more than 24h
+                            savedPlayers[targetPlayerNickname][0] = 1
+                            savedPlayers[targetPlayerNickname][1] = currentDate
+                            console.log('minal czas')
+                            //console.log("XD", savedPlayers[targetPlayerNickname][1])
+                            shouldPlayerFight = true;
+                            //console.log('ilosc bic: ', savedPlayers[targetPlayerNickname][0])
+                        }
+                        else{ // less than 24h passed
+                            console.log('nie minal czas')
+                            if (savedPlayers[targetPlayerNickname][0] < MAX_NUMBER_OF_FIGHTS) {// jeli gracz bil  przeciwnika mniej razy niz maksymalna ilosc
+                                savedPlayers[targetPlayerNickname][0]++;
+                                //console.log("XD", savedPlayers[targetPlayerNickname][1])
+                                shouldPlayerFight = true;
+                                //console.log('ilosc bic: ', savedPlayers[targetPlayerNickname][0])
+                            }
+                            else { //jesli gracz bil przeciwnika za duzo razy
+                                shouldPlayerFight = false;
+                            }
+                        }
+                    }
+
+                    else {
+                        console.log('nie istnieje')
+                        appendItemToObjectOfObjects(savedPlayers, targetPlayerNickname, [1, Date.now()])
+                        shouldPlayerFight = true;
+                    }
+
+                    localStorage.setItem('_' + serverNumber + '_arenaProvSavedPlayers', JSON.stringify(savedPlayers))
+                }
+
+                if (shouldPlayerFight){
+                    setTimeout(function(){
+                        console.log('ATTACK CLICK')
+                        weakerEnemies[i][0].click();
+                    }, 500)
+                    break;
+                }
+                else{
+                    console.log('checking next enemy')
+                }
+
+            }
+            if (!shouldPlayerFight){
+                console.log('reroll')
+                document.querySelector('input.button1[name="actionButton"]').click()
+            }
             return
         })
             .catch(error => {
@@ -2533,12 +2666,44 @@
         return 1
     }
 
-    //let arr1 = JSON.parse(localStorage.getItem('_enemyCharactersStatsCircus'))
-    //let arr2 = JSON.parse(localStorage.getItem('_weakerEnemiesCircus'))
-    //let arr3 = JSON.parse(localStorage.getItem('_weakestEnemyCircus'))
-    //let arr4 = JSON.parse(localStorage.getItem('_enemyStatsArena'))
-    //let arr5 = JSON.parse(localStorage.getItem('_weakerEnemiesArena'))
-    //let arr6 = JSON.parse(localStorage.getItem('_weakestEnemyArena'))
+    function backgroundOperations(){
+        console.log('background tasks')
+        let backgroundTimers = JSON.parse(localStorage.getItem('_' + serverNumber + '_backgroundTimers')) || {}
+        if(backgroundTimers.lastArenaCheck){
+            //console.log('last arena check exists, value = ', backgroundTimers.lastArenaCheck)
+            let interval = 360 // check for old data every 360 minutes
+            interval *= 60000
+
+            if ((currentDate - backgroundTimers.lastArenaCheck) > interval){ // more than 24h passed
+                let compareInterval = 1440 //24h
+                compareInterval *= 60000
+                let arenaEnemiesData = JSON.parse(localStorage.getItem('_' + serverNumber + '_arenaProvSavedPlayers')) || {}
+
+                for (const key in arenaEnemiesData) {
+                    if (arenaEnemiesData.hasOwnProperty(key)) {
+                        if (currentDate - arenaEnemiesData[key][1] > compareInterval){
+                            console.log('wiecej niz 24h, usun')
+                            removeItemFromObjectOfObjects(arenaEnemiesData, key)
+                        }
+                        else console.log('mniej niz 24, zostaw')
+                    }
+                }
+                console.log('PO USUWANIACH')
+                console.log('zmodyfikowany obiekt: ', arenaEnemiesData)
+                localStorage.setItem('_' + serverNumber + '_arenaProvSavedPlayers', JSON.stringify(arenaEnemiesData))
+                backgroundTimers.lastArenaCheck = currentDate
+                localStorage.setItem('_' + serverNumber + '_backgroundTimers', JSON.stringify(backgroundTimers))
+            }
+            else{ // less than 24h passed
+                //console.log('do nothing')
+            }
+        }
+        else{
+            console.log('last arena check DOESN"T exists')
+            backgroundTimers.lastArenaCheck = currentDate
+            localStorage.setItem('_' + serverNumber + '_backgroundTimers', JSON.stringify(backgroundTimers))
+        }
+    }
 
     function pickAction(){
         if (checkQuestsCondition(autoquestok) == 1){
@@ -2599,6 +2764,7 @@
                 else if (currentAction == 50) checkCircusProvinciarium(selectcircusprovinciariummode.value);
                 else if (currentAction == 60) checkArenaProvinciarium(selectarenaprovinciariummode.value);
                 else if (currentAction == 70) checkWork(autoworktype.value);
+                else backgroundOperations();
             }
         }
     }
