@@ -480,12 +480,16 @@
             selectarenaprovinciariummode.style.display="none";
             arenadatalabel.style.display="none";
             arenahp.style.display="none";
+            arenaMaxEnemyAttacksLabel.style.display="none";
+            arenaMaxEnemyAttacks.style.display="none";
             arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
         }else{
             arenaSliderOk = true;
             selectarenaprovinciariummode.style.display="block";
             arenadatalabel.style.display="block";
             arenahp.style.display="block";
+            arenaMaxEnemyAttacksLabel.style.display="block";
+            arenaMaxEnemyAttacks.style.display="block";
             arenaSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
 
         }
