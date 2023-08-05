@@ -39,8 +39,19 @@
         quickSellButton.style = 'width: 50px; height: 30px; position: absolute; left: 125px; top: 230px'
         quickSellButton.addEventListener('click', sellTabItems)
 
-        let inventory = document.querySelector('div.inventoryBox')
-        inventory.appendChild(quickSellButton)
+        let inventoryMenu = document.querySelector('div.inventoryBox')
+        inventoryMenu.appendChild(quickSellButton)
+    }
+    else if (location.href.includes('mod=packages')){
+        let quickGetPackages = document.createElement('button')
+        quickGetPackages.innerText = 'Get packages'
+        quickGetPackages.classList.add('awesome-button')
+        quickGetPackages.style = 'width: 65px; height: 30px; position: absolute; left:320px; top: 523px'
+        quickGetPackages.addEventListener('click', getPackages)
+
+        //let packageMenu = document.querySelector('div.pagination')
+        let packageMenu = document.querySelector('div#content')
+        packageMenu.appendChild(quickGetPackages)
     }
 
 
@@ -2686,6 +2697,18 @@
         let tabItems = document.querySelectorAll('div#inv div[data-content-type]')
         let index = 0;
         tabItems.forEach(item => {
+            index++;
+            let randomDelay = Math.round(Math.random() * (100 - 10)) + 10
+            setTimeout(function(){
+                simulateDoubleClick(item)
+            }, index*200 + randomDelay)
+        })
+    }
+
+    function getPackages(){
+        let packageItems = document.querySelectorAll('div#packages div.packageItem div[style]')
+        let index = 0;
+        packageItems.forEach(item => {
             index++;
             let randomDelay = Math.round(Math.random() * (100 - 10)) + 10
             setTimeout(function(){
