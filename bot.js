@@ -32,6 +32,18 @@
         dungeonLocations.push(dungeonLink);
     }
 
+    if (location.href.includes('mod=inventory')){
+        let quickSellButton = document.createElement('button')
+        quickSellButton.innerText = 'Quick sell'
+        quickSellButton.classList.add('awesome-button')
+        quickSellButton.style = 'width: 50px; height: 30px; position: absolute; left: 125px; top: 230px'
+        quickSellButton.addEventListener('click', sellTabItems)
+
+        let inventory = document.querySelector('div.inventoryBox')
+        inventory.appendChild(quickSellButton)
+    }
+
+
     let boton=localStorage.getItem('_boton') === 'true';
     let autoexpeditionok=localStorage.getItem('_autoexpeditionok') === 'true';
     let autodungeonok=localStorage.getItem('_autodungeonok') === 'true';
@@ -2668,6 +2680,18 @@
 
         if (currentHealthInPercentage >= parseInt(autoHealBelowHpPerc.value)) return 0
         return 1
+    }
+
+    function sellTabItems(){
+        let tabItems = document.querySelectorAll('div#inv div[data-content-type]')
+        let index = 0;
+        tabItems.forEach(item => {
+            index++;
+            let randomDelay = Math.round(Math.random() * (100 - 10)) + 10
+            setTimeout(function(){
+                simulateDoubleClick(item)
+            }, index*200 + randomDelay)
+        })
     }
 
     function backgroundOperations(){
