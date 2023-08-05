@@ -32,8 +32,9 @@
         dungeonLocations.push(dungeonLink);
     }
 
+    let quickSellButton = document.createElement('button')
+    let quickGetPackages = document.createElement('button')
     if (location.href.includes('mod=inventory')){
-        let quickSellButton = document.createElement('button')
         quickSellButton.innerText = 'Quick sell'
         quickSellButton.classList.add('awesome-button')
         quickSellButton.style = 'width: 50px; height: 30px; position: absolute; left: 125px; top: 230px'
@@ -43,7 +44,6 @@
         inventoryMenu.appendChild(quickSellButton)
     }
     else if (location.href.includes('mod=packages')){
-        let quickGetPackages = document.createElement('button')
         quickGetPackages.innerText = 'Get packages'
         quickGetPackages.classList.add('awesome-button')
         quickGetPackages.style = 'width: 65px; height: 30px; position: absolute; left:320px; top: 523px'
@@ -2694,6 +2694,7 @@
     }
 
     function sellTabItems(){
+        quickSellButton.disabled = true;
         let tabItems = document.querySelectorAll('div#inv div[data-content-type]')
         let index = 0;
         tabItems.forEach(item => {
@@ -2701,11 +2702,18 @@
             let randomDelay = Math.round(Math.random() * (100 - 10)) + 10
             setTimeout(function(){
                 simulateDoubleClick(item)
+                if(document.querySelector('div#blackoutDialogdestackConfirm').style.display == 'block'){
+                    document.querySelector('input#linkdestackConfirm').click()
+                }
             }, index*200 + randomDelay)
         })
+        setTimeout(function(){
+            quickSellButton.disabled = false;
+        }, index* 200 + 500)
     }
 
     function getPackages(){
+        quickGetPackages.disabled = true;
         let packageItems = document.querySelectorAll('div#packages div.packageItem div[style]')
         let index = 0;
         packageItems.forEach(item => {
@@ -2715,6 +2723,9 @@
                 simulateDoubleClick(item)
             }, index*200 + randomDelay)
         })
+        setTimeout(function(){
+            quickGetPackages.disabled = false;
+        }, index* 200 + 500)
     }
 
     function backgroundOperations(){
