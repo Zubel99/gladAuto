@@ -24,6 +24,7 @@
     let dungeonLocations = [];
     let expeditionLocationsUnfiltered=document.querySelectorAll('div#submenu2.submenu a');
     for (let i=1; i < expeditionLocationsUnfiltered.length; i++) {
+        console.log(expeditionLocationsUnfiltered[i])
         let leftAnchor = expeditionLocationsUnfiltered[i].href.indexOf('index.php?');
         let rightAnchor = expeditionLocationsUnfiltered[i].href.indexOf('&sh=');
         let locationLink = expeditionLocationsUnfiltered[i].href.substring(leftAnchor, rightAnchor+4)+sessionHash;
@@ -63,6 +64,7 @@
     let autoarenaprovinciariumok=localStorage.getItem('_autoarenaprovinciariumok') === 'true';
     //let autoturmaok=localStorage.getItem('_autoturmaok') === 'true';
     let autoworkok=localStorage.getItem('_autoworkok') === 'true';
+    let autoeventok=localStorage.getItem('_autoeventok') === 'true';
 
     let autoquestok=localStorage.getItem('_autoquestok') === 'true';
     let autoMarketOk = localStorage.getItem('_autoMarketOk') === 'true';
@@ -93,10 +95,10 @@
     let marketSliderOk = localStorage.getItem('_marketSliderOk') === 'true';
     let autoHealSliderOk = localStorage.getItem('_autoHealSlider') === 'true'
     let workSliderOk = localStorage.getItem('_workSliderOk') === 'true';
+    let eventSliderOk = localStorage.getItem('_eventSliderOk') === 'true';
 
 
-    //additional functionalities handle the same way
-    let autoeventok=true
+
 
     let menujuego=document.querySelector('#mainmenu');
     let menubotfooter=document.createElement('div');
@@ -186,10 +188,10 @@
         expeditionboton.style.textShadow = botOptionOff
     }
     selectexpeditionmap.id="expeditionmap";
-    let zonas= document.querySelectorAll("div#submenu2 a.menuitem");
+    let zonas= document.querySelectorAll("div#submenu2 a.menuitem")
     let zona;
     for (let i=1; i<zonas.length; i++){
-        if (!zonas[i].classList.contains("eyecatcher")) {
+        if (!zonas[i].classList.contains("eyecatcher")) { // here excludes event locations - since they have eyecatcher class
             zona=document.createElement('option');
             zona.innerHTML = zonas[i].innerHTML;
             zona.setAttribute("value",i-1);
@@ -1155,6 +1157,7 @@
     }
 
     // WORK LOGIC
+
     autoworkboton.addEventListener('click', function(){
         if (autoworkok==true){
             autoworkok=false;
@@ -1187,6 +1190,143 @@
     }
     workSlider.addEventListener('click', handleWorkSlider)
     workSlider.addEventListener('touchend', handleWorkSlider) //for mobile
+
+    // ********************************************************************************************** BotOn EVENT
+
+    let eventboton=document.createElement('a');
+    let selecteventmap=document.createElement('select');
+    let selecteventtarget=document.createElement('select');
+    eventboton.classList.add('menuitem');
+    eventboton.style = "cursor: pointer; margin-bottom: 5px";
+    let eventhp=document.createElement('input');
+    eventhp.setAttribute("type","range");
+    eventhp.value=localStorage.getItem('_eventhp') || 50;
+    eventhp.setAttribute("list","eventdatalist");
+    eventhp.id="eventhp";
+    let eventdatalist=document.createElement('datalist');
+    eventdatalist.id="eventdatalist";
+    eventdatalist.innerHTML='<option value="5"></option><option value="10"></option><option value="15"></option><option value="20"></option><option value="25"></option><option value="30"></option><option value="35"></option><option value="40"></option><option value="45"></option><option value="50"></option><option value="55"></option><option value="60"></option><option value="65"></option><option value="70"></option><option value="75"></option><option value="80"></option><option value="85"></option><option value="90"></option><option value="95"></option><option value="100"></option>';
+    let eventdatalabel=document.createElement('span');
+    eventdatalabel.innerHTML="Not attack hp < " + (localStorage.getItem('_eventhp') || 50) +"%";
+    eventdatalabel.id="eventdatalabel";
+    let eventIntervalLabel = document.createElement('span');
+    eventIntervalLabel.innerHTML='Event interval(min)'
+    let eventInterval=document.createElement('input');
+    eventInterval.id="eventInterval";
+    eventInterval.value= localStorage.getItem('_eventInterval') || 5;
+    let eventPointsLabel = document.createElement('span');
+    eventPointsLabel.innerHTML='Daily event points'
+    let eventPoints=document.createElement('input');
+    eventPoints.id="eventPoints";
+    eventPoints.value= localStorage.getItem('_eventPoints') || 16;
+
+    let eventSlider = createMenuItemSlider('eventSlider')
+    if (eventSliderOk){
+        selecteventmap.setAttribute("style","display:block;margin-left:10px;");
+        selecteventtarget.setAttribute("style","display:block;margin-left:10px;");
+        eventhp.setAttribute("style","display:block;margin-left:10px; margin-bottom: 12px");
+        eventdatalabel.setAttribute("style","display:block;margin-left:10px;color:yellow;");
+        eventIntervalLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        eventInterval.setAttribute("style","display:block;margin-left:10px;max-width: 130px; margin-bottom: 12px");
+        eventPointsLabel.setAttribute("style","display:block;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        eventPoints.setAttribute("style","display:block;margin-left:10px;max-width: 130px; margin-bottom: 12px");
+    }else{
+        selecteventmap.setAttribute("style","display:none;margin-left:10px;");
+        selecteventtarget.setAttribute("style","display:none;margin-left:10px;");
+        eventhp.setAttribute("style","display:none;margin-left:10px; margin-bottom: 12px");
+        eventdatalabel.setAttribute("style","display:none;margin-left:10px;color:yellow;");
+        eventIntervalLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        eventInterval.setAttribute("style","display:none;margin-left:10px;max-width: 130px; margin-bottom: 12px");
+        eventPointsLabel.setAttribute("style","display:none;margin-left:10px;max-width: 100px; color:yellow; white-space: nowrap;");
+        eventPoints.setAttribute("style","display:none;margin-left:10px;max-width: 130px; margin-bottom: 12px");
+    }
+    if (autoeventok==true){
+        eventboton.innerHTML="EVENT ON";
+        eventboton.style.textShadow = botOptionOn
+
+    }else{
+        eventboton.innerHTML="EVENT OFF";
+        eventboton.style.textShadow = botOptionOff
+    }
+    selecteventmap.id="eventmap";
+    let zonaEvent;
+    for (let i=1; i<zonas.length; i++){
+        if (zonas[i].classList.contains("eyecatcher")) { // is includes this class that means thsi location should be event
+            zonaEvent=document.createElement('option');
+            zonaEvent.innerHTML = zonas[i].innerHTML;
+            zonaEvent.setAttribute("value",i-1);
+            selecteventmap.appendChild(zonaEvent);
+        }
+    }
+    selecteventtarget.innerHTML = '<option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option>';
+    selecteventtarget.id="eventtarget";
+    selecteventmap.value=localStorage.getItem('_selectedeventmap') || zonas.length - 2;
+    selecteventtarget.value=localStorage.getItem('_selectedeventtarget') || 0;
+
+    //EVENT LOGIC
+
+    eventboton.addEventListener("click",function(){
+        if (autoeventok==true){
+            autoeventok=false;
+            eventboton.innerHTML="EVENT OFF";
+            eventboton.style.textShadow = botOptionOff
+        }else{
+            autoeventok=true;
+            eventboton.innerHTML="EVENT ON";
+            eventboton.style.textShadow = botOptionOn
+        }
+        localStorage.setItem('_autoeventok', autoeventok)
+    });
+    eventhp.addEventListener("change",function(){
+        let eventdatalabel=document.querySelector('#eventdatalabel');
+        eventdatalabel.innerHTML="Not attack hp < "+eventhp.value+"%";
+        localStorage.setItem('_eventhp', eventhp.value);
+    });
+    selecteventmap.addEventListener("change", function(){
+        localStorage.setItem('_selectedeventmap', selecteventmap.value);
+    })
+    selecteventtarget.addEventListener("change", function(){
+        localStorage.setItem('_selectedeventtarget', selecteventtarget.value);
+    })
+    eventInterval.addEventListener('change', function(){
+        localStorage.setItem('_eventInterval', eventInterval.value);
+    })
+    eventPoints.addEventListener('change', function(){
+        localStorage.setItem('_eventPoints', eventPoints.value);
+    })
+    function handleEventSlider(){
+        let selectedeventmap=document.querySelector('#eventmap');
+        let selectedeventtarget=document.querySelector('#eventtarget');
+        let eventdatalabel=document.querySelector('#eventdatalabel');
+        let eventhp=document.querySelector('#eventhp');
+        if (eventSliderOk==true){
+            eventSliderOk = false;
+            selectedeventmap.style.display="none";
+            selectedeventtarget.style.display="none";
+            eventdatalabel.style.display="none";
+            eventhp.style.display="none";
+            eventSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/down-icon.png')
+            eventIntervalLabel.style.display= 'none'
+            eventInterval.style.display= 'none'
+            eventPointsLabel.style.display= 'none'
+            eventPoints.style.display= 'none'
+        }else{
+            eventSliderOk = true;
+            selectedeventmap.style.display="block";
+            selectedeventtarget.style.display="block";
+            eventdatalabel.style.display="block";
+            eventhp.style.display="block";
+            eventSlider.setAttribute('src', 'https://icons.iconarchive.com/icons/custom-icon-design/mono-general-1/48/up-icon.png')
+            eventIntervalLabel.style.display= 'block'
+            eventInterval.style.display= 'block'
+            eventPointsLabel.style.display= 'block'
+            eventPoints.style.display= 'block'
+
+        }
+        localStorage.setItem('_eventSliderOk', eventSliderOk);
+    }
+    eventSlider.addEventListener('click', handleEventSlider)
+    eventSlider.addEventListener('touchend', handleEventSlider) //for mobile
 
 
     // ********************************************************************************************** MENU BOT ON
@@ -1309,6 +1449,19 @@
     menubot.appendChild(autoworkboton);
     menubot.appendChild(autoworktype);
     //menubot.appendChild(autoworktime);
+
+    menubot.appendChild(eventSlider) //slider
+    menubot.appendChild(eventboton);
+    menubot.appendChild(selecteventmap);
+    menubot.appendChild(selecteventtarget);
+    menubot.appendChild(eventdatalabel);
+    menubot.appendChild(eventhp);
+    menubot.appendChild(eventdatalist);
+    menubot.appendChild(eventIntervalLabel);
+    menubot.appendChild(eventInterval);
+    menubot.appendChild(eventPointsLabel);
+    menubot.appendChild(eventPoints);
+
     menubot.appendChild(menubotfooter);
     menujuego.appendChild(menubotboton);
     menujuego.appendChild(menubot);
@@ -1350,6 +1503,75 @@
         let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
         //console.log('content != "Go to expedition"', content != 'Go to expedition')
         if(content != 'Go to expedition') return 0
+        return 1
+    }
+
+    function getNextMidnightTimestamp() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+        return tomorrow.getTime();
+    }
+
+
+    function checkEvent(selecteventmap, selecteventtarget){
+        location.href = expeditionLocations[selecteventmap];
+
+        let fightPointsRequired = [1,1,1,2]
+        let remainingPointsInfo = document.querySelectorAll('#content .section-header p')[1].innerText;
+        let filteredPoints = remainingPointsInfo.substring(remainingPointsInfo.indexOf('event points: ')+ 10, remainingPointsInfo.indexOf('event points: ')+ 20)
+        let filteredPointsInt = parseInt(filteredPoints.replace(/[^0-9]/g, ""))
+        console.log('filteredPoints: ', filteredPointsInt)
+        //zapisac tu ilsoc aktualnych punktow
+        console.log('set currentEventPoints')
+        localStorage.setItem('_currentEventPoints', filteredPointsInt);
+
+        if (filteredPointsInt < fightPointsRequired[selecteventtarget]){
+            console.log('not enough points');
+            return;
+        }
+        console.log('set lastEventFight')
+        localStorage.setItem('_lastEventFight', Date.now())
+        console.log('fight')
+        localStorage.setItem('_currentEventPoints', filteredPointsInt - fightPointsRequired[selecteventtarget])
+        document.getElementById('expedition_list').children[selecteventtarget].children[1].children[0].click();
+
+        //console.log(getNextMidnightTimestamp())
+
+
+        //
+    }
+
+    console.log(Date.now())
+
+    function checkEventCondition(autoeventok, eventhp, eventInterval, selecteventtarget){
+        let fightPointsRequired = [1,1,1,2]
+        if (!autoeventok) return 0
+        console.log('event')
+        let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
+        //console.log('currentHpPercentage < expeditionhp: ', currentHpPercentage < expeditionhp)
+        if (currentHpPercentage < eventhp) return 0;
+        let content = document.getElementById('cooldown_bar_text_expedition').innerHTML;
+        //console.log('content != "Go to expedition"', content != 'Go to expedition')
+        //if(content != 'Go to expedition') return 0
+
+        //here check for replenish
+        //localStorage.setItee('_resetEventPoints', getNextMidnightTimestamp())
+        let nextReset = parseInt(localStorage.getItem('_resetEventPoints')) || 0
+        if (Date.now() > nextReset){
+            localStorage.setItem('_currentEventPoints', eventPoints.value) //default daily points - 16 currently
+            localStorage.setItem('_resetEventPoints', getNextMidnightTimestamp())
+        }
+
+        let currentEventPoints = parseInt(localStorage.getItem('_currentEventPoints')) || eventPoints.value; // 16 as default value CURRENTLY
+        if (currentEventPoints < fightPointsRequired[selecteventtarget]){console.log('not enough points'); return 0}
+
+        let lastEventFight = localStorage.getItem('_lastEventFight') || 0
+        if (Date.now() - lastEventFight < (eventInterval*60*1000)) {
+            console.log('interval havent passed yet')
+            return 0 // if 5 mins havent passed yet
+        }
         return 1
     }
 
@@ -2789,6 +3011,9 @@
         else if (checkArenaProvinciariumCondition(autoarenaprovinciariumok, arenahp.value) == 1){
             return 60
         }
+        else if (checkEventCondition(autoeventok, expeditionhp.value, eventInterval.value, selecteventtarget.value) == 1){
+            return 61
+        }
         else if (checkWorkCondition(autoworkok) == 1){
             return 70
         }
@@ -2825,6 +3050,7 @@
                 else if (currentAction == 40) checkDungeon(selectdungeonmap.value, advanced.value, skipboss.value, fulldungclear.value);
                 else if (currentAction == 50) checkCircusProvinciarium(selectcircusprovinciariummode.value);
                 else if (currentAction == 60) checkArenaProvinciarium(selectarenaprovinciariummode.value);
+                else if (currentAction == 61) checkEvent(selecteventmap.value, selecteventtarget.value)
                 else if (currentAction == 70) checkWork(autoworktype.value);
                 else backgroundOperations();
             }
