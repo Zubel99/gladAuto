@@ -24,7 +24,7 @@
     let dungeonLocations = [];
     let expeditionLocationsUnfiltered=document.querySelectorAll('div#submenu2.submenu a');
     for (let i=1; i < expeditionLocationsUnfiltered.length; i++) {
-        console.log(expeditionLocationsUnfiltered[i])
+        //console.log(expeditionLocationsUnfiltered[i])
         let leftAnchor = expeditionLocationsUnfiltered[i].href.indexOf('index.php?');
         let rightAnchor = expeditionLocationsUnfiltered[i].href.indexOf('&sh=');
         let locationLink = expeditionLocationsUnfiltered[i].href.substring(leftAnchor, rightAnchor+4)+sessionHash;
@@ -1542,8 +1542,6 @@
 
         //
     }
-
-    console.log(Date.now())
 
     function checkEventCondition(autoeventok, eventhp, eventInterval, selecteventtarget){
         let fightPointsRequired = [1,1,1,2]
