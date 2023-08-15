@@ -1514,14 +1514,32 @@
         return tomorrow.getTime();
     }
 
+    function stripString(_string){
+        let flagStart = false
+        let allowedNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        let newString = ''
+        for (let i = 0; i < _string.length; i++){
+            if (allowedNumbers.includes(_string[i])){
+                flagStart = true
+                newString += _string[i]
+            }
+            else if (!allowedNumbers.includes(_string[i]) && flagStart){
+                return newString
+            }
+        }
+        return newString
+    }
 
     function checkEvent(selecteventmap, selecteventtarget){
         location.href = expeditionLocations[selecteventmap];
 
-        let fightPointsRequired = [1,1,1,2]
+        //let fightPointsRequired = [1,1,1,2]
+        let fightPointsRequired = parseInt(stripString(document.getElementById('expedition_list').children[selecteventtarget].children[1].children[1].innerText))
+        console.log('fightPointsRequired', fightPointsRequired)
         let remainingPointsInfo = document.querySelectorAll('#content .section-header p')[1].innerText;
         let filteredPoints = remainingPointsInfo.substring(remainingPointsInfo.indexOf('event points: ')+ 10, remainingPointsInfo.indexOf('event points: ')+ 20)
-        let filteredPointsInt = parseInt(filteredPoints.replace(/[^0-9]/g, ""))
+        //let filteredPointsInt = parseInt(filteredPoints.replace(/[^0-9]/g, ""))
+        let filteredPointsInt = parseInt(stripString(filteredPoints))
         console.log('filteredPoints: ', filteredPointsInt)
         //zapisac tu ilsoc aktualnych punktow
         console.log('set currentEventPoints')
@@ -1536,11 +1554,6 @@
         console.log('fight')
         localStorage.setItem('_currentEventPoints', filteredPointsInt - fightPointsRequired[selecteventtarget])
         document.getElementById('expedition_list').children[selecteventtarget].children[1].children[0].click();
-
-        //console.log(getNextMidnightTimestamp())
-
-
-        //
     }
 
     function checkEventCondition(autoeventok, eventhp, eventInterval, selecteventtarget){
