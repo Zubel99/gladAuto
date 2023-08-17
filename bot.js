@@ -1490,8 +1490,10 @@
     }
 
     function checkExpedition(selectexpeditionmap, selectexpeditiontarget){
-        location.href = expeditionLocations[selectexpeditionmap];
-        document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
+        if(location.href.includes(expeditionLocations[selectexpeditionmap])){
+            document.getElementById('expedition_list').children[selectexpeditiontarget].children[1].children[0].click();
+        }
+        else location.href = expeditionLocations[selectexpeditionmap]
     }
 
     function checkExpeditionCondition(autoexpeditionok, expeditionhp){
@@ -1533,31 +1535,33 @@
     function checkEvent(selecteventmap, selecteventtarget){
         location.href = expeditionLocations[selecteventmap];
 
-        //let fightPointsRequired = [1,1,1,2]
         let fightPointsRequired = parseInt(stripString(document.getElementById('expedition_list').children[selecteventtarget].children[1].children[1].innerText))
         console.log('fightPointsRequired', fightPointsRequired)
+
         let remainingPointsInfo = document.querySelectorAll('#content .section-header p')[1].innerText;
-        let filteredPoints = remainingPointsInfo.substring(remainingPointsInfo.indexOf('event points: ')+ 10, remainingPointsInfo.indexOf('event points: ')+ 20)
+        let filteredPoints = remainingPointsInfo.substring(remainingPointsInfo.indexOf('event points:')+ 10, remainingPointsInfo.indexOf('event points: ')+ 20)
         //let filteredPointsInt = parseInt(filteredPoints.replace(/[^0-9]/g, ""))
         let filteredPointsInt = parseInt(stripString(filteredPoints))
+
         console.log('filteredPoints: ', filteredPointsInt)
         //zapisac tu ilsoc aktualnych punktow
         console.log('set currentEventPoints')
         localStorage.setItem('_currentEventPoints', filteredPointsInt);
 
-        if (filteredPointsInt < fightPointsRequired[selecteventtarget]){
+        if (filteredPointsInt < fightPointsRequired){
             console.log('not enough points');
+            localStorage.setItem('_resetEventPoints', getNextMidnightTimestamp())
             return;
         }
         console.log('set lastEventFight')
         localStorage.setItem('_lastEventFight', Date.now())
         console.log('fight')
-        localStorage.setItem('_currentEventPoints', filteredPointsInt - fightPointsRequired[selecteventtarget])
+        localStorage.setItem('_currentEventPoints', filteredPointsInt - fightPointsRequired)
         document.getElementById('expedition_list').children[selecteventtarget].children[1].children[0].click();
     }
 
     function checkEventCondition(autoeventok, eventhp, eventInterval, selecteventtarget){
-        let fightPointsRequired = [1,1,1,2]
+        //let fightPointsRequired = [1,1,1,2]
         if (!autoeventok) return 0
         console.log('event')
         let currentHpPercentage = parseInt(document.getElementById('header_values_hp_percent').innerHTML);
@@ -1569,21 +1573,48 @@
 
         //here check for replenish
         //localStorage.setItee('_resetEventPoints', getNextMidnightTimestamp())
-        let nextReset = parseInt(localStorage.getItem('_resetEventPoints')) || 0
-        if (Date.now() > nextReset){
-            localStorage.setItem('_currentEventPoints', eventPoints.value) //default daily points - 16 currently
-            localStorage.setItem('_resetEventPoints', getNextMidnightTimestamp())
-        }
+        //let nextReset = parseInt(localStorage.getItem('_resetEventPoints')) || 0
+        //if (Date.now() > nextReset){
+        //    localStorage.setItem('_currentEventPoints', eventPoints.value) //default daily points - 16 currently
+        //    localStorage.setItem('_resetEventPoints', getNextMidnightTimestamp())
+        //}
+        //else return 0
 
-        let currentEventPoints = parseInt(localStorage.getItem('_currentEventPoints')) || eventPoints.value; // 16 as default value CURRENTLY
-        if (currentEventPoints < fightPointsRequired[selecteventtarget]){console.log('not enough points'); return 0}
+        let currentEventPoints; // 16 as default value CURRENTLY
+        let storedValue = localStorage.getItem('_currentEventPoints');
+        let parsedValue = parseInt(storedValue);
+
+        if (!isNaN(parsedValue) || parsedValue === 0) {
+            currentEventPoints = parsedValue;
+        } else {
+            currentEventPoints = eventPoints.value;
+        }
+        console.log('currentEventPoints', currentEventPoints)
+        if (currentEventPoints > 0){
+            console.log('git 1')
+            //return 1
+        }
+        else {
+            let nextReset = parseInt(localStorage.getItem('_resetEventPoints')) || 0
+            if (Date.now() > nextReset){
+                localStorage.setItem('_currentEventPoints', eventPoints.value)
+                localStorage.setItem('_resetEventPoints', getNextMidnightTimestamp())
+                console.log('git 2')
+                //location.href = document.querySelector('#mainmenu .menuitem[title="Overview"]').href; //back to overview
+
+            }
+            else {
+                return 0
+            }
+        }
+        //if (currentEventPoints < fightPointsRequired[selecteventtarget]){console.log('not enough points'); return 0}
 
         let lastEventFight = localStorage.getItem('_lastEventFight') || 0
         if (Date.now() - lastEventFight < (eventInterval*60*1000)) {
             console.log('interval havent passed yet')
             return 0 // if 5 mins havent passed yet
         }
-        return 1
+        return 1 //1
     }
 
 
@@ -1593,7 +1624,10 @@
         let skipboss = _skipboss === 'true'
         let fulldungclear = _fulldungclear === 'true'
 
-        location.href = dungeonLocations[selectdungeonmap];
+        //location.href = dungeonLocations[selectdungeonmap];
+        if(!location.href.includes(dungeonLocations[selectdungeonmap])){
+            location.href = dungeonLocations[selectdungeonmap];
+        }
 
 
         if (document.querySelector('div#content div.contentItem h3').innerHTML == "Description"){
